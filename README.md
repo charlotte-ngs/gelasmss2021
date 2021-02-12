@@ -14,7 +14,7 @@ Livestock
 ## Topics for Master Theses
 
 Topics for Master Theses at Qualitas AG together with ETH are shown
-[here](https://charlotte-ngs.github.io/gelasmss2021/ "misc/MasterThesisTopics_SS2021.html").
+[here](https://charlotte-ngs.github.io/gelasmss2021/%20misc/MasterThesisTopics_SS2021.html).
 
 ## Information
 
