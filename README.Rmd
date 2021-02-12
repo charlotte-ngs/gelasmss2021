@@ -1,5 +1,4 @@
 ---
-title: Applied Statistical Methods in Animal Science and Genetic Evaluation of Livestock
 output: github_document
 ---
 

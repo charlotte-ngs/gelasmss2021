@@ -1,6 +1,3 @@
-Applied Statistical Methods in Animal Science and Genetic Evaluation of
-Livestock
-================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
