@@ -4,7 +4,7 @@ url: https://charlotte-ngs.github.io/gelasmss2021/
 
 template:
   params:
-    bootswatch: readable
+    bootswatch: pulse
 
 navbar:
   title:
