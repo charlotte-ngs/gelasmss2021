@@ -1,0 +1,17 @@
+Package: gelasmss2021
+Title: Genetic Evaluation of Livestock and Applied Statistical Methods in Animal Science
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Peter",
+           family = "von Rohr",
+           role = c("aut", "cre"),
+           email = "peter.vonrohr@usys.ethz.ch")
+Description: Course Material for the two courses Genetic Evaluation of Livestock and 
+  Applied Statistical Methods in Animal Science. These courses are taught in spring 
+  semester 2021 at ETH. 
+License: GPL (>= 2)
+Encoding: UTF-8
+Language: en
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0

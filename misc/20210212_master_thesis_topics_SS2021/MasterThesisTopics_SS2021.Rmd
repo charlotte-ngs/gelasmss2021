@@ -37,10 +37,6 @@ If you are interested in any of the following topics or if you have questions, p
 Routinely, selection candidates are genotyped with a Low-density chip (LD-chip, about 30000 SNPs). The prediction of SNP-effects in a training population is done with sires genotyped with a chip with a higher density. As a consequence of that sires which are selected for artificial insemination are usually re-genotyped. In populations like __Original Braunvieh__ and __Simmental__ the amount of natural insemination is high. In breeding schemes without artificial insemination, selected sires are not re-genotyped with the denser chip. The influence of this fact on the accuracy of the predicted genomic breeding values in the population of Original Braunvieh is to be investigated with a real-world dataset. The project contains imputation of the LD-Chip genotypes onto the denser chip by predicting the missing genotypes and the prediction of genomic breeding values
 
 
-### Verification of the prediction forumula for the standard lactation milk yield {#project_header .emphasized}
-For Swiss dairy cows the milk yield of a standard lactation is predicted starting from day 80 of the respective lactation with a regression formula. Influential factors in this formula are lactation number and birth month of the calf. In this project, the existing regression formula should be verified and adapted if necessary. 
-
-
 ### New Breeding Programs {#project_header .emphasized}
 Swiss Dairy Cattle breeding organisations have traditionally been collecting the same type of data from a large number of farms. Recently the breeding organisations have diversified their services and now offer different type of memberships. Depending on the type of membership that a farmer is committing to different types of data are collected. Some of these newly collected data offer the possibility to use the information from this data as selection tools. To the best of our knowledge there has not been any scientific investigation about the benefits of collecting the new types of data for the breeding program as a whole.
 
@@ -65,16 +61,16 @@ Fertalys is a pregnancy testing service offered by the Swiss Dairy Cattle Breedi
 An analysis comparable to https://doi.org/10.3168/jds.2018-15858 is to be developed.
 
 
-### Beef Cattle Production Model
-With recent market developments, economic aspects of beef production have become more important. The approach developed by Phocas et al (1998) should be adapted to Swiss circumstances.
-
-
 ### Early Maturity in Swiss Beef Cattle
 Early maturity is an important trait in beef cattle. But this trait is not easy to integrate into a breeding program. Different solutions to this problem should be proposed and evaluated.
 
 
 ### Application of Generalized Linear Mixed Effect Models
-Based on the results of a previous master thesis, different comparison studies should be undertaken where conventional linear mixed models are compared with the generalised lienar mixed model based on the same data set. 
+Based on the results of a previous master thesis, different comparison studies should be undertaken where conventional linear mixed models are compared with the generalized linear mixed model based on the same data set. 
+
+
+### Relationship between Myostatin-Status with Calving Traits
+Some beef cattle breeds (Charolais, Limousin, ...) are looking into the genetic basis of the myostatin-gene (double-muscle). Recent developments in genomic selection of beef cattle in Switzerland give the possibility to analyse the status of the myostatin-gene in the Swiss beef cattle breeds. A specific emphasis is to be put to the relationship with other important characteristics of the animals such as calving traits.
 
 ---
 
