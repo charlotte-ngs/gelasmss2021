@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Basics in Quantitative Genetics | Applied Statistical Methods in Animal Sciences</title>
+  <meta name="description" content="Chapter 3 Basics in Quantitative Genetics | Applied Statistical Methods in Animal Sciences" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Basics in Quantitative Genetics | Applied Statistical Methods in Animal Sciences" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://github.com/charlotte-ngs/gelasmss2021" />
+  
+  
+  <meta name="github-repo" content="charlotte-ngs/gelasmss2021" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Basics in Quantitative Genetics | Applied Statistical Methods in Animal Sciences" />
+  
+  
+  
+
+<meta name="author" content="Peter von Rohr" />
+
+
+<meta name="date" content="2021-02-19" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="intro-linalg.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Applied Statistical Methods</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#general-developments"><i class="fa fa-check"></i>General Developments</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#where-does-this-course-fit-in"><i class="fa fa-check"></i>Where Does This Course Fit In?</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-objectives"><i class="fa fa-check"></i>Course Objectives</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="asm-intro.html"><a href="asm-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="asm-intro.html"><a href="asm-intro.html#us-presidential-campaigns"><i class="fa fa-check"></i><b>1.1</b> US Presidential Campaigns</a></li>
+<li class="chapter" data-level="1.2" data-path="asm-intro.html"><a href="asm-intro.html#health-care"><i class="fa fa-check"></i><b>1.2</b> Health Care</a></li>
+<li class="chapter" data-level="1.3" data-path="asm-intro.html"><a href="asm-intro.html#face-recognition"><i class="fa fa-check"></i><b>1.3</b> Face Recognition</a></li>
+<li class="chapter" data-level="1.4" data-path="asm-intro.html"><a href="asm-intro.html#feed-intake-and-behavior-traits-of-cows"><i class="fa fa-check"></i><b>1.4</b> Feed Intake and Behavior Traits of Cows</a></li>
+<li class="chapter" data-level="1.5" data-path="asm-intro.html"><a href="asm-intro.html#conclusions-from-examples"><i class="fa fa-check"></i><b>1.5</b> Conclusions from Examples</a></li>
+<li class="chapter" data-level="1.6" data-path="asm-intro.html"><a href="asm-intro.html#asm-traditional-animal-breeding"><i class="fa fa-check"></i><b>1.6</b> Traditional Livestock Breeding</a></li>
+<li class="chapter" data-level="1.7" data-path="asm-intro.html"><a href="asm-intro.html#asm-genomic-selection"><i class="fa fa-check"></i><b>1.7</b> Genomic Selection</a></li>
+<li class="chapter" data-level="1.8" data-path="asm-intro.html"><a href="asm-intro.html#asm-mono-genic-model"><i class="fa fa-check"></i><b>1.8</b> Mono-Genic Model</a></li>
+<li class="chapter" data-level="1.9" data-path="asm-intro.html"><a href="asm-intro.html#asm-two-step-approach"><i class="fa fa-check"></i><b>1.9</b> Two Step Approach</a></li>
+<li class="chapter" data-level="1.10" data-path="asm-intro.html"><a href="asm-intro.html#asm-single-step-approach"><i class="fa fa-check"></i><b>1.10</b> Single Step Approach</a></li>
+<li class="chapter" data-level="1.11" data-path="asm-intro.html"><a href="asm-intro.html#asm-summary"><i class="fa fa-check"></i><b>1.11</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro-linalg.html"><a href="intro-linalg.html"><i class="fa fa-check"></i><b>2</b> Introduction To Linear Algebra</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-glimpse-ahead"><i class="fa fa-check"></i><b>2.1</b> Glimpse Ahead</a></li>
+<li class="chapter" data-level="2.2" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-vectors"><i class="fa fa-check"></i><b>2.2</b> Vectors</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-physics-perspective"><i class="fa fa-check"></i><b>2.2.1</b> Physics Perspective</a></li>
+<li class="chapter" data-level="2.2.2" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-computer-science-perspective"><i class="fa fa-check"></i><b>2.2.2</b> Computer Science Perspective</a></li>
+<li class="chapter" data-level="2.2.3" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-geometric-context"><i class="fa fa-check"></i><b>2.2.3</b> Geometric Context</a></li>
+<li class="chapter" data-level="2.2.4" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-coordinate-system"><i class="fa fa-check"></i><b>2.2.4</b> Coordinate System</a></li>
+<li class="chapter" data-level="2.2.5" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-vector-operations"><i class="fa fa-check"></i><b>2.2.5</b> Vector Operations</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-matrices"><i class="fa fa-check"></i><b>2.3</b> Matrices</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-special-matrices"><i class="fa fa-check"></i><b>2.3.1</b> Special Matrices</a></li>
+<li class="chapter" data-level="2.3.2" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-matrix-operation"><i class="fa fa-check"></i><b>2.3.2</b> Matrix Operations</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-systems-of-equations"><i class="fa fa-check"></i><b>2.4</b> Systems Of Equations</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-matrix-vector-notation"><i class="fa fa-check"></i><b>2.4.1</b> Matrix-Vector Notation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="intro-linalg.html"><a href="intro-linalg.html#intro-linalg-solving-systems-of-linear-equations"><i class="fa fa-check"></i><b>2.5</b> Solving Systems of Linear Equations</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="quan-gen.html"><a href="quan-gen.html"><i class="fa fa-check"></i><b>3</b> Basics in Quantitative Genetics</a><ul>
+<li class="chapter" data-level="3.1" data-path="quan-gen.html"><a href="quan-gen.html#single-locus-quant-trait"><i class="fa fa-check"></i><b>3.1</b> Single Locus - Quantitative Trait</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="quan-gen.html"><a href="quan-gen.html#qg-terminology"><i class="fa fa-check"></i><b>3.1.1</b> Terminology</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="quan-gen.html"><a href="quan-gen.html#qg-frequency"><i class="fa fa-check"></i><b>3.2</b> Frequencies</a></li>
+<li class="chapter" data-level="3.3" data-path="quan-gen.html"><a href="quan-gen.html#hw-eq"><i class="fa fa-check"></i><b>3.3</b> Hardy-Weinberg Equilibrium</a></li>
+<li class="chapter" data-level="3.4" data-path="quan-gen.html"><a href="quan-gen.html#value-mean"><i class="fa fa-check"></i><b>3.4</b> Value and Mean</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="quan-gen.html"><a href="quan-gen.html#geno-value"><i class="fa fa-check"></i><b>3.4.1</b> Genotypic Values</a></li>
+<li class="chapter" data-level="3.4.2" data-path="quan-gen.html"><a href="quan-gen.html#pop-mean"><i class="fa fa-check"></i><b>3.4.2</b> Population Mean</a></li>
+<li class="chapter" data-level="3.4.3" data-path="quan-gen.html"><a href="quan-gen.html#breed-value"><i class="fa fa-check"></i><b>3.4.3</b> Breeding Values</a></li>
+<li class="chapter" data-level="3.4.4" data-path="quan-gen.html"><a href="quan-gen.html#allele-substitution"><i class="fa fa-check"></i><b>3.4.4</b> Allele Substitution</a></li>
+<li class="chapter" data-level="3.4.5" data-path="quan-gen.html"><a href="quan-gen.html#dominance-deviation"><i class="fa fa-check"></i><b>3.4.5</b> Dominance Deviation</a></li>
+<li class="chapter" data-level="3.4.6" data-path="quan-gen.html"><a href="quan-gen.html#summary-of-values"><i class="fa fa-check"></i><b>3.4.6</b> Summary of Values</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="quan-gen.html"><a href="quan-gen.html#variances"><i class="fa fa-check"></i><b>3.5</b> Variances</a></li>
+<li class="chapter" data-level="3.6" data-path="quan-gen.html"><a href="quan-gen.html#extension-to-more-loci"><i class="fa fa-check"></i><b>3.6</b> Extension To More Loci</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="quan-gen.html"><a href="quan-gen.html#epistatic-interaction"><i class="fa fa-check"></i><b>3.6.1</b> Epistatic Interaction</a></li>
+<li class="chapter" data-level="3.6.2" data-path="quan-gen.html"><a href="quan-gen.html#interaction-variance"><i class="fa fa-check"></i><b>3.6.2</b> Interaction Variance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="quan-gen.html"><a href="quan-gen.html#genetic-models"><i class="fa fa-check"></i><b>3.7</b> Genetic Models</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="quan-gen.html"><a href="quan-gen.html#model-usage-in-routine-evaluations"><i class="fa fa-check"></i><b>3.7.1</b> Model Usage In Routine Evaluations</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="quan-gen.html"><a href="quan-gen.html#appendix-derivations"><i class="fa fa-check"></i><b>3.8</b> Appendix: Derivations</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Applied Statistical Methods in Animal Sciences</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="quan-gen" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Basics in Quantitative Genetics</h1>
+<!-- ---------------------------------------------------------- --
+  -- TODO: Improvement of extension to more than one locus
+  --  * In section {#extension-to-more-loci} put a diagram and  --
+  --    an instructive example of a two locus model showing the --
+  --    decomposition of genotypic values, and the appearance   --
+  --    of the interaction effect.                              --
+  -- ---------------------------------------------------------- -->
+<p>As already mentioned in section <a href="#geno-pheno"><strong>??</strong></a>, the central dogma of molecular biology tells us that the genotype is the basics of any phenotypic expression. The genotype of an individual is composed of a number of genes which are also called <strong>loci</strong>. In this section, we start with the simplest possible genetic architecture where the genotype is composed by just one locus. The connection between the genotype and the phenotype is modeled according to equation <a href="#eq:phengenenv">(<strong>??</strong>)</a>. The phenotype is assumed to be a quantitative trait. That means we are not looking at binary or categorical traits. Categorical traits can just take a limited number of different levels. Examples of categorical traits are the horn status in cattle or certain color characteristics. Quantitative traits do not take discrete levels but they show specific distributions.</p>
+<div id="single-locus-quant-trait" class="section level2">
+<h2><span class="header-section-number">3.1</span> Single Locus - Quantitative Trait</h2>
+<p>In Livestock there are not many examples where a quantitative trait is influenced by just one locus. But this case helps in understanding the foundation of more complex genetic architectures. We start by looking at the following idealized population (Figure <a href="quan-gen.html#fig:idealpopsingletrait">3.1</a>).</p>
+<div class="figure"><span id="fig:idealpopsingletrait"></span>
+<img src="odg/idealpopsingletrait.png" alt="Idealized Population With A Single Locus" width="381" />
+<p class="caption">
+Figure 3.1: Idealized Population With A Single Locus
+</p>
+</div>
+<div id="qg-terminology" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Terminology</h3>
+<p>The different genetic variants that are present at our Locus <span class="math inline">\(G\)</span> are called <strong>alleles</strong>. When looking at all individuals in the population for our locus, we have two different alleles <span class="math inline">\(G_1\)</span> and <span class="math inline">\(G_2\)</span>. Hence, we call the locus <span class="math inline">\(G\)</span> to be a <strong>bi-allelic</strong> locus. In any given individual of the population, the two alleles of the locus <span class="math inline">\(G\)</span> together are called the individuals <strong>genotype</strong>. All possible combinations of the two alleles at the locus <span class="math inline">\(G\)</span> leads to a total number of three genotypes. It is important to mention that the order of the alleles in a given genotype is not important. Hence, <span class="math inline">\(G_1G_2\)</span> and <span class="math inline">\(G_2G_1\)</span> are the same genotype. The two genotypes <span class="math inline">\(G_1G_1\)</span> and <span class="math inline">\(G_2G_2\)</span> are called <strong>homozygous</strong> and the genotype <span class="math inline">\(G_1G_2\)</span> is called <strong>heterozygous</strong>.</p>
+</div>
+</div>
+<div id="qg-frequency" class="section level2">
+<h2><span class="header-section-number">3.2</span> Frequencies</h2>
+<p>To be able to characterize our population with respect to the locus of interest, we are first looking at some frequencies. These are measures of how often a certain allele or genotype does occur in our population. For our example population shown in Figure <a href="quan-gen.html#fig:idealpopsingletrait">3.1</a>, the <strong>genotype frequencies</strong> are</p>
+<p><span class="math display" id="eq:genotypefreq">\[\begin{align}
+f(G_1G_1) &amp;= \frac{4}{10} = 0.4 \notag \\
+f(G_1G_2) &amp;= \frac{3}{10} = 0.3 \notag \\
+f(G_2G_2) &amp;= \frac{3}{10} = 0.3  \tag{3.1}
+\end{align}\]</span></p>
+<p>The <strong>allele frequencies</strong> can be determined either by counting or they can be computed from the genotype frequencies.</p>
+<p><span class="math display" id="eq:allelefreq">\[\begin{align}
+f(G_1) &amp;= f(G_1G_1) + {1\over 2}*f(G_1G_2) = 0.55 \notag \\
+f(G_2) &amp;= f(G_2G_2) + {1\over 2}*f(G_1G_2) = 0.45 \tag{3.2}
+\end{align}\]</span></p>
+</div>
+<div id="hw-eq" class="section level2">
+<h2><span class="header-section-number">3.3</span> Hardy-Weinberg Equilibrium</h2>
+<p>The Hardy-Weinberg equilibrium is the central law of how allele frequencies and genotype frequencies are related in an idealized population. Given the allele frequencies</p>
+<p><span class="math display" id="eq:allelefreq">\[\begin{align}
+f(G_1) &amp;= p \notag \\
+f(G_2) &amp;= q = 1-p
+\tag{3.2}
+\end{align}\]</span></p>
+<p>During mating, we assume that in an idealized population alleles are combined independently. This leads to the genotype frequencies shown in Table <a href="quan-gen.html#tab:tabgenfreq">3.1</a>.</p>
+<table>
+<caption><span id="tab:tabgenfreq">Table 3.1: </span>Genotype Frequencies under Hardy-Weinberg equilibrium</caption>
+<thead>
+<tr class="header">
+<th align="center">Alleles</th>
+<th align="center"><span class="math inline">\(G_1\)</span></th>
+<th align="center"><span class="math inline">\(G_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(G_1\)</span></td>
+<td align="center"><span class="math inline">\(f(G_1G_1) = p^2\)</span></td>
+<td align="center"><span class="math inline">\(f(G_1G_2) = p*q\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(G_2\)</span></td>
+<td align="center"><span class="math inline">\(f(G_1G_2) = p*q\)</span></td>
+<td align="center"><span class="math inline">\(f(G_2G_2) = q^2\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Summing up the heterozygous frequencies leads to</p>
+<p><span class="math display" id="eq:genofreq">\[\begin{align}
+f(G_1G_1) &amp;= p^2 \notag \\
+f(G_1G_2) &amp;= 2pq \notag \\
+f(G_2G_2) &amp;= q^2
+\tag{3.3}
+\end{align}\]</span></p>
+<p>Comparing these expected genotype frequencies in a idealized population under the Hardy-Weinberg equilibrium to what we found for the small example population in Figure <a href="quan-gen.html#fig:idealpopsingletrait">3.1</a>, we can clearly say that the small example population is not in Hardy-Weinberg equilibrium.</p>
+</div>
+<div id="value-mean" class="section level2">
+<h2><span class="header-section-number">3.4</span> Value and Mean</h2>
+<p>Our goal is still to improve our population at the genetic level. The term improvement implies the need for a quantitative assessment of our trait of interest. Furthermore, we have to be able to associate the genotypes in the population to the quantitative values of our trait.</p>
+<div id="geno-value" class="section level3">
+<h3><span class="header-section-number">3.4.1</span> Genotypic Values</h3>
+<p>The values <span class="math inline">\(V_{ij}\)</span> to each genotype <span class="math inline">\(G_iG_j\)</span> are assigned as shown in Figure <a href="quan-gen.html#fig:genotypicvalue">3.2</a>.</p>
+<div class="figure"><span id="fig:genotypicvalue"></span>
+<img src="odg/genotypicvalue.png" alt="Genotypic Values" width="871" />
+<p class="caption">
+Figure 3.2: Genotypic Values
+</p>
+</div>
+<p>The origin of the genotypic values is placed in the middle between the two homozygous genotypes <span class="math inline">\(G_2G_2\)</span> and <span class="math inline">\(G_1G_1\)</span>. Here we are assuming that <span class="math inline">\(G_1\)</span> is the favorable allele. This leads to values of <span class="math inline">\(+a\)</span> for genotype <span class="math inline">\(G_1G_1\)</span> and of <span class="math inline">\(-a\)</span> for genotype <span class="math inline">\(G_2G_2\)</span>. The value of genotype <span class="math inline">\(G_1G_2\)</span> is set to <span class="math inline">\(d\)</span> and is called dominance deviation. Table <a href="quan-gen.html#tab:tabsumgenvalue">3.2</a> summarizes the values for all genotypes.</p>
+<table>
+<caption><span id="tab:tabsumgenvalue">Table 3.2: </span>Values for all Genotypes</caption>
+<thead>
+<tr class="header">
+<th align="center">Variable</th>
+<th align="center">Genotype</th>
+<th align="center">Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(V_{11}\)</span></td>
+<td align="center"><span class="math inline">\(G_1G_1\)</span></td>
+<td align="center">a</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(V_{12}\)</span></td>
+<td align="center"><span class="math inline">\(G_1G_2\)</span></td>
+<td align="center">d</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(V_{22}\)</span></td>
+<td align="center"><span class="math inline">\(G_2G_2\)</span></td>
+<td align="center">-a</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="pop-mean" class="section level3">
+<h3><span class="header-section-number">3.4.2</span> Population Mean</h3>
+<p>For the complete population, we can compute the <strong>population mean</strong> (<span class="math inline">\(\mu\)</span>) of all values at the locus <span class="math inline">\(G\)</span>. This mean corresponds to the expected value and is computed as</p>
+<p><span class="math display" id="eq:popmean">\[\begin{align}
+\mu &amp;= V_{11} * f(G_1G_1) + V_{12} * f(G_1G_2) + V_{22} * f(G_2G_2) \notag \\
+    &amp;= a * p^2 + d *2pq + (-a) * q^2 \notag \\
+    &amp;= (p-q)a + 2pqd
+\tag{3.4}
+\end{align}\]</span></p>
+<p>The population mean depends on the values <span class="math inline">\(a\)</span> and <span class="math inline">\(d\)</span> and on the allele frequencies <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>. The larger the difference between <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> the more influence the value <span class="math inline">\(a\)</span> has in <span class="math inline">\(\mu\)</span>, because for very different <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> the product <span class="math inline">\(2pq\)</span> is very small. On the other hand, if <span class="math inline">\(p=q=0.5\)</span>, then <span class="math inline">\(\mu = 0.5d\)</span>. For loci with <span class="math inline">\(d=0\)</span>, the population mean <span class="math inline">\(\mu = (p-q)a\)</span> and hence, if in addition we have <span class="math inline">\(p=q\)</span>, then <span class="math inline">\(\mu=0\)</span>.</p>
+</div>
+<div id="breed-value" class="section level3">
+<h3><span class="header-section-number">3.4.3</span> Breeding Values</h3>
+<p>The term <strong>breeding value</strong> is defined as shown in Definition <a href="quan-gen.html#def:defbreedingvalue">3.1</a>.</p>
+
+<div class="definition">
+<span id="def:defbreedingvalue" class="definition"><strong>Definition 3.1  (Breeding Value)  </strong></span>The breeding value of an animal <span class="math inline">\(i\)</span> is defined as two times the difference between the mean value of offsprings of animal <span class="math inline">\(i\)</span> and the population mean.
+</div>
+
+<p>Applying this definition and using the parameters that we have computed so far leads to the following formulas for the breeding value of an animal with a certain genotype.</p>
+<div id="breeding-value-for-g_1g_1" class="section level4">
+<h4><span class="header-section-number">3.4.3.1</span> Breeding value for <span class="math inline">\(G_1G_1\)</span></h4>
+<p>Assume that we have a given parent <span class="math inline">\(S\)</span> with a genotype <span class="math inline">\(G_1G_1\)</span> and we want to compute its breeding value. Let us further suppose that our single parent <span class="math inline">\(S\)</span> is mated to a potentially infinite number of animals from the idealized population, then we can deduce the following mean genotypic value for the offspring of parent <span class="math inline">\(S\)</span>.</p>
+
+
+
+<p>Because parent <span class="math inline">\(S\)</span> has genotype <span class="math inline">\(G_1G_1\)</span>, the frequency <span class="math inline">\(f(G_1)\)</span> of a <span class="math inline">\(G_1\)</span> allele coming from <span class="math inline">\(S\)</span> is <span class="math inline">\(1\)</span> and the frequency <span class="math inline">\(f(G_2)\)</span> of a <span class="math inline">\(G_2\)</span> allele is 0. The expected genetic value (<span class="math inline">\(\mu_{11}\)</span>) of the offspring of animal <span class="math inline">\(S\)</span> can be computed as</p>
+<p><span class="math display" id="eq:MeanOffGen11">\[\begin{equation}
+\mu_{11} = p*a + q*d
+\tag{3.5}
+\end{equation}\]</span></p>
+<p>Applying definition <a href="quan-gen.html#def:defbreedingvalue">3.1</a>, we can compute the breeding value (<span class="math inline">\(BV_{11}\)</span>) for animal <span class="math inline">\(S\)</span> as shown in equation <a href="quan-gen.html#eq:BVGen11">(3.6)</a> while using the results given by equations <a href="quan-gen.html#eq:MeanOffGen11">(3.5)</a> and <a href="quan-gen.html#eq:popmean">(3.4)</a>.</p>
+<p><span class="math display" id="eq:BVGen11">\[\begin{align}
+BV_{11} &amp;=  2*(\mu_{11} - \mu)  \notag \\
+        &amp;=  2\left(pa + qd - \left[(p - q)a + 2pqd \right] \right) \notag\\
+        &amp;=  2\left(pa + qd - (p - q)a - 2pqd \right) \notag\\
+        &amp;=  2\left(qd + qa - 2pqd\right) \notag \\
+        &amp;=  2\left(qa + qd(1 - 2p)\right) \notag \\
+        &amp;=  2q\left(a + d(1 - 2p)\right) \notag \\
+        &amp;=  2q\left(a + (q-p)d\right)
+\tag{3.6}
+\end{align}\]</span></p>
+<p>Breeding values for parents with genotypes <span class="math inline">\(G_2G_2\)</span> and <span class="math inline">\(G_1G_2\)</span> are derived analogously.</p>
+</div>
+<div id="breeding-value-for-g_2g_2" class="section level4">
+<h4><span class="header-section-number">3.4.3.2</span> Breeding value for <span class="math inline">\(G_2G_2\)</span></h4>
+<p>First, we determine the expected genotypic value for offsprings of a parent <span class="math inline">\(S\)</span> with genotype <span class="math inline">\(G_2G_2\)</span></p>
+
+
+
+<p>The expected genetic value (<span class="math inline">\(\mu_{22}\)</span>) of the offspring of animal <span class="math inline">\(S\)</span> can be computed as</p>
+<p><span class="math display" id="eq:MeanOffGen22">\[\begin{equation}
+\mu_{22} = pd - qa
+\tag{3.7}
+\end{equation}\]</span></p>
+<p>The breeding value <span class="math inline">\(BV_{22}\)</span> corresponds to</p>
+<p><span class="math display" id="eq:BVGen22">\[\begin{align}
+BV_{22} &amp;=   2*(\mu_{22} - \mu)  \notag \\
+        &amp;=   2\left(pd - qa - \left[(p - q)a + 2pqd \right] \right) \notag \\
+        &amp;=   2\left(pd - qa - (p - q)a - 2pqd \right) \notag \\
+        &amp;=   2\left(pd - pa - 2pqd\right) \notag \\
+        &amp;=   2\left(-pa + p(1-2q)d\right) \notag \\
+        &amp;=  -2p\left(a + (q - p)d\right)
+\tag{3.8}
+\end{align}\]</span></p>
+</div>
+<div id="breeding-value-for-g_1g_2" class="section level4">
+<h4><span class="header-section-number">3.4.3.3</span> Breeding value for <span class="math inline">\(G_1G_2\)</span></h4>
+<p>The genotype frequencies of the offsprings of a parent <span class="math inline">\(S\)</span> with a genotype <span class="math inline">\(G_1G_2\)</span> is determined in the following table.</p>
+
+
+
+<p>The expected mean genotypic value of the offsprings of parent <span class="math inline">\(S\)</span> with genotype <span class="math inline">\(G_1G_2\)</span> is computed as</p>
+<p><span class="math display" id="eq:MeanOffGen12">\[\begin{equation}
+\mu_{12} = 0.5pa + 0.5d - 0.5qa = 0.5\left[(p-q)a + d \right]
+\tag{3.9}
+\end{equation}\]</span></p>
+<p>The breeding value <span class="math inline">\(BV_{12}\)</span> corresponds to</p>
+<p><span class="math display" id="eq:BVGen12">\[\begin{align}
+ZW_{12} &amp;=   2*(\mu_{12} - \mu) \notag \\
+        &amp;=   2\left(0.5(p-q)a + 0.5d - \left[(p - q)a + 2pqd \right] \right) \notag \\
+        &amp;=   2\left(0.5pa - 0.5qa + 0.5d - pa + qa - 2pqd \right) \notag \\
+        &amp;=   2\left(0.5(q-p)a + (0.5 - 2pq)d \right) \notag \\
+        &amp;=   (q-p)a + (1-4pq)d  \notag \\
+        &amp;=   (q-p)a + (p^2 + 2pq + q^2 -4pq)d  \notag \\
+        &amp;=   (q-p)a + (p^2 - 2pq + q^2)d  \notag \\
+        &amp;=   (q-p)a + (q - p)^2d   \notag \\
+        &amp;=   (q-p)\left[a + (q-p)d \right]
+\tag{3.10}
+\end{align}\]</span></p>
+</div>
+<div id="summary-of-breeding-values" class="section level4">
+<h4><span class="header-section-number">3.4.3.4</span> Summary of Breeding Values</h4>
+<p>The term <span class="math inline">\(a + (q-p)d\)</span> appears in all three breeding values. We replace this term by <span class="math inline">\(\alpha\)</span> and summarize the results in the following table.</p>
+
+</div>
+</div>
+<div id="allele-substitution" class="section level3">
+<h3><span class="header-section-number">3.4.4</span> Allele Substitution</h3>
+<p>Comparing the genotype <span class="math inline">\(G_2G_2\)</span> with the genotype <span class="math inline">\(G_1G2\)</span>, one of the differences is in the number of <span class="math inline">\(G_1\)</span>-alleles. <span class="math inline">\(G_2G_2\)</span> has zero <span class="math inline">\(G_1\)</span>-alleles and <span class="math inline">\(G_1G_2\)</span> has one <span class="math inline">\(G_1\)</span>-allele. They also have different breeding values. Because the breeding values are to be used to assess the value of a given genotype, any difference between the breeding values <span class="math inline">\(BV_{12}\)</span> and <span class="math inline">\(B_{22}\)</span> can be associated to that additional <span class="math inline">\(G_1\)</span> allele in <span class="math inline">\(G_1G_2\)</span> compared to <span class="math inline">\(G_2G_2\)</span>.</p>
+<p>The computation of the difference between the breeding value <span class="math inline">\(BV_{12}\)</span> and <span class="math inline">\(B_{22}\)</span> results in</p>
+<p><span class="math display" id="eq:AdditiveBv1">\[\begin{align}
+    BV{12} - BV_{22} &amp;=   (q-p)\alpha - \left( -2p\alpha \right)  \notag \\
+                      &amp;=   (q-p)\alpha + 2p\alpha \notag \\
+                      &amp;=   (q-p+2p)\alpha \notag \\
+                      &amp;=   (q+p)\alpha \notag \\
+                      &amp;=   \alpha
+  \tag{3.11}
+\end{align}\]</span></p>
+<p>The analogous computation can be done by comparing the breeding values <span class="math inline">\(BV_{11}\)</span> and <span class="math inline">\(BV_{12}\)</span>.</p>
+<p><span class="math display" id="eq:AdditiveBv2">\[\begin{align}
+    BV_{11} - BV_{12} &amp; = &amp; 2q\alpha - (q-p)\alpha \notag \\
+                      &amp; = &amp; \left(2q - (q-p)\right)\alpha \notag\\
+                      &amp; = &amp; \alpha 
+  \tag{3.12}
+\end{align}\]</span></p>
+<p>The breeding values themselves depend on the allele frequencies. But the differences between breeding values are linear while replacing <span class="math inline">\(G_2\)</span> alleles by <span class="math inline">\(G_1\)</span> alleles. This replacement is also called allele-substitution and the term <span class="math inline">\(alpha\)</span> is called <strong>allele-substitution effect</strong>.</p>
+</div>
+<div id="dominance-deviation" class="section level3">
+<h3><span class="header-section-number">3.4.5</span> Dominance Deviation</h3>
+<p>When looking at the difference between the genotypic value <span class="math inline">\(V_{ij}\)</span> and the breeding value <span class="math inline">\(BV_{ij}\)</span> for each of the three genotypes, we get the following results.</p>
+<p><span class="math display">\[\begin{align}
+  V_{11} - BV_{11} &amp;=   a - 2q \alpha \notag \\
+                   &amp;=   a - 2q \left[ a + (q-p)d \right] \notag \\
+                   &amp;=   a - 2qa -2q(q-p)d \notag \\
+                   &amp;=   a(1-2q) - 2q^2d + 2pqd \notag \\
+                   &amp;=   \left[(p - q)a + 2pqd\right] - 2q^2d \notag \\
+                   &amp;=   \mu + D_{11} 
+  \end{align}\]</span></p>
+<p><span class="math display">\[\begin{align}
+  V_{12} - BV{12} &amp;=   d - (q-p)\alpha \notag \\
+                   &amp;=   d - (q-p)\left[ a + (q-p)d \right] \notag \\
+                   &amp;=   \left[(p-q)a + 2pqd\right] + 2pqd \notag \\
+                   &amp;=   \mu + D_{12}
+  \end{align}\]</span></p>
+<p><span class="math display">\[\begin{align}
+  V_{22} - BV_{22} &amp;=   -a - (-2p\alpha) \notag \\
+                   &amp;=   -a + 2p\left[ a + (q-p)d \right] \notag \\
+                   &amp;=   \left[(p-q)a + 2pqd\right] - 2p^2d \notag \\
+                   &amp;=   \mu + D_{22} \notag
+  \end{align}\]</span></p>
+<p>The difference all contain the population mean <span class="math inline">\(\mu\)</span> plus a certain deviation. This deviation term is called <strong>dominance deviation</strong>.</p>
+</div>
+<div id="summary-of-values" class="section level3">
+<h3><span class="header-section-number">3.4.6</span> Summary of Values</h3>
+<p>The following table summarizes all genotypic values all breeding values and the dominance deviations.</p>
+
+<p>The formulas in the above shown table assume that <span class="math inline">\(G_1\)</span> is the favorable allele with frequency <span class="math inline">\(f(G_1) = p\)</span>. The allele frequency of <span class="math inline">\(G_2\)</span> is <span class="math inline">\(f(G_2) = q\)</span>. Since we have a bi-allelic locus <span class="math inline">\(p+q=1\)</span>.</p>
+<p>Based on the definition of dominance deviation, the genotypic values <span class="math inline">\(V_{ij}\)</span> can be decomposed into the components population mean (<span class="math inline">\(\mu\)</span>), breeding value (<span class="math inline">\(BV_{ij}\)</span>) and dominance deviation (<span class="math inline">\(D_{ij}\)</span>) according to equation <a href="quan-gen.html#eq:SeparationGenoValue">(3.13)</a>.</p>
+<p><span class="math display" id="eq:SeparationGenoValue">\[\begin{align}
+V_{ij} &amp;=   \mu + BV_{ij} + D_{ij}
+\tag{3.13}
+\end{align}\]</span></p>
+<p>Taking expected values on both sides of equation <a href="quan-gen.html#eq:SeparationGenoValue">(3.13)</a> and knowing that the population mean <span class="math inline">\(\mu\)</span> was defined as the expected value of the genotypic values in the population, i.e. <span class="math inline">\(E\left[ V \right] = \mu\)</span>, it follows that the expected values of both the breeding values and the dominance deviations must be <span class="math inline">\(0\)</span>. More formally, we have</p>
+<p><span class="math display" id="eq:ExpValueGenBvDom">\[\begin{align}
+E\left[ V \right] &amp;=  E\left[ \mu + BV + D \right] \notag \\
+                  &amp;=  E\left[ \mu \right]  + E\left[ BV \right] + E\left[ D \right] \notag \\
+                  &amp;=  \mu
+\tag{3.14}
+\end{align}\]</span></p>
+<p>From the last line in equation <a href="quan-gen.html#eq:ExpValueGenBvDom">(3.14)</a>, it follows that <span class="math inline">\(E\left[ BV \right] = E\left[ D \right] = 0\)</span>. This also shows that both breeding values and dominance deviations are defined as deviation from a given mean.</p>
+</div>
+</div>
+<div id="variances" class="section level2">
+<h2><span class="header-section-number">3.5</span> Variances</h2>
+<p>The population mean <span class="math inline">\(\mu\)</span> and derived from that the breeding values were defined as expected values. Their main purpose is to assess the state of a given population with respect to a certain genetic locus and its effect on a phenotypic trait of interest. One of our primary goals in livestock breeding is to improve the populations at the genetic level through the means of selection and mating. Selection of potential parents that produce offspring that are closer to our breeding goals is only possible, if the selection candidates show a certain level of variation in the traits that we are interested in. In populations where there is no variation which means that all individuals are exactly at the same level, it is not possible to select potential parents for the next generation.</p>
+<p>In statistics the measure that is most often used to assess variation in a certain population is called <strong>variance</strong>. For any given discrete random variable <span class="math inline">\(X\)</span> the variance is defined as the second central moment of <span class="math inline">\(X\)</span> which is computed as shown in equation <a href="quan-gen.html#eq:VarianceDiscreteRV">(3.15)</a>.</p>
+<p><span class="math display" id="eq:VarianceDiscreteRV">\[\begin{equation}
+Var\left[X\right] = \sum_{x_i \in \mathcal{X}} (x_i - \mu_X)^2 * f(x_i)
+\tag{3.15}
+\end{equation}\]</span></p>
+
+
+
+<p>In this section we will be focusing on separating the obtained variances into different components according to their causative sources. Applying the definition of variance given in equation <a href="quan-gen.html#eq:VarianceDiscreteRV">(3.15)</a> to the genotypic values <span class="math inline">\(V_{ij}\)</span>, we obtain the following expression.</p>
+<p><span class="math display" id="eq:VarianceGenotypicValue">\[\begin{align}
+\sigma_G^2 = Var\left[V\right] &amp;=   (V_{11} - \mu)^2 * f(G_1G_1) \notag \\
+                               &amp;  +\  (V_{12} - \mu)^2 * f(G_1G_2) \notag \\
+                               &amp;  +\  (V_{22} - \mu)^2 * f(G_2G_2)
+\tag{3.16}
+\end{align}\]</span></p>
+<p>where <span class="math inline">\(\mu = (p - q)a + 2pqd\)</span> the population mean.</p>
+<p>Based on the decomposition of the genotypic value <span class="math inline">\(V_{ij}\)</span> given in <a href="quan-gen.html#eq:SeparationGenoValue">(3.13)</a>, the difference between <span class="math inline">\(V_{ij}\)</span> and <span class="math inline">\(\mu\)</span> can be written as the sum of the breeding value and the dominance deviation. Then <span class="math inline">\(\sigma_G^2\)</span> can be written as</p>
+<p><span class="math display" id="eq:GeneticVarianceBVDom">\[\begin{align}
+\sigma_G^2 = Var\left[V\right] &amp;=   (BV_{11} + D_{11})^2 * f(G_1G_1) \notag \\
+                               &amp;  +\  (BV_{12} + D_{12})^2 * f(G_1G_2) \notag \\
+                               &amp;  +\  (BV_{22} + D_{22})^2 * f(G_2G_2)
+\tag{3.17}
+\end{align}\]</span></p>
+<p>Inserting the expressions for the breeding values <span class="math inline">\(BV_{ij}\)</span> and for the dominance deviation <span class="math inline">\(D_{ij}\)</span> found earlier and simplifying the equation leads to the result in <a href="quan-gen.html#eq:FinalGeneticVariance">(3.18)</a>. A more detailed derivation of <span class="math inline">\(\sigma_G^2\)</span> is given in the appendix (<a href="quan-gen.html#appendix-derivations">3.8</a>) of this chapter.</p>
+<p><span class="math display" id="eq:FinalGeneticVariance">\[\begin{align}
+  \sigma_G^2 &amp;=  2pq\alpha^2 + \left(2pqd \right)^2 \notag\\
+             &amp;=  \sigma_A^2 + \sigma_D^2
+\tag{3.18}             
+\end{align}\]</span></p>
+<p>The formula in equation <a href="quan-gen.html#eq:FinalGeneticVariance">(3.18)</a> shows that <span class="math inline">\(\sigma_G^2\)</span> consists of two components. The first component <span class="math inline">\(\sigma_A^2\)</span> is called the <strong>genetic additive variance</strong> and the second component <span class="math inline">\(\sigma_D^2\)</span> is termed <strong>dominance variance</strong>. As shown in equation <a href="quan-gen.html#eq:VarBV">(3.22)</a> <span class="math inline">\(\sigma_A^2\)</span> corresponds to the variance of the breeding values. Because we have already seen that the breeding values are additive in the number of favorable alleles, <span class="math inline">\(\sigma_A^2\)</span> is called genetic additive variance. Because <span class="math inline">\(\sigma_D^2\)</span> corresponds to the variance of the dominance deviation effects (see equation <a href="quan-gen.html#eq:VarDom">(3.24)</a>) it is called dominance variance.</p>
+</div>
+<div id="extension-to-more-loci" class="section level2">
+<h2><span class="header-section-number">3.6</span> Extension To More Loci</h2>
+<p>When only a single locus is considered, the genotypic values (<span class="math inline">\(V_{ij}\)</span>) can be decomposed according to equation <a href="quan-gen.html#eq:SeparationGenoValue">(3.13)</a> into population mean, breeding value and dominance deviation. When a genotype refers to more than one locus, the genotypic value may contain an additional deviation caused by non-additive combination effects.</p>
+<div id="epistatic-interaction" class="section level3">
+<h3><span class="header-section-number">3.6.1</span> Epistatic Interaction</h3>
+<p>Let <span class="math inline">\(V_A\)</span> be the genotypic value of locus <span class="math inline">\(A\)</span> and <span class="math inline">\(V_B\)</span> denote the genotypic value of a second locus <span class="math inline">\(B\)</span>, then the total aggregate genotypic value <span class="math inline">\(V\)</span> attributed to both loci <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> can be written as</p>
+<p><span class="math display" id="eq:AggregateGenotypicValueTwoLoci">\[\begin{equation}
+V = V_A + V_B + I_{AB}
+\tag{3.19}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(I_{AB}\)</span> is the deviation from additive combination of these genotypic values. When computing the population mean earlier in this chapter, we assumed that <span class="math inline">\(I\)</span> was zero for all combinations of genotypes. If <span class="math inline">\(I\)</span> is not zero for any combination of genes at different loci, those genes are said to <strong>interact</strong> with each other or to exhibit <strong>epistasis</strong>. The deviation <span class="math inline">\(I\)</span> is called interaction deviation or epistatic deviation. If <span class="math inline">\(I\)</span> is zero, the genes are called to act additively between loci. Hence <em>additive action</em> may mean different things. When referring to one locus, it means absence of dominance. When referring to different loci, it means absence of epistasis.</p>
+<p>Interaction between loci may occur between pairs or between higher numbers of different loci. The complex nature of higher order interactions, i.e., interactions between higher number of loci does not need to concern us. Because in the aggregate genotypic value <span class="math inline">\(V\)</span>, interaction deviations of all sorts are treated together in an overall interaction deviation <span class="math inline">\(I\)</span>. This leads to the following generalized form of decomposing the overall aggregate genotype <span class="math inline">\(V\)</span> for the case of multiple loci affecting a certain trait of interest.</p>
+<p><span class="math display" id="eq:AggregateGenotypicValueMultipleLoci">\[\begin{equation}
+V = \mu + U + D + I
+\tag{3.20}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(U\)</span> is the sum of the breeding values attributable to the separate loci and <span class="math inline">\(D\)</span> is the sum of all dominance deviations. For our purposes in livestock breeding where we want to assess the genetic potential of a selection candidate to be a parent of offspring forming the next generation, the <strong>breeding value</strong> is the most important quantity. The breeding value is of primary importance because a given parent passes a random sample of its alleles to its offspring. We have seen in section <a href="quan-gen.html#allele-substitution">3.4.4</a> that breeding values are additive in the number of favorable alleles. Hence the more favorable alleles a given parent passes to its offspring the higher the breeding value of this parent.</p>
+<p>On the other hand, the dominance deviation measures the effect of a certain genotype occurring in an individual and the interaction deviation estimates the effects of combining different genotypes at different loci in the genome. But because parents do not pass complete genotypes nor do they pass stretches of DNA with several loci, but only a random collection of its alleles, it is really the breeding value that is of primary importance in assessing the genetic potential of a given selection candidate.</p>
+</div>
+<div id="interaction-variance" class="section level3">
+<h3><span class="header-section-number">3.6.2</span> Interaction Variance</h3>
+<p>If genotypes at different loci show epistatic interaction effects as described in section <a href="quan-gen.html#epistatic-interaction">3.6.1</a>, the interactions give rise to an additional variance component called <span class="math inline">\(V_I\)</span>, which is the variance of interaction deviations. This new variance component <span class="math inline">\(V_I\)</span> can be further decomposed into sub-components. The first level of sub-components is according to the number of loci that are considered. Two-way interactions involve two loci, three-way interactions consider three loci and in general <span class="math inline">\(n\)</span>-way interactions arise from <span class="math inline">\(n\)</span> different loci. The next level of subdivision is according to whether they include additive effects, dominance deviations or both.</p>
+<p>In general it can be said that for practical purposes, interaction effects explain only a very small amount of the overall variation. As already mentioned in section @ref(#epistatic-interaction) for livestock breeding, we are mostly interested in the additive effects. This is also true when looking at the variance components. Hence dominance variance and variances of interaction deviations are not used very often in practical livestock breeding application.</p>
+</div>
+</div>
+<div id="genetic-models" class="section level2">
+<h2><span class="header-section-number">3.7</span> Genetic Models</h2>
+<p>In this chapter, we have seen how to model the genetic basis of a quantitative trait when a single locus affects the trait of interest. We call this a single-locus model. When several loci have an effect on a certain trait, then we talk about a <strong>polygenic model</strong>. Letting the number of loci affecting a certain phenotype tend to infinity, the resulting model is called <strong>infinitesimal model</strong>.</p>
+<p>From a statistical point of view, the breeding values in an infinitesimal model are considered as a random effect with a known distribution. Due to the central limit theorem, this distribution is assumed to be a normal distribution. The central limit theorem says that the distribution of any sum of a large number of very small effects converges to a normal distribution. For our case where a given trait of interest is thought to be influenced by a large number of genetic loci each having a small effect, the sum of the breeding values of all loci together can be approximated by a normal distribution. Figure (<a href="quan-gen.html#fig:hist-clt">3.3</a>) shows the distribution for a sum of 10, 100 and 1000 components each. The histograms show a better approximation to the normal distribution the larger the number of components considered in the sum.</p>
+<div class="figure"><span id="fig:hist-clt"></span>
+<img src="bookdown-asmas-ss2021_files/figure-html/hist-clt-1.png" alt="Distribution of Sums of Different Numbers of Components" width="672" />
+<p class="caption">
+Figure 3.3: Distribution of Sums of Different Numbers of Components
+</p>
+</div>
+<div id="model-usage-in-routine-evaluations" class="section level3">
+<h3><span class="header-section-number">3.7.1</span> Model Usage In Routine Evaluations</h3>
+<p>Traditional prediction of breeding values before the introduction of genomic selection is based on the infinitesimal model. When genomic selection was introduced which takes into account the information from a large number of loci, genomic breeding values are estimated using a polygenic model.</p>
+</div>
+</div>
+<div id="appendix-derivations" class="section level2">
+<h2><span class="header-section-number">3.8</span> Appendix: Derivations</h2>
+<p>This section shows how the genetic variance in equation <a href="quan-gen.html#eq:FinalGeneticVariance">(3.18)</a> is computed.</p>
+<p><span class="math display" id="eq:GenVarZWD">\[\begin{align}
+\sigma_G^2  &amp;=   (BV_{11} + D_{11})^2 * p^2                                       \notag \\
+            &amp;   +\  (BV_{12} + D_{12})^2 * 2pq                                    \notag \\
+            &amp;   +\  (BV_{22} + D_{22})^2 * q^2                                    \notag \\
+            &amp;=      \left(2q\alpha - 2q^2d   \right)^2 * p^2                      \notag \\
+            &amp;   +\  \left((q-p)\alpha + 2pqd \right)^2 * 2pq                      \notag \\
+            &amp;   +\  \left(-2p\alpha - 2p^2d  \right)^2 * q^2                      \notag \\
+            &amp;=      \left(4q^2\alpha^2 - 8q^3d\alpha + 4q^4d^2  \right) * p^2     \notag \\
+            &amp;   +\  \left(q^2\alpha^2 - 2pq\alpha^2 + p^2\alpha^2
+                           - 4(q-p)pqd\alpha + 4p^2q^2d^2\right) * 2pq            \notag \\
+            &amp;   +\  \left(4p^2\alpha^2 + 8p^3d\alpha + 4p^4\alpha^2 \right) * q^2 \notag \\
+            &amp;=      4p^2q^2\alpha^2 - 8p^2q^3d\alpha + 4p^2q^4d^2                 \notag \\
+            &amp;   +\  2pq^3\alpha^2 - 4p^2q^2\alpha^2+ 2p^3q\alpha^2                \notag \\
+            &amp;   -\  8p^3q^2d\alpha + 8p^2q^3d\alpha + 8p^3q^3d^2                  \notag \\
+            &amp;   +\  4p^2q^2\alpha^2 + 8p^3q^2d\alpha + 4p^4q^2d^2                 \notag \\
+            &amp;=      4p^2q^2\alpha^2 + 4p^2q^4d^2                                  \notag \\
+            &amp;   +\  2pq^3\alpha^2 + 2p^3q\alpha^2                                 \notag \\
+            &amp;   +\  8p^3q^3d^2                                                    \notag \\
+            &amp;   +\  4p^4q^2d^2                                                    \notag \\
+            &amp;=      2pq\alpha^2 \left(p^2 + 2pq + q^2 \right)                     \notag \\
+            &amp;   +\  \left(2pqd \right)^2 \left(p^2 + 2pq + q^2 \right)            \notag \\
+            &amp;=      2pq\alpha^2 + \left(2pqd \right)^2                            \notag \\
+            &amp;=      \sigma_A^2 + \sigma_D^2
+\tag{3.21}
+\end{align}\]</span></p>
+<p>From the last two lines of <a href="quan-gen.html#eq:GenVarZWD">(3.21)</a> it follows that <span class="math inline">\(\sigma_A^2 = 2pq\alpha^2\)</span> and <span class="math inline">\(\sigma_D^2 = \left(2pqd \right)^2\)</span>. It can be shown that <span class="math inline">\(\sigma_A^2\)</span> corresponds to the squared breeding values times the associated genotype frequencies. Because the expected values of the breeding values is zero, <span class="math inline">\(\sigma_A^2\)</span> is equivalent to the variance of the breeding values.</p>
+<p><span class="math display" id="eq:VarBV">\[\begin{align}
+\sigma_A^2 &amp;= Var\left[ BV \right] = (BV_{11} - E\left[ BV \right])^2 * f(G_1G_1) 
+              + (BV_{12} - E\left[ BV \right])^2 * f(G_1G_2) 
+              + (BV_{22} - E\left[ BV \right])^2 * f(G_2G_2) \notag \\
+           &amp;= BV_{11}^2 * f(G_1G_1) + BV_{12}^2 * f(G_1G_2) + BV_{22}^2 * f(G_2G_2) \notag \\
+           &amp;= \left(2q \alpha \right)^2 * p^2 +  \left((q-p) \alpha \right)^2 * 2pq + \left(-2p \alpha \right)^2 * q^2 \notag \\
+           &amp;= 4p^2 q^2 \alpha^2 + \left(q^2 \alpha^2 -2pq\alpha^2 + p^2 \alpha^2 \right) * 2pq + 4p^2q^2\alpha^2 \notag \\
+           &amp;= 8p^2 q^2 \alpha^2 + 2pq^3\alpha^2 -4p^2q^2\alpha^2 + 2p^3q\alpha^2 \notag \\
+           &amp;= 4p^2 q^2 \alpha^2 + 2pq^3\alpha^2  + 2p^3q\alpha^2 \notag \\
+           &amp;= 2pq\alpha^2 \left(2pq + q^2 + p^2 \right) \notag \\
+           &amp;= 2pq\alpha^2
+\tag{3.22}
+\end{align}\]</span></p>
+<p>In the above derivation in <a href="quan-gen.html#eq:VarBV">(3.22)</a> of the variance of the breeding values, we were using the fact that the expected value <span class="math inline">\(E\left[ BV \right]=0\)</span>. This can be shown more formally as follows</p>
+<p><span class="math display" id="eq:ExpectedValueBV">\[\begin{align}
+E\left[ BV \right]  &amp;=  BV_{11} * f(G_1G_1) + BV_{12} * f(G_1G_2)  + BV_{22} * f(G_2G_2) \notag \\
+                    &amp;=  2q \alpha * p^2 + (q-p) \alpha * 2pq + (-2p \alpha) * q^2 \notag \\
+                    &amp;=  2p^2q \alpha + 2pq^2 \alpha - 2p^2q\alpha - 2pq^2\alpha \notag \\
+                    &amp;=  0
+\tag{3.23}
+\end{align}\]</span></p>
+<p>Similarly to <a href="quan-gen.html#eq:VarBV">(3.22)</a> we can show that <span class="math inline">\(\sigma_D^2\)</span> corresponds to the squared dominance deviations times the frequencies of the corresponding genotypes. That is the reason why <span class="math inline">\(\sigma_D^2\)</span> is called dominance variance.</p>
+<p><span class="math display" id="eq:VarDom">\[\begin{align}
+\sigma_D^2  &amp;=  D_{11}^2 * f(G_1G_1) + D_{12}^2 * f(G_1G_2) + D_{22}^2 * f(G_2G_2) \notag \\
+            &amp;=   (- 2q^2d)^2 * p^2 + (2pqd)^2 * 2pq + (- 2p^2d)^2 * q^2 \notag \\
+            &amp;=  4p^2q^4d^2 + 8p^3q^3d^2 + 4p^4q^2d^2 \notag \\
+            &amp;=  4p^2q^2d^2 \left( q^2 + 2pq + p^2 \right) \notag \\
+            &amp;=  4p^2q^2d^2 
+\tag{3.24}
+\end{align}\]</span></p>
+
+<div id="refs" class="references">
+<div>
+<p>3blue1brown. 2016. “What are vectors.” <a href="https://youtu.be/fNk%7B\_%7DzzaMoSs">https://youtu.be/fNk{\_}zzaMoSs</a>.</p>
+</div>
+<div>
+<p>Adibuzzaman, M, P DeLaurentis, J Hill, and B D Benneyworth. 2017. “Big data in healthcare - the promises, challenges and opportunities from a research perspective: A case study with a model database.” <em>AMIA Annu Symp Proc</em> 2017: 384–92. <a href="https://www.ncbi.nlm.nih.gov/pubmed/29854102">https://www.ncbi.nlm.nih.gov/pubmed/29854102</a>.</p>
+</div>
+<div>
+<p>Chizzotti, M. L., F. S. Machado, E. E. L. Valente, L. G. R. Pereira, M. M. Campos, T. R. Tomich, S. G. Coelho, and M. N. Ribas. 2015. “Technical note: Validation of a system for monitoring individual feeding behavior and individual feed intake in dairy cattle.” <em>Journal of Dairy Science</em> 98 (5): 3438–42. <a href="https://doi.org/10.3168/jds.2014-8925">https://doi.org/10.3168/jds.2014-8925</a>.</p>
+</div>
+<div>
+<p>Czech, Bartosz, Magdalena Fraszczak, Magda Mielczarek, and Joanna Szyda. 2018. “Identification and annotation of breed-specific single nucleotide polymorphisms in Bos taurus genomes.” <em>PLoS ONE</em> 13 (6): 1–9. <a href="https://doi.org/10.1109/TCSI.2014.2341116">https://doi.org/10.1109/TCSI.2014.2341116</a>.</p>
+</div>
+<div>
+<p>Falconer, D. S., and Trudy F. C. Mackay. 1996. <em>Introduction to Quantitative Genetics</em>. 4th ed. Essex: Addison Wesley Longman Limited.</p>
+</div>
+<div>
+<p>Issenberg, Sasha. 2013. “How Obama’s Team Used Big Data to Rally Voters.” <em>MIT Technology Review</em> 116 (1): 38–49.</p>
+</div>
+<div>
+<p>Mashey, John R. 1998. “Big Data ... and the Next Wave of InfraStress.” <a href="http://static.usenix.org/event/usenix99/invited%7B\_%7Dtalks/mashey.pdf">http://static.usenix.org/event/usenix99/invited{\_}talks/mashey.pdf</a>.</p>
+</div>
+<div>
+<p>Meuwissen, T H E, B J Hayes, and M E Goddard. 2001. “Prediction of Total Genetic Value Using Genome-Wide Dense Marker Maps.” <em>Genetics</em> 157: 1819–29.</p>
+</div>
+<div>
+<p>Moore, G E. 1965. “Cramming more components onto integrated circuits.” <em>Electronics</em> 38.</p>
+</div>
+<div>
+<p>Nipp, Kaspar, and Daniel Stoffer. 2002. <em>Lineare Algebra</em>. 5th ed. Zurich: vdf Hochschulverlag.</p>
+</div>
+<div>
+<p>Pant, Sameer D., Flavio S. Schenkel, Chris P. Verschoor, and Niel A. Karrow. 2012. “Use of breed-specific single nucleotide polymorphisms to discriminate between Holstein and Jersey dairy cattle breeds.” <em>Animal Biotechnology</em> 23 (1): 1–10. <a href="https://doi.org/10.1080/10495398.2012.636224">https://doi.org/10.1080/10495398.2012.636224</a>.</p>
+</div>
+<div>
+<p>R Core Team. 2018. “R: A language and environment for statistical computing.” Vienna, Austria: R Foundation for Statistical Computing. <a href="https://doi.org/R%20Foundation%20for%20Statistical%20Computing,%20Vienna,%20Austria.%20ISBN%203-900051-07-0,%20URL%20http://www.R-project.org.">https://doi.org/R Foundation for Statistical Computing, Vienna, Austria. ISBN 3-900051-07-0, URL http://www.R-project.org.</a></p>
+</div>
+<div>
+<p>Schaeffer, L. R. 2006. “Strategy for applying genome-wide selection in dairy cattle.” <em>J Anim Breed Genet</em> 123 (123): 218–23. <a href="https://doi.org/10.1111/j.1439-0388.2006.00595.x">https://doi.org/10.1111/j.1439-0388.2006.00595.x</a>.</p>
+</div>
+<div>
+<p>Searle, S R. 1971. <em>Linear Models</em>. Wiley Clas. New York: John Wiley &amp; Sons.</p>
+</div>
+<div>
+<p>Seidel, Jr., G. E. 2010. “Brief introduction to whole-genome selection in cattle using single nucleotide polymorphisms.” <em>Reproduction Fertility and Development</em> 22 (1): 138–44. <a href="https://doi.org/10.1071/RD09220">https://doi.org/10.1071/RD09220</a>.</p>
+</div>
+<div>
+<p>Wikipedia, Contributors. 2019. “Big data - Wikipedia.” <a href="https://en.wikipedia.org/w/index.php?title=Big%7B\_%7Ddata%7B\&amp;%7Doldid=881938730">https://en.wikipedia.org/w/index.php?title=Big{\_}data{\&amp;}oldid=881938730</a>.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="intro-linalg.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/charlotte-ngs/gelasmss2021/edit/master/cn_asm/93_basics_qg.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-asmas-ss2021.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
