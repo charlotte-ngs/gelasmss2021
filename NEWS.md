@@ -1,3 +1,7 @@
+# gelasmss2021 1.0.0
+
+* Releases of material for week 1
+
 # gelasmss2021 0.0.1
 
 * Started with preparing material for week 1.
