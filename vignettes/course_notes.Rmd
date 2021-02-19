@@ -18,7 +18,7 @@ This page contains the list of links pointing to the different chapters in the c
 
 ## Applied Statistical Methods
 
-```{r}
+```{r, echo=FALSE}
 s_cn_asm_url <- 'https://charlotte-ngs.github.io/gelasmss2021/cn_asm/'
 tbl_asm_chpt <- tibble::tibble(Week = c(1),
                                Date = c('2021-02-22'),
@@ -31,7 +31,7 @@ knitr::kable(tbl_asm_chpt)
 
 ## Appendix
 
-```{r}
+```{r, echo=FALSE}
 tbl_asm_app <- tibble::tibble(Week = c(1,1),
                               Date = c('2021-02-22', '2021-02-22'),
                               Topic = c(
