@@ -1,4 +1,8 @@
-# gelasmss2021 1.0.0
+# gelasmss2021 0.1.1
+
+* Chapter 1 of course notes
+
+# gelasmss2021 0.1.0
 
 * Releases of material for week 1
 
