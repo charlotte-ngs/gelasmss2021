@@ -356,7 +356,7 @@ if (!file.exists(s_plot_filename))
   ggsave(s_plot_filename, p)
 ```
 
-```{r compareregflem, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Comparison Between Regression Model And Fixed Linear Effects Model With An SNP-Locus As A Discrete Predictor Variables"}
+```{r compareregflem, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Comparison Between Regression Model And Fixed Linear Effects Model With An SNP-Locus As A Discrete Predictor Variables", out.width='11cm'}
 #rmddochelper::use_odg_graphic(ps_path = "odg/compareregflem.odg")
 knitr::include_graphics(path = "odg/compareregflem.png")
 ```
