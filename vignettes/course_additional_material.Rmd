@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ## Slides
 
-```{r}
+```{r, echo=FALSE}
 s_sl_url <- 'https://charlotte-ngs.github.io/gelasmss2021/sl/'
 tbl_sl <- tibble::tibble(Week    = c(1),
                          Date    = c("2021-02-22"),
