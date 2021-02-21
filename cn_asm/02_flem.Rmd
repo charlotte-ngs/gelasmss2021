@@ -43,7 +43,7 @@ The environmental part can be split into some fixed known systematic factors suc
   (\#eq:envdecompgeneticmodel)
 \end{equation}
 
-The genetic component $g$ can be decomposed into contributions from the finite number of loci that are influencing the observation $y$. In our example dataset (see Figure \@ref(fig:datastucturegbv)) there are three loci^[Implicitly, we are treating the SNP-markers to be identical with the underlying QTL. But based on the fact that we have very many SNPs spread over the complete genome, there will always be SNP sufficiently close to every QTL that influences a certain trait. But in reality the unknown QTL affect the traits and not the SNPs.] that are assumed to have an effect on $y$. Ignoring any interaction effects between the three loci, we can decompose the overall genetic effect $g$ into the some of the genotypic values of each locus. Hence 
+The genetic component $g$ can be decomposed into contributions from the finite number of loci that are influencing the observation $y$. In our example dataset (see Figure \@ref(fig:datastucturegbv)) there are three loci^[Implicitly, we are treating the SNP-markers to be identical with the underlying QTL. But based on the fact that we have very many SNPs spread over the complete genome, there will always be SNP sufficiently close to every QTL that influences a certain trait. But in reality the unknown QTL affect the traits and not the SNPs.] that are assumed to have an effect on $y$. Ignoring any interaction effects between the three loci and thereby assuming a completely additive model, the overall genetic effect $g$ can be decomposed into the sum of the genotypic values of each locus. Hence 
 
 \begin{equation}
   g = \sum_{j=1}^k g_j
@@ -54,7 +54,7 @@ where for our example $k$ is equal to three^[In reality $k$ can be $1.5*10^5$ fo
 
 Considering all SNP loci to be purely additive which means that we are ignoring any dominance effects, the genotypic values $g_j$ at any locus $j$ can just take one of the three values $-a_j$, $0$ or $+a_j$ where $a_j$ corresponds to the $a$ value from the mono-genic model (see Figure \@ref(fig:monogenicsnpmodel)). For our example dataset the genotypic value for each SNP genotype is given in the following table.
 
-```{r 02-flem-‹›ﬁgenotypicvalue, echo=FALSE, results='asis'}
+```{r 02-flem-genotypicvalue, echo=FALSE, results='asis'}
 tbl_genoval <- tibble::tibble(`SNP Locus` = c(rep("$SNP_1$", 3),
                                               rep("$SNP_2$", 3),
                                               rep("$SNP_3$", 3)),
@@ -71,7 +71,7 @@ knitr::kable(tbl_genoval,
              escape = FALSE)
 ```
 
-From the Table \@ref(tab:genotypicvalue) we can see that always the allele with subscript $1$ is taken to be that with the positive effect. Combining the information from Table \@ref(tab:genotypicvalue) together with the decomposition of the genotypic value $g$ in \@ref(eq:decompgeneticeffect), we get
+From the Table \@ref(tab:02-flem-genotypicvalue) we can see that always the allele with subscript $1$ is taken to be that with the positive effect. Combining the information from Table \@ref(tab:02-flem-genotypicvalue) together with the decomposition of the genotypic value $g$ in \@ref(eq:decompgeneticeffect), we get
 
 \begin{equation}
   g = M \cdot a
@@ -85,7 +85,7 @@ where $M$ is an indicator matrix taking values of $-1$, $0$ and $1$ depending on
   (\#eq:finalgeneticmodel)
 \end{equation}
 
-The result obtained in \@ref(eq:envdecompgeneticmodel) is the fundamental decomposition of the phenotypic observation $y$ into a genetic part represented by the SNP marker information ($M$) and an environmental part ($\beta$ and $\epsilon$). The $a$ values are unknown an must be estimated. The estimates of the $a$ values will then be used to predict the GBVs. How this estimation procedure works is described in the next section \@ref(asm-flem-statistical-model). 
+The result obtained in \@ref(eq:envdecompgeneticmodel) is the fundamental decomposition of the phenotypic observation $y$ into a genetic part represented by the SNP marker information ($M$) and an environmental part ($\beta$ and $\epsilon$). The $a$ values are unknown and must be estimated. The estimates of the $a$ values will then be used to predict the GBVs. How this estimation procedure works is described in the next section \@ref(asm-flem-statistical-model). 
 
 
 ### Statistical Model {#asm-flem-statistical-model}
@@ -157,7 +157,7 @@ The incidence matrix $X$ in \@ref(eq:flemmatrixvector) can be composed from the 
 ## Parameter Estimation Using Least Squares {#asm-flem-parameter-estimation-least-squares}
 The method of parameter estimation is explained using the simpler case of a regression model. That means both the predictors and the response variables are on a continuous scale. As a further simplification, we assume that there is only one predictor variable and one response variable. The predictor variable is called $x$ and the response variable is called $y$. The model is still the same as shown in \@ref(eq:flemmatrixvector). The matrix $X$ has just one column with the measured values of the predictor variable and $b$ is just a scalar unknown parameter. The vector $y$ contains the observed values for the response values. 
 
-The goal of the analysis of the simple dataset is to find an estimate of the scalar $b$ such that the linear combination of $X$ and $b$ best explains the values in $y$. How we can find such an estimation procedure that allows us to calculate an estimate of $b$ is explained using a small example data set in the following subsection.
+The goal of the analysis of the simple dataset is to find an estimate of the scalar $b$ such that the linear combination of $X$ and $b$ best explains the values in $y$. How we can find such an estimation procedure that allows us to calculate an estimate of $b$ is explained using a small example dataset in the following subsection.
 
 
 ### An Example Dataset {#asm-flem-regression-example}
@@ -460,16 +460,19 @@ matX <- matrix(c(1, 1, 0,
                  1, 0, 0), nrow = n_nr_animal, byrow = TRUE)
 vec_b = matrix(c("b_0", "a_G", "a_H"), ncol = 1)
 cat("\\begin{equation}\n")
-cat("\\left[")
-cat(paste0(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_obs_y_rounded, pnDigits = 0), collapse = "\n"), "\n")
-cat("\\right]\n")
+cat(paste0(rmdhelp::bmatrix(pmat = mat_obs_y_rounded), collapse = "\n"), "\n")
+# cat("\\left[")
+# cat(paste0(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_obs_y_rounded, pnDigits = 0), collapse = "\n"), "\n")
+# cat("\\right]\n")
 cat(" = \n")
-cat("\\left[")
-cat(paste0(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = matX, pnDigits = 0), collapse = "\n"), "\n")
-cat("\\right]\n")
-cat("\\left[")
-cat(paste0(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = vec_b, pnOutStartLine = 4), collapse = "\n"), "\n")
-cat("\\right]\n")
+cat(paste0(rmdhelp::bmatrix(pmat = matX), collapse = "\n"), "\n")
+# cat("\\left[")
+# cat(paste0(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = matX, pnDigits = 0), collapse = "\n"), "\n")
+# cat("\\right]\n")
+cat(paste0(rmdhelp::bmatrix(pmat = vec_b), collapse = "\n"), "\n")
+# cat("\\left[")
+# cat(paste0(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = vec_b, pnOutStartLine = 4), collapse = "\n"), "\n")
+# cat("\\right]\n")
 cat(" + \\epsilon")
 cat("\\end{equation}")
 ```

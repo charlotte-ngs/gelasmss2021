@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2015.11.2)  19 FEB 2021 11:40
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2015.11.2)  21 FEB 2021 09:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1157,11 +1157,11 @@ LaTeX Font Info:    Font shape `EU1/latinmodern-math.otf(2)/m/n' will be
 (Font)              scaled to size 6.99986pt on input line 2.
 LaTeX Font Info:    Font shape `EU1/latinmodern-math.otf(2)/m/n' will be
 (Font)              scaled to size 4.99992pt on input line 2.
-)
+[3])
 \tf@toc=\write3
 \openout3 = `bookdown-asmas-ss2021.toc'.
 
-[3] [4]
+[4]
 Underfull \vbox (badness 7486) has occurred while \output is active []
 
 [5
@@ -1213,118 +1213,168 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [16]
 File: odg/infinitesimalvspolygenic.pdf Graphic file (type QTm)
 <use  "odg/infinitesimalvspolygenic.pdf" > [17] [18]
-Appendix A.
+Chapter 2.
+File: odg/datastucturegbv.pdf Graphic file (type QTm)
+<use  "odg/datastucturegbv.pdf" >
+Overfull \hbox (81.81636pt too wide) in paragraph at lines 314--314
+[][] 
+ []
+
 [19
 
 ]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[20] [21] [22] [23] [24]
+Underfull \vbox (badness 1242) has occurred while \output is active []
+
+[25]
+File: odg/showregressionbwonbc.pdf Graphic file (type QTm)
+<use  "odg/showregressionbwonbc.pdf" >
+Overfull \hbox (81.81636pt too wide) in paragraph at lines 513--513
+[][] 
+ []
+
+[26] [27] [28] [29]
+File: odg/compareregflem.pdf Graphic file (type QTm)
+<use  "odg/compareregflem.pdf" >
+Overfull \hbox (500.09639pt too wide) in paragraph at lines 642--642
+[][] 
+ []
+
+[30] [31]
+Overfull \hbox (39.9001pt too wide) in paragraph at lines 659--688
+ [][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[32] [33] [34] [35] [36
+
+]
+Appendix A.
+[37]
 File: odg/vector-physics-perspective.pdf Graphic file (type QTm)
 <use  "odg/vector-physics-perspective.pdf" >
-Overfull \hbox (81.81636pt too wide) in paragraph at lines 341--342
+Overfull \hbox (81.81636pt too wide) in paragraph at lines 775--776
 [][] 
  []
 
-[20]
+[38]
 File: odg/vector-cs-perspecitve.pdf Graphic file (type QTm)
 <use  "odg/vector-cs-perspecitve.pdf" >
-Overfull \hbox (81.81636pt too wide) in paragraph at lines 348--349
+Overfull \hbox (81.81636pt too wide) in paragraph at lines 782--783
 [][] 
  []
 
-[21]
+[39]
 File: odg/coordinate-system.pdf Graphic file (type QTm)
 <use  "odg/coordinate-system.pdf" >
-Overfull \hbox (81.81636pt too wide) in paragraph at lines 360--361
+Overfull \hbox (81.81636pt too wide) in paragraph at lines 794--795
 [][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[22]
+[40]
 File: odg/vector-sum.pdf Graphic file (type QTm)
 <use  "odg/vector-sum.pdf" >
-Overfull \hbox (81.81636pt too wide) in paragraph at lines 384--384
+Overfull \hbox (81.81636pt too wide) in paragraph at lines 818--818
 [][] 
  []
 
-[23] [24]
+[41] [42]
 File: odg/vector-scalar-multiplication.pdf Graphic file (type QTm)
 <use  "odg/vector-scalar-multiplication.pdf" >
-Overfull \hbox (81.81636pt too wide) in paragraph at lines 400--401
+Overfull \hbox (81.81636pt too wide) in paragraph at lines 834--835
 [][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[25] [26] [27] [28] [29] [30] [31] [32
+[43] [44] [45] [46] [47] [48] [49] [50
 
 ]
 Appendix B.
 
-LaTeX Warning: Reference `geno-pheno' on page 33 undefined on input line 715.
+LaTeX Warning: Reference `geno-pheno' on page 51 undefined on input line 1149.
 
 
-LaTeX Warning: Reference `eq:phengenenv' on page 33 undefined on input line 715
-.
+LaTeX Warning: Reference `eq:phengenenv' on page 51 undefined on input line 114
+9.
 
 File: odg/idealpopsingletrait.pdf Graphic file (type QTm)
 <use  "odg/idealpopsingletrait.pdf" >
-Overfull \hbox (81.81636pt too wide) in paragraph at lines 723--723
+Overfull \hbox (81.81636pt too wide) in paragraph at lines 1157--1157
 [][] 
  []
 
-[33] [34]
+[51] [52]
 
 Package amsmath Warning: Foreign command \over;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 747.
+(amsmath)                 on input line 1181.
 
-[35]
+[53]
 File: odg/genotypicvalue.pdf Graphic file (type QTm)
 <use  "odg/genotypicvalue.pdf" >
-Overfull \hbox (432.86519pt too wide) in paragraph at lines 798--798
+Overfull \hbox (432.86519pt too wide) in paragraph at lines 1232--1232
 [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 24.06564pt on input line 799.
+LaTeX Warning: Float too large for page by 24.06564pt on input line 1233.
 
-[36] [37] [38] [39] [40] [41] [42] [43] [44] [45]
+[54] [55] [56] [57] [58] [59] [60] [61] [62] [63]
 File: bookdown-asmas-ss2021_files/figure-latex/hist-clt-1.pdf Graphic file (typ
 e QTm)
-<use  "bookdown-asmas-ss2021_files/figure-latex/hist-clt-1.pdf" > [46]
+<use  "bookdown-asmas-ss2021_files/figure-latex/hist-clt-1.pdf" > [64]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[47]
-Overfull \hbox (148.14867pt too wide) in paragraph at lines 1233--1233
+[65]
+Overfull \hbox (148.14867pt too wide) in paragraph at lines 1667--1667
 [] 
  []
 
-[48] (./bookdown-asmas-ss2021.bbl [49] [50
+[66] (./bookdown-asmas-ss2021.bbl [67] [68
 
-] [51])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1258.
-[52]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1258.
+]
+Underfull \hbox (badness 1371) in paragraph at lines 66--73
+[]\EU1/lmr/m/n/10 David J. Lilja.  \EU1/lmr/m/it/10 Linear regression using R :
+ an introduction to data
+ []
+
+
+Underfull \hbox (badness 1430) in paragraph at lines 66--73
+\EU1/lmr/m/it/10 modeling\EU1/lmr/m/n/10 .  University of Minnesota Libraries P
+ublishing, Minneapolis,
+ []
+
+[69])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1692.
+[70]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1692.
 (./bookdown-asmas-ss2021.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1258.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1258.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1692.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1692.
 
 LaTeX Warning: There were undefined references.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1258.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1692.
  ) 
 Here is how much of TeX's memory you used:
- 28933 strings out of 493706
- 512431 string characters out of 6145769
- 660455 words of memory out of 5000000
- 31966 multiletter control sequences out of 15000+600000
+ 29014 strings out of 493706
+ 514059 string characters out of 6145769
+ 666793 words of memory out of 5000000
+ 32044 multiletter control sequences out of 15000+600000
  10139 words of font info for 73 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
- 58i,10n,103p,10416b,617s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 58i,10n,103p,10416b,623s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on bookdown-asmas-ss2021.pdf (52 pages).
+Output written on bookdown-asmas-ss2021.pdf (70 pages).
