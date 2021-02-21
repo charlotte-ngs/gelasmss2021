@@ -1,7 +1,7 @@
 ---
 title: "Fixed Linear Effects Models"
 author: "Peter von Rohr"
-date: "24.02.2020"
+date: "01.03.2021"
 output: beamer_presentation
 ---
 
@@ -18,7 +18,7 @@ knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
 
 
 ## Data
-```{r datastucturegbv, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+```{r datastucturegbv, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
 #rmddochelper::use_odg_graphic(ps_path = "odg/datastucturegbv.odg")
 knitr::include_graphics(path = "odg/datastucturegbv.png")
 ```
@@ -52,7 +52,7 @@ $$y = g + e$$
 
 ## Genetic Model (II)
 
-```{r geneticmodeldiagram, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+```{r geneticmodeldiagram, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
 #rmddochelper::use_odg_graphic(ps_path = "odg/geneticmodeldiagram.odg")
 knitr::include_graphics(path = "odg/geneticmodeldiagram.png")
 ```
@@ -136,7 +136,7 @@ $$y_i = x_i * b + \epsilon_i$$
 
 
 ## LSQ Diagram
-```{r showregressionbwonbc, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+```{r showregressionbwonbc, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
 #rmddochelper::use_odg_graphic(ps_path = "odg/showregressionbwonbc.odg")
 knitr::include_graphics(path = "odg/showregressionbwonbc.png")
 ```
@@ -215,11 +215,11 @@ with $b^T = \left[\begin{array}{cccc} b_0 & b_1 & b_2 & b_3 \end{array}\right]$
 
 ```{r datamultlinregression, echo=FALSE, results='asis', message=FALSE}
 ### # define constant paths
-s_data_root_online <- "https://charlotte-ngs.github.io/GELASMSS2020"
+s_data_root_online <- "https://charlotte-ngs.github.io/gelasmss2021/data"
 s_data_root_local <- here::here() 
-s_data_dir <- "ex/w03/bw_mult_reg.csv"
+s_data_dir <- "bw_mult_reg.csv"
 ### # define data path depending on whether we are online or not
-b_online <- FALSE
+b_online <- TRUE
 if (b_online){
   s_data_root <- s_data_root_online
 } else {
@@ -255,7 +255,7 @@ $\rightarrow$ regression on dummy variables or just general fixed linear model.
 
 ## Example: SNP-Data
 
-```{r snp-data-linkage, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+```{r snp-data-linkage, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
 #rmdhelp::use_odg_graphic(ps_path = "odg/snp-data-linkage.odg")
 knitr::include_graphics(path = "odg/snp-data-linkage.png")
 ```
@@ -270,7 +270,7 @@ knitr::include_graphics(path = "odg/snp-data-linkage.png")
 
 ## Dummy Regression Line
 
-```{r snp-data-dummy-reg-line, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+```{r snp-data-dummy-reg-line, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
 #rmdhelp::use_odg_graphic(ps_path = "odg/snp-data-dummy-reg-line.odg")
 knitr::include_graphics(path = "odg/snp-data-dummy-reg-line.png")
 ```
