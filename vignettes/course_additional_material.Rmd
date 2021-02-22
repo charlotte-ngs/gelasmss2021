@@ -14,3 +14,15 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Slides
+
+```{r, echo=FALSE}
+s_sl_url <- 'https://charlotte-ngs.github.io/gelasmss2021/sl/'
+tbl_sl <- tibble::tibble(Week    = c(1),
+                         Date    = c("2021-02-22"),
+                         Topic   = c(
+                           paste0("[Introduction](", s_sl_url, "asm-w01-v01-intro.pdf)", collapse = '')
+                         ))
+knitr::kable(tbl_sl)
+```
+

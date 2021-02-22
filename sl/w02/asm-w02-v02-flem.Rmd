@@ -1,0 +1,312 @@
+---
+title: "Fixed Linear Effects Models"
+author: "Peter von Rohr"
+date: "01.03.2021"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
+```
+
+## Background
+- Given a population of $N$ animals
+- Each animal has information on genotypes at loci $G$, $H$ and $I$
+- Each animal has an observation for one quantitative trait of interest $y$
+- __Goal__: Predict genomic breeding values
+
+
+## Data
+```{r datastucturegbv, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
+#rmddochelper::use_odg_graphic(ps_path = "odg/datastucturegbv.odg")
+knitr::include_graphics(path = "odg/datastucturegbv.png")
+```
+
+
+## Two Types Of Models
+
+1. __Genetic__ Model: How can we decompose the phenotype into genetic part and non-genetic environmental part
+2. __Statistical__ Model: How to estimate unknown parameters from a dataset
+
+__Goals__: 
+
+1. Use genetic model to show how observations and genetic information can be used to predict breeding values.
+2. Use statistical techniques to do the prediction
+
+
+## Genetic Model
+
+- simple model from quantitative genetics to split phenotypic observation into 
+    + genetic part $g$ and
+    + environmental part $e$
+    
+$$y = g + e$$
+    
+- environment: split into
+    + known environmental factors: `herd`, `year`, ... ($\beta$)
+    + unknown random error ($\epsilon$)
+    
+- polygenic model: use a finite number of loci to model genetic part of phenotypic observation
+
+
+## Genetic Model (II)
+
+```{r geneticmodeldiagram, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
+#rmddochelper::use_odg_graphic(ps_path = "odg/geneticmodeldiagram.odg")
+knitr::include_graphics(path = "odg/geneticmodeldiagram.png")
+```
+ 
+
+## Polygenic Model
+- Component $g$ can be decomposed into contributions $g_j$ of single loci
+
+$$g = \sum_{j=1}^k g_j$$
+
+- Assume that loci are additive, hence genotypic values $g_j$ depends on $a_j$ with $d_j = 0$
+- Genotypic values at locus $j$ can either be $-a_j$, $0$ or $a_j$
+- Breeding values based on locus $j$ depends on $a_j$.
+
+
+## Genotypic Value
+- Genotypic value $g_i$ for animal $i$ over all loci
+
+$$g_i = M_i \cdot a$$
+
+where M_i is a row vector with elements $-1$, $0$ and $1$ and $a$ is the vector of all genotypic values of the positive homozygous genotypes of all loci. 
+
+
+## Phenotypic Value
+- Collecting all components for an observation $y_i$ for animal $i$
+
+$$y_i = W_i \cdot \beta + M_i \cdot a + \epsilon_i$$
+
+- all animals in the population
+
+$$y = W\cdot \beta + M \cdot a + \epsilon$$
+
+- combining $b^T = \left[\begin{array}{cc} \beta & a \end{array} \right]$ and $X = \left[\begin{array}{cc} W & M \end{array} \right]$
+
+$$y = X\cdot b + \epsilon$$
+
+
+## Statistical Model
+- genetic model from statistics point of view
+- phenotypic observation as response $y$
+- vector $b$ (known environment and genotypic values) as unknown parameter
+- fixed predictor variales in matrix $X$
+- vector $\epsilon$ as random error terms
+
+$\rightarrow$ Fixed Linear Effects Model
+
+
+## Parameter Estimation
+- use regression model
+- regression means both response and predictors are continuous
+- example dataset: body weight on breast circumference
+
+
+## Regression Dataset
+
+```{r dataregression, echo=FALSE, results='asis'}
+tbl_reg <- tibble::tibble(Animal = c(1:10),
+                          `Breast Circumference` = c(176, 177, 178, 179, 179, 180, 181, 182,183, 184),
+                          `Body Weight` = c(471, 463, 481, 470, 496, 491, 518, 511, 510, 541))
+knitr::kable(tbl_reg)
+```
+
+
+## Regression Model
+
+- response $y$: body weight
+- predictor $x$: breast circumference
+- model for observation $y_i$
+
+$$y_i = x_i * b + \epsilon_i$$
+
+- meaning of $b$: change $x_i$ by one unit $\rightarrow$ $y_i$ changes on average by $b$ units.
+- use case: measure $x_{N+1}$ for animal $N+1$ with unknown weight and use $b$ to predict $y_{N+1}$
+
+
+## Least Squares
+- How to find $b$ such that $y$ is best approximated by $x$
+- Residuals $r_i = y_i - x_i * \hat{b}$
+- Minimization of sum of squared residuals ($LS$)
+- Use $\hat{b}$ at minimal $LS$ as estimate
+
+
+## LSQ Diagram
+```{r showregressionbwonbc, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
+#rmddochelper::use_odg_graphic(ps_path = "odg/showregressionbwonbc.odg")
+knitr::include_graphics(path = "odg/showregressionbwonbc.png")
+```
+
+
+## Sum of squared residuals 
+
+$$LS = \sum_{i=1}^n r_i^2$$
+- In matrix-vector notation with $r$ denoting the vector of all residuals
+$$LS = ||r||^2 = r^Tr$$
+
+where $||.||$ stands for the norm ("length in 2D") of a vector 
+
+- Replacing $r$ with $r = y - X\hat{b}$
+
+$$LS = (y - X\hat{b})^T(y - X\hat{b}) = y^Ty - y^TX\hat{b} - \hat{b}^TX^Ty + \hat{b}^TX^TX\hat{b}$$
+
+## Minimization
+
+- Set partial derivative of $LS$ with respect to $\hat{b}$ to $0$
+
+$$\frac{\partial LS}{\partial \hat{b}} = -y^TX - y^TX + 2\hat{b}^TX^TX = 0$$
+
+- Take the $\hat{b}$ that satisfies the above equation as the least squares estimate $\hat{b}_{LS}$
+
+$$X^TX\hat{b}_{LS} = X^Ty$$
+
+- Solution
+
+$$\hat{b}_{LS} = (X^TX)^{-1}X^Ty$$
+
+
+## Variance of Error Terms
+- Least Squares Procedure does not yield an estimate for $\sigma^2$
+- The estimator based on the residuals 
+
+$$\hat{\sigma^2} =  {1 \over n-p} \sum_{i=1}^n r_i^2$$
+
+
+## Different Types of Regressions
+
+- Regression through the origin
+
+$$y_i = x_i * b + e_i$$
+
+- Regression with intercept
+
+$$y_i = b_0 + x_i * b + e_i$$
+
+
+## Predictions
+
+- One of the use-cases for regression is **prediction**
+- Prediction means that given a regression model with estimated regression coefficients based on a data set, values of responses are to be predicted for new predictor values ($x_{new}$)
+
+$$\hat{y} = x_{new} * \hat{b}$$
+
+- No predictions outside of the range of $x$ used to estimate $\hat{b}$
+
+
+## Multiple Linear Regression
+
+* Use more than one predictor variable
+* Example: Conformation traits `BCS` and `HEI` besides `BC`
+* New model:
+
+$$ y_i = b_0 + BC_i * b_1 + BCS_i * b_2 + HEI_i * b_3 + e_i$$
+
+* In matrix vector notation:
+
+$$y = X b + e$$
+
+with $b^T = \left[\begin{array}{cccc} b_0 & b_1 & b_2 & b_3 \end{array}\right]$
+
+## New data set
+
+```{r datamultlinregression, echo=FALSE, results='asis', message=FALSE}
+### # define constant paths
+s_data_root_online <- "https://charlotte-ngs.github.io/gelasmss2021/data"
+s_data_root_local <- here::here() 
+s_data_dir <- "bw_mult_reg.csv"
+### # define data path depending on whether we are online or not
+b_online <- TRUE
+if (b_online){
+  s_data_root <- s_data_root_online
+} else {
+  s_data_root <- s_data_root_local
+}
+s_data_path <- file.path(s_data_root, s_data_dir)
+### # read data from s_data_path
+tbl_reg <- readr::read_csv(file = s_data_path)
+knitr::kable(tbl_reg,
+             booktabs = TRUE,
+             longtable = TRUE,
+             caption = "Dataset for Multiple Linear Regression")
+```
+
+
+## Goal
+
+* Find solution for $\hat{b}_{LS}$
+* Same principle of least squares as with simple linear regression
+* Different dimensions for $X$ and $b$
+
+$\rightarrow$ Problem 1 in Exercise 2
+
+
+## Regression on Dummy Variables
+
+* What happens when predictor variables $X$ are no longer continuous
+* Examples: SNP-Genotypes
+* $X$ can only take a few discrete values, e.g., $0, 1$ or $-1, 0, 1$, ...
+
+$\rightarrow$ regression on dummy variables or just general fixed linear model.
+
+
+## Example: SNP-Data
+
+```{r snp-data-linkage, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
+#rmdhelp::use_odg_graphic(ps_path = "odg/snp-data-linkage.odg")
+knitr::include_graphics(path = "odg/snp-data-linkage.png")
+```
+ 
+
+## Goal
+
+* Same as in linear regression: fit line through points such that least squares criterion holds
+* Interpretation: Difference between effect levels
+* For SNP-data: differences correspond to marker effects
+
+
+## Dummy Regression Line
+
+```{r snp-data-dummy-reg-line, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
+#rmdhelp::use_odg_graphic(ps_path = "odg/snp-data-dummy-reg-line.odg")
+knitr::include_graphics(path = "odg/snp-data-dummy-reg-line.png")
+```
+
+ 
+## Problem
+
+* In many datasets $X$ does not have full column-rank
+* That means some columns of $X$ show linear dependence
+* As a consequence of that $(X^TX)$ cannot be inverted
+
+
+## Solution
+
+* Use a generalised inverse $(X^TX)^-$ to get a solution $\hat{b}_{LS}$ for least squares normal equations
+* Use estimable functions of $\hat{b}_{LS}$ which are independent of the choice of $(X^TX)^-$
+* One example for estimable functions are differences between effect levels
+* For example of SNP-data these correspond to marker effects.
+
+
+## Generalised Inverse
+
+* Reminder: the (ordinary) inverse $A^{-1}$ of $A$ is given by $A^{-1}A = I$, but $A^{-1}$ exists only, if $A$ is of full rank.
+* A generalised inverse $G$ of matrix $A$ satisfies: $AGA = A$
+* For the system of equations $Ax = y$, the vector $x = Gy$ is a solution, if $AGA = A$
+* For a generalised inverse $G$ of $A$, the system of equation $Ax = y$ has solutions
+
+$$\tilde{x} = Gy + (GA - I)z$$
+for an arbitrary vector $z$.
+
+
+## Estimable Functions
+
+* linear function of the parameter ($b$) that is identical to linear function of expected values of observations $y$, i.e., 
+
+$$q^Tb = t^TE(y)$$
+
+* estimable functions are invariant (do not change) with different generalised inverses.
+

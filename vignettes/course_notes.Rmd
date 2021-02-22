@@ -16,4 +16,28 @@ knitr::opts_chunk$set(
 
 This page contains the list of links pointing to the different chapters in the course notes. 
 
-## Chapters
+## Applied Statistical Methods
+
+```{r, echo=FALSE}
+s_cn_asm_url <- 'https://charlotte-ngs.github.io/gelasmss2021/cn_asm/'
+tbl_asm_chpt <- tibble::tibble(Week = c(1),
+                               Date = c('2021-02-22'),
+                               Topic = c(
+                                 paste0("[Introduction](", s_cn_asm_url, "01_intro.pdf)", collapse = "")
+                               ))
+knitr::kable(tbl_asm_chpt)
+```
+
+
+## Appendix
+
+```{r, echo=FALSE}
+tbl_asm_app <- tibble::tibble(Week = c(1,1),
+                              Date = c('2021-02-22', '2021-02-22'),
+                              Topic = c(
+                                paste0("[Linear Algebra](", s_cn_asm_url, "91_app_lin_alg.pdf)", collapse = ""),
+                                paste0("[Quantitative Genetics](", s_cn_asm_url, "92_app_qg.pdf)", collapse = "")
+                              ))
+knitr::kable(tbl_asm_app)
+```
+
