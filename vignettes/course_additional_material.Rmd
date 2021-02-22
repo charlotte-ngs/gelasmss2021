@@ -21,8 +21,24 @@ s_sl_url <- 'https://charlotte-ngs.github.io/gelasmss2021/sl/'
 tbl_sl <- tibble::tibble(Week    = c(1),
                          Date    = c("2021-02-22"),
                          Topic   = c(
-                           paste0("[Introduction](", s_sl_url, "asm-w01-v01-intro.pdf)", collapse = '')
+                           "Introduction to Applied Statistical Methods"
+                         ),
+                         Link    = c(
+                           paste0("[original](", s_sl_url, "asm-w01-v01-intro.pdf) | ", 
+                                  "[with notes](", s_sl_url, "asm-w01-v01-intro_with_notes.pdf)", collapse = '')
                          ))
 knitr::kable(tbl_sl)
+```
+
+
+## Video
+
+```{r, echo=FALSE}
+tbl_video <- tibble::tibble(Week = c(1),
+                            Date = c("2021-02-22"),
+                            Topic = c(
+                              "[Introduction to Applied Statistical Methods](https://youtu.be/wMHUiDgAUI8)"
+                            ))
+kitr::kable(tbl_video)
 ```
 
