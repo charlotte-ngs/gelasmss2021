@@ -39,6 +39,6 @@ tbl_video <- tibble::tibble(Week = c(1),
                             Topic = c(
                               "[Introduction to Applied Statistical Methods](https://youtu.be/wMHUiDgAUI8)"
                             ))
-kitr::kable(tbl_video)
+knitr::kable(tbl_video)
 ```
 

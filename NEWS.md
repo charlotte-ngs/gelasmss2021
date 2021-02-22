@@ -1,3 +1,7 @@
+# gelasmss2021 0.1.3
+
+* Link to video and to slides with notes for week 1
+
 # gelasmss2021 0.1.2
 
 * Release of slides for week 1
