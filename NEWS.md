@@ -1,3 +1,7 @@
+# gelasmss2021 0.2.0
+
+* Course notes for week 2
+
 # gelasmss2021 0.1.3
 
 * Link to video and to slides with notes for week 1
