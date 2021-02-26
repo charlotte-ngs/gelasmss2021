@@ -71,21 +71,21 @@ knitr::kable(tbl_genoval,
              escape = FALSE)
 ```
 
-From the Table \@ref(tab:02-flem-genotypicvalue) we can see that always the allele with subscript $1$ is taken to be that with the positive effect. Combining the information from Table \@ref(tab:02-flem-genotypicvalue) together with the decomposition of the genotypic value $g$ in \@ref(eq:decompgeneticeffect), we get
+From the Table \@ref(tab:02-flem-genotypicvalue) we can see that always the allele with subscript $1$ is taken to be that with the positive effect. Combining the information from Table \@ref(tab:02-flem-genotypicvalue) together with the decomposition of the genotypic value $g$ in \@ref(eq:decompgeneticeffect), we get 
 
 \begin{equation}
-  g = M \cdot a
+  g = m^T \cdot a
   (\#eq:genotypicvalueintermsofa)
 \end{equation}
 
-where $M$ is an indicator matrix taking values of $-1$, $0$ and $1$ depending on the SNP marker genotype and $a$ is the vector of $a$ values for all SNP marker loci. Combining the decomposition in \@ref(eq:genotypicvalueintermsofa) together with the basic genetic model in \@ref(eq:envdecompgeneticmodel), we get
+where $m$ is an indicator vector taking values of $-1$, $0$ and $1$ depending on the SNP marker genotype and $a$ is the vector of $a$ values for all SNP marker loci. Combining the decomposition in \@ref(eq:genotypicvalueintermsofa) together with the basic genetic model in \@ref(eq:envdecompgeneticmodel), we get
 
 \begin{equation}
-  y = \beta + M \cdot a + \epsilon
+  y = \beta + m^T \cdot a + \epsilon
   (\#eq:finalgeneticmodel)
 \end{equation}
 
-The result obtained in \@ref(eq:envdecompgeneticmodel) is the fundamental decomposition of the phenotypic observation $y$ into a genetic part represented by the SNP marker information ($M$) and an environmental part ($\beta$ and $\epsilon$). The $a$ values are unknown and must be estimated. The estimates of the $a$ values will then be used to predict the GBVs. How this estimation procedure works is described in the next section \@ref(asm-flem-statistical-model). 
+The result obtained in \@ref(eq:envdecompgeneticmodel) is the fundamental decomposition of the phenotypic observation $y$ into a genetic part represented by the SNP marker information ($m$) and an environmental part ($\beta$ and $\epsilon$). The $a$ values are unknown and must be estimated. The estimates of the $a$ values will then be used to predict the GBVs. How this estimation procedure works is described in the next section \@ref(asm-flem-statistical-model). 
 
 
 ### Statistical Model {#asm-flem-statistical-model}
@@ -210,24 +210,24 @@ The method that determines $\hat{b}$ such that the sum of the squared residuals 
   (\#eq:leastsquaresestimate)
 \end{equation}
 
-where $||.||$ denotes the Euclidean norm. The estimate $\hat{b}_{LS}$ can be found by finding the minimum of $||y - Xb||^2$. The minimum of $||y - Xb||^2$ is found by first taking the derivative with respect to $b$ and the setting that derivative to $0$. The derivative of $||y - Xb||^2$ with respect to $b$ can be computed as follows
+where $||.||$ denotes the Euclidean norm. The estimate $\hat{b}_{LS}$ can be found by finding the minimum of $||y - Xb||^2$. The minimum of $||y - Xb||^2$ is found by first taking the derivative with respect to $b$ and the setting that derivative to $0$. The derivative of $||y - Xb||^2$ with respect to $b$ can be computed by starting with the derivation of the least squares criterium $LS$ as follows
 
 \begin{equation}
   LS = ||y - Xb||^2 = (y - Xb)^T(y - Xb) = y^Ty - y^TXb - b^TX^Ty + b^TX^TXb
   (\#eq:computels)
 \end{equation}
 
-The derivative of $LS$ with respect to $b$ is
+The derivative of $LS$ with respect to $b$ corresponds to the gradient vector of $LS$ with respect to $b$ which contains the derivative of $LS$ with respect to every component $b_i$ of the vector $b$. This gradient vector is
 
 \begin{equation}
-  \frac{\partial LS}{\partial b} = -y^TX - y^TX + 2*b^TX^TX
+  \frac{\partial LS}{\partial b} = -X^Ty - X^Ty + 2*X^TXb
   (\#eq:partiallswrtb)
 \end{equation}
 
-The minimum is found by setting $\frac{\partial LS}{\partial b}$ to $0$. 
+The minimum is found by setting $\frac{\partial LS}{\partial b}$ to $0$ which is satisfied by a specific vector called $\hat{b}$. 
 
 \begin{equation}
-  \frac{\partial LS}{\partial b} = -y^TX - y^TX + 2*\hat{b}^TX^TX = 0
+  \frac{\partial LS}{\partial b} = -X^Ty - X^Ty + 2*X^TX\hat{b} = 0
   (\#eq:minimumls)
 \end{equation}
 
@@ -372,7 +372,7 @@ We are using the dataset shown in Table \@ref(tab:dataflemsnpobs) as an example 
 ```{r dataflemsnpobs, echo=FALSE}
 ### # fix the number of animals
 n_nr_animal <- 20
-### # intercept
+### # intercept
 n_inter_cept <- 500
 ### # residual standard deviation
 n_res_sd <- 12.13
@@ -495,9 +495,36 @@ The normal equations in \@ref(eq:normalequationflem) are written with the symbol
   (\#eq:gensolnormalequationflem)
 \end{equation}
 
-where $(X^TX)^-$ stands for a __generalized inverse__ of the matrix $X^TX$. A generalized inverse $G$ of a given matrix $A$ is defined as the matrix that satisfies the equation $AGA = A$. The matrix $G$ is not unique. Applying the concept of a generalized inverse to a system of equations $Ax = y$, it can be shown that $x = Gy$ is a solution, if $G$ is a generalized inverse of $A$. Because $G$ is not unique, there are infinitely many solutions corresponding to $\tilde{x} = Gy + (GA - I)z$ where $z$ can be an arbitrary vector of consistent order. Applying these statements concerning generalized inverses and solutions to systems of equations to \@ref(eq:gensolnormalequationflem), it means that $b^{(0)}$ is not a unique solution to \@ref(eq:normalequationflem) because the generalized inverse $(X^TX)^-$ is not unique. As a consequence of that the solution $b^{(0)}$ cannot be used as an estimate of the unknown parameter vector $b$. 
+where $(X^TX)^-$ stands for a __generalized inverse__ of the matrix $X^TX$. 
 
-The numeric solution of the analysis of the example dataset given in Table \@ref(tab:dataflemsnpobs) is the topic of an exercise. When developing that solution, we will see that some linear functions of $b^{(0)}$ can be found which do not depend on the choice of the generalized inverse $(X^TX)^-$. Such functions are called __estimable functions__ and can be used as estimates for the respective functions of the unknown parameter vector $b$. Differences between different elements in the parameter vector $b$ are often used as estimable functions. More details about generalized inverses and estimable functions can be found in `r met$add("Searle1971")`. 
+
+### Generalized Inverse Matrices {#asm-flem-generalized-inverse-matrices}
+A generalized inverse matrix $G$ of a given matrix $A$ is defined as the matrix that satisfies the equation $AGA = A$. The matrix $G$ is not unique. Applying the concept of a generalized inverse to a system of equations $Ax = y$, it can be shown that $x = Gy$ is a solution, if $G$ is a generalized inverse of $A$. Because $G$ is not unique, there are infinitely many solutions corresponding to $\tilde{x} = Gy + (GA - I)z$ where $z$ can be an arbitrary vector of consistent length. Applying these statements concerning generalized inverses and solutions to systems of equations to \@ref(eq:gensolnormalequationflem), it means that $b^{(0)}$ is not a unique solution to \@ref(eq:normalequationflem) because the generalized inverse $(X^TX)^-$ is not unique. As a consequence of that non-uniqueness, the solution $b^{(0)}$ cannot be used as an estimate of the unknown parameter vector $b$. 
+
+
+### Estimabel Functions {#asm-flem-estimable-functions}
+The numeric solution of the analysis of the example dataset given in Table \@ref(tab:dataflemsnpobs) is the topic of an exercise. When developing that solution, we will see that some linear functions of $b^{(0)}$ can be found which do not depend on the choice of the generalized inverse $(X^TX)^-$. Such functions are called __estimable functions__ and can be used as estimates for the respective functions of the unknown parameter vector $b$. The idea of estimable functions can be demonstrated with the following example. 
+
+```{r ex-estimable-function-data, echo=FALSE}
+n_nr_rec_est_fun <- 6
+tbl_est_fun <- tibble::tibble(Animal = n_nr_rec_est_fun,
+                              `SNP G` = c("$G_1G_1$", "$G_1G_1$", "$G_1G_1$", "$G_1G_2$", "$G_1G_2$", "$G_1G_2$"),
+                              `SNP H` = c("$H_1H_2$", "$H_1H_2$", "$H_1H_2$", "$H_1H_1$", "$H_1H_1$", "$H_1H_2$"),
+                              `SNP I` = c("$I_1I_2$", "$I_1I_2$", "$I_1I_2$", "$I_1I_2$", "$I_1I_2$", "$I_1I_1$"))
+```
+
+Let us assume that we have a small data set of `r n_nr_rec_est_fun` animals. 
+
+```{r ex-estimable-function-table, echo=FALSE}
+knitr::kable(tbl_est_fun,
+             booktabs = TRUE,
+             longtable = FALSE,
+             caption = "Example Showing Estimable Functions",
+             escape = FALSE)
+```
+
+
+Differences between different elements in the parameter vector $b$ are often used as estimable functions. More details about generalized inverses and estimable functions can be found in `r met$add("Searle1971")`. 
 
 
 
