@@ -461,18 +461,9 @@ matX <- matrix(c(1, 1, 0,
 vec_b = matrix(c("b_0", "a_G", "a_H"), ncol = 1)
 cat("\\begin{equation}\n")
 cat(paste0(rmdhelp::bmatrix(pmat = mat_obs_y_rounded), collapse = "\n"), "\n")
-# cat("\\left[")
-# cat(paste0(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_obs_y_rounded, pnDigits = 0), collapse = "\n"), "\n")
-# cat("\\right]\n")
 cat(" = \n")
 cat(paste0(rmdhelp::bmatrix(pmat = matX), collapse = "\n"), "\n")
-# cat("\\left[")
-# cat(paste0(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = matX, pnDigits = 0), collapse = "\n"), "\n")
-# cat("\\right]\n")
 cat(paste0(rmdhelp::bmatrix(pmat = vec_b), collapse = "\n"), "\n")
-# cat("\\left[")
-# cat(paste0(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = vec_b, pnOutStartLine = 4), collapse = "\n"), "\n")
-# cat("\\right]\n")
 cat(" + \\epsilon")
 cat("\\end{equation}")
 ```
@@ -502,7 +493,7 @@ where $(X^TX)^-$ stands for a __generalized inverse__ of the matrix $X^TX$.
 A generalized inverse matrix $G$ of a given matrix $A$ is defined as the matrix that satisfies the equation $AGA = A$. The matrix $G$ is not unique. Applying the concept of a generalized inverse to a system of equations $Ax = y$, it can be shown that $x = Gy$ is a solution, if $G$ is a generalized inverse of $A$. Because $G$ is not unique, there are infinitely many solutions corresponding to $\tilde{x} = Gy + (GA - I)z$ where $z$ can be an arbitrary vector of consistent length. Applying these statements concerning generalized inverses and solutions to systems of equations to \@ref(eq:gensolnormalequationflem), it means that $b^{(0)}$ is not a unique solution to \@ref(eq:normalequationflem) because the generalized inverse $(X^TX)^-$ is not unique. As a consequence of that non-uniqueness, the solution $b^{(0)}$ cannot be used as an estimate of the unknown parameter vector $b$. 
 
 
-### Estimabel Functions {#asm-flem-estimable-functions}
+### Estimable Functions {#asm-flem-estimable-functions}
 The numeric solution of the analysis of the example dataset given in Table \@ref(tab:dataflemsnpobs) is the topic of an exercise. When developing that solution, we will see that some linear functions of $b^{(0)}$ can be found which do not depend on the choice of the generalized inverse $(X^TX)^-$. Such functions are called __estimable functions__ and can be used as estimates for the respective functions of the unknown parameter vector $b$. The idea of estimable functions can be demonstrated with the following example. 
 
 ```{r ex-estimable-function-data, echo=FALSE}
@@ -510,10 +501,11 @@ n_nr_rec_est_fun <- 6
 tbl_est_fun <- tibble::tibble(Animal = n_nr_rec_est_fun,
                               `SNP G` = c("$G_1G_1$", "$G_1G_1$", "$G_1G_1$", "$G_1G_2$", "$G_1G_2$", "$G_1G_2$"),
                               `SNP H` = c("$H_1H_2$", "$H_1H_2$", "$H_1H_2$", "$H_1H_1$", "$H_1H_1$", "$H_1H_2$"),
-                              `SNP I` = c("$I_1I_2$", "$I_1I_2$", "$I_1I_2$", "$I_1I_2$", "$I_1I_2$", "$I_1I_1$"))
+                              `SNP I` = c("$I_1I_2$", "$I_1I_2$", "$I_1I_2$", "$I_1I_2$", "$I_1I_2$", "$I_1I_1$"),
+                              Observation = c(16, 10, 19, 11, 13, 27))
 ```
 
-Let us assume that we have a small data set of `r n_nr_rec_est_fun` animals. 
+Let us assume that we have a small data set of `r n_nr_rec_est_fun` animals with observations in a particular traits and given genotypes at three loci. The dataset for that example is given in Table \@ref(tab:ex-estimable-function-table). 
 
 ```{r ex-estimable-function-table, echo=FALSE}
 knitr::kable(tbl_est_fun,
@@ -523,8 +515,124 @@ knitr::kable(tbl_est_fun,
              escape = FALSE)
 ```
 
+As shown before, we want to estimate the marker effects at the three loci $G$, $H$ and $I$. This can be done with the following fixed effects model. 
 
-Differences between different elements in the parameter vector $b$ are often used as estimable functions. More details about generalized inverses and estimable functions can be found in `r met$add("Searle1971")`. 
+$$y = Xb + e$$
+with 
+
+```{r, echo=FALSE, results='asis'}
+# design matrix X
+mat_x_est_fun <- matrix(c(1, 1, 0, 0,
+                          1, 1, 0, 0,
+                          1, 1, 0, 0,
+                          1, 0, 1, 0,
+                          1, 0, 1, 0,
+                          1, 0, 0, 1), ncol = 4, byrow = TRUE)
+# parameter vector b
+vec_b <- c("\\mu", "\\alpha_1", "\\alpha_2", "\\alpha_3")
+cat("$$\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = tbl_est_fun$Observation, ps_name = "y"), collapse = '\n'))
+cat("\\text{, }")
+cat(paste0(rmdhelp::bmatrix(pmat = mat_x_est_fun, ps_name = "X"), collapse = "\n"))
+cat("\\text{ and }")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_b, ps_name =  "b"), collapse = "\n"), "\n")
+cat("$$\n")
+```
+
+The vector $b$ of unknown parameters consist of the general mean $\mu$ and the three marker effects $\alpha_1$, $\alpha_2$ and $\alpha_3$. Based on the above information, the normal equations can be written as
+
+```{r, echo=FALSE, results='asis'}
+mat_xtx_est_fun <- crossprod(mat_x_est_fun)
+mat_xty_est_fun <- crossprod(mat_x_est_fun, tbl_est_fun$Observation)
+vec_b0 <- c("\\mu^0", "\\alpha_1^0", "\\alpha_2^0", "\\alpha_3^0")
+cat("$$\n")
+cat(paste0(rmdhelp::bmatrix(mat_xtx_est_fun), collapse = '\n'))
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_b0), collapse = '\n'))
+cat(" = ")
+cat(paste0(rmdhelp::bmatrix(pmat = mat_xty_est_fun), collapse = '\n'))
+cat("$$\n")
+```
+
+The above equations have infinitely many solutions. Four of them are shown below in Table \@ref(tab:est-fun-sol). 
+
+```{r est-fun-sol, echo=FALSE}
+tbl_est_fun_sol <- tibble::tibble(`Elements of Solution` = c("$\\mu^0$", "$\\alpha_1^0$", "$\\alpha_2^0$", "$\\alpha_3^0$"),
+                                  `$b_1^0$` = c(16, -1, -4, 11),
+                                  `$b_2^0$` = c(14, 1, -2, 13),
+                                  `$b_3^0$` = c(27, -12, -15, 0),
+                                  `$b_4^0$` = c(-2982, 2997, 2994, 3009))
+knitr::kable(tbl_est_fun_sol,
+             booktabs = TRUE,
+             longtable = FALSE,
+             caption = "Solution of Normal Equations",
+             escape = FALSE)
+```
+
+The differences between the same elements in the four numerical solutions make it clear why no solution $b^0$ can be used as estimates for the unknown parameters in $b$. 
+
+This problem can be addressed, if we are not considering the single elements of a solution vector $b^0$, but linear functions of these elements. Examples of such linear functions are shown in Table \@ref(tab:lin-fun-sol).
+
+
+```{r lin-fun-sol, echo=FALSE}
+tbl_lin_fun_sol <- tibble::tibble(`Linear Function` = c("$\\alpha_1^0 - \\alpha_2^0$", "$\\mu^0 + \\alpha_1^0$", "$\\mu^0 + 1/2(\\alpha_2^0 + \\alpha_3^0)$"),
+                                  `$b_1^0$` = c(3, 15, 19.5),
+                                  `$b_2^0$` = c(3, 15, 19.5),
+                                  `$b_3^0$` = c(3, 15, 19.5),
+                                  `$b_4^0$` = c(3, 15, 19.5))
+knitr::kable(tbl_lin_fun_sol,
+             booktabs = TRUE,
+             longtable = FALSE,
+             caption = "Estimates of Estimable Functions",
+             escape = FALSE)
+```
+
+The values of the expressions shown in Table \@ref(tab:lin-fun-sol) are invariant to whatever solution $b^0$ is selected. Because this invariance statement is true for all solutions $b^0$, these functions are of special interest which corresponds to
+
+* $\alpha_1^0 - \alpha_2^0$: estimate of the difference between marker effect of locus $G$ and locus $H$
+* $\mu^0 + \alpha_1^0$: estimate of the general mean plus the marker effect of locus $G$
+* $\mu^0 + 1/2(\alpha_2^0 + \alpha_3^0)$: estimate of the general mean plus mean effect of loci $H$ and $I$
+
+
+#### Definition of Estimable Functions 
+In summary the underlying idea of estimable functions are that they are linear functions of the parameters $b$ that do not depend on the numerical solutions $b^0$ of the normal equations. Because estimable functions are functions of the parameters $b$, they can be expressed as $q^Tb$ where $q^T$ is a row vector. In a more formal way estimable functions can be described by the following definition.
+
+```{definition, label="defestfun", name="Estimable Function"}
+A (linear) function of the parameters $b$ is defined as __estimable__, if it is identically equal to some linear function of the expected value of the vector of observations $y$. 
+```
+
+This means the linear function $q^Tb$ is estimable, if 
+
+$$q^Tb = t^TE(y)$$
+
+for some vector $t$. That means, if there exists a vector $t$, such that $t^TE(y) = q^Tb$, then $q^Tb$ is said to be estimable. For our example shown in Table \@ref(tab:ex-estimable-function-table), the expected value of the observations of all animals with a genotype $G_1G_1$ is obtained by 
+
+$$E(y_{G_1G_1}) = \mu + \alpha_1$$
+with $t^T = \left[\begin{array}{cccccc} 1 & 1 & 1 & 0 & 0 & 0 \end{array}\right]$ and $q^T = \left[\begin{array}{cccc} 1 & 1 & 0 & 0 \end{array} \right]$
+
+
+### Properties of Estimable Functions
+Among the many properties we are here just listing the ones that are considered important. The complete list of properties can be found in `r met$add("Searle1971")`. 
+
+* _Form of estimable function_. If $q^Tb$ is estimable, then $q^Tb = t^TE(y)$ for some $t$. By definition $E(y) = Xb$ and therefore, $q^Tb = t^TXb$. Because estimability is not a concept that depends on $b$, this result is true for all values of $b$. Therefore 
+
+$$q^t = t^TX$$
+for some vector $t$. 
+
+* _Invariance to solutions_ $b^0$. If $q^Tb$ is estimable, the linear function $q^Tb^0$ is invariance to whatever solution of the normal equation
+
+$$X^TXb^0 = X^Ty$$
+is used for $b^0$. This is because 
+
+$$q^Tb^0 = t^TXb^0 = t^TXGX^Ty$$
+where $G$ is a generalized inverse of $X^TX$ and $XGX^T$ is invariant to $G$ which means that it is the same for any choice of $G$. 
+
+
+#### Testing for Estimability
+A given function $q^Tb$ is estimable, if some vector $t$ can be found, such that $t^TX = q^T$. For a known value of $q$, it might not be easy to find a vector $t$ satisfying $t^TX=q^T$. Alternatively to finding a vector $t$, estimability of $q^Tb$ can also be investigated by seeing whether $q$ has the property that 
+
+$$q^TH = q^T$$
+
+with $H = GX^TX$. A proof of that can be found in `r met$add("Searle1971")`. 
 
 
 
