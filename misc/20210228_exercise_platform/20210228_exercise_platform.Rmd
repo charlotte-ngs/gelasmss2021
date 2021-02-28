@@ -1,0 +1,146 @@
+---
+title: "Prepare Docker Container"
+author: "Peter von Rohr"
+date: "2/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Disclaimer
+The preparation of the docker container for the R exercise platform is documented here.
+
+
+## Dockerfile
+The docker container that is built is based on the container `rocker/verse`. To have all packages available, we build a `Dockerfile` that installs all packages directly into the image. The content of the `Dockerfile` is shown below
+
+```
+$ cd /home/quagadmin/courses/gelasmss2021/docker
+quagadmin@2-htz:~/courses/gelasmss2021/docker$ cat Dockerfile 
+FROM rocker/verse
+
+LABEL maintainer="peter.vonrohr@usys.ethz.ch"
+
+RUN R -e "install.packages(c('pedigreemm', 'kableExtra', 'AlphaSimR', dependencies = TRUE))" && \
+    R -e "remotes::install_github(repo = 'charlotte-ngs/rmdhelp')" && \
+    R -e "remotes::install_github(repo = 'pvrqualitasag/rvcetools')"
+
+```
+
+From that `Dockerfile`, a docker image is built by the following command
+
+```
+docker build -t gelasmss2021 .
+```
+
+
+## Testing The Image
+The following command is used to test the command
+
+```
+docker run -d -p 10087:8787 -e PASSWORD=pvrpass -v /home/quagadmin/courses/gelasmss2021/home/pvr:/home/rstudio --name pvr_rstudio gelasmss2021
+$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                     NAMES
+8e3d27e3799c        gelasmss2021        "/init"             9 seconds ago       Up 6 seconds        0.0.0.0:10087->8787/tcp   pvr_rstudio
+```
+
+Open the firewall to test it from outside
+
+```
+sudo ufw allow 10087/tcp
+sudo ufw status
+```
+
+## Stopping the Test Container
+
+```
+docker stop pvr_rstudio
+docker rm $(docker ps --filter "status=exited" -q)
+```
+
+
+## Creating Student Lists
+Start with a download of the `BelegungLerneinheit*.xlsx` file from `eDoz` under `https://www.lehrbetrieb.ethz.ch/edoz` . We assume that this file is saved to the `Downloads` folder. From there, we extract the usernamens of the students.
+
+```{r}
+vec_pkg <- c('openxlsx', 'dplyr', 'tidyr')
+if (!all(is.element(vec_pkg, installed.packages())))
+  install.packages(vec_pkg, dependencies = TRUE)
+
+s_bl_path <- '~/Downloads/BelegungenLerneinheit_751760200L_Fruehjahrssemester_2021.xlsx'
+wb <- openxlsx::read.xlsx(xlsxFile = s_bl_path)
+```
+
+First create a list of students with their names, firstnames and e-mail addresses
+
+```{r}
+require(dplyr)
+(tbl_student_info <- wb %>% 
+    select(Familienname, Rufname, Nummer, `E-Mail`) %>%
+    mutate(UDName = `E-Mail`) %>%
+    tidyr::separate(UDName, c("Username", NA), sep = '@') %>%
+    select(Username, Familienname, Rufname, Nummer, `E-Mail`))
+```
+
+The student information is written to a file. 
+
+```{r}
+readr::write_csv(tbl_student_info, file = file.path(here::here(), 'students', 'students_gelasmss2021.txt'), col_names = FALSE)
+```
+
+A test-student is created manually. 
+
+```{r}
+tbl_test_student_info <- tibble::tibble(Username     = c('vrohrp'),
+                                        Familienname = c('von Rohr'), 
+                                        Rufname      = c('Peter'), 
+                                        Nummer       = c('00-000-000') , 
+                                        `E-Mail`     = c('peter.vonrohr@usys.ethz.ch'))
+readr::write_csv(tbl_test_student_info, file = file.path(here::here(), 'students', 'test_students_gelasmss2021.txt'), col_names = FALSE)
+```
+
+
+
+## Student Usernames
+From the e-mail addresses, we extract usernames as follows
+
+```{r}
+(tbl_student_username <- tbl_student_info %>% select(Username))
+```
+
+Write the usernames to a file
+
+```{r}
+readr::write_csv(tbl_student_username, file = file.path(here::here(), 'students', 'student_usernames_gelasmss2021.txt'), col_names = FALSE)
+```
+
+The username for the test-student is specified manually and is not extracted from the e-mail. 
+
+```{r}
+tbl_test_student_username <- tbl_test_student_info %>% select(Username)
+readr::write_csv(tbl_test_student_username, file = file.path(here::here(), 'students', 'test_student_usernames_gelasmss2021.txt'), col_names = FALSE)
+```
+
+
+## File Upload
+Upload the created files to the server
+
+```
+$ cd /Users/peter/Data/Projects/GitHub/charlotte-ngs/gelasmss2021_gh-root/master/gelasmss2021
+$ scp -r students quagadmin@2-htz.quagzws.com:/home/quagadmin/courses/gelasmss2021
+$ scp -r bash quagadmin@2-htz.quagzws.com:/home/quagadmin/courses/gelasmss2021
+```
+
+
+## Start Containers
+
+```
+cd /home/quagadmin/courses/gelasmss2021/bash
+# test
+./docker_student_start.sh -f ../students/test_students_gelasmss2021.txt -c /home/quagadmin/courses/gelasmss2021/home -p 10187
+# real
+
+```
+
