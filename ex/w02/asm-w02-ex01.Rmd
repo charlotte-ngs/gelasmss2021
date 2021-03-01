@@ -9,6 +9,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+if (!is.element('rmdhelp', installed.packages()))
+  remotes::install_github(repo = 'charlotte-ngs/rmdhelp')
 knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
 ```
 
