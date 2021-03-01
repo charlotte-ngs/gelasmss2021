@@ -1,3 +1,7 @@
+# gelasmss2021 0.2.2
+
+* Link to slides for week 2
+
 # gelasmss2021 0.2.1
 
 * Exercise 1 for week 2
