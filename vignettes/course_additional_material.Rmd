@@ -28,7 +28,8 @@ tbl_sl <- tibble::tibble(Week    = c(1,2),
                          Link    = c(
                            paste0("[original](", s_sl_url, "asm-w01-v01-intro.pdf) | ", 
                                   "[with notes](", s_sl_url, "asm-w01-v01-intro_with_notes.pdf)", collapse = ''),
-                           paste0("[original](", s_sl_url, "asm-w02-v02-flem.pdf)", collapse = '')
+                           paste0("[original](", s_sl_url, "asm-w02-v02-flem.pdf) | ", 
+                                  "[with notes](", s_sl_url, "asm-w02-v02-flem_with_notes.pdf", collapse = '')
                          ))
 knitr::kable(tbl_sl)
 ```
@@ -37,10 +38,12 @@ knitr::kable(tbl_sl)
 ## Video
 
 ```{r, echo=FALSE}
-tbl_video <- tibble::tibble(Week = c(1),
-                            Date = c("2021-02-22"),
+tbl_video <- tibble::tibble(Week = c(1, 2),
+                            Date = c("2021-02-22",
+                                     "2021-03-01"),
                             Topic = c(
-                              "[Introduction to Applied Statistical Methods](https://youtu.be/wMHUiDgAUI8)"
+                              "[Introduction to Applied Statistical Methods](https://youtu.be/wMHUiDgAUI8)",
+                              "[Fixed Linear Effects Models](https://youtu.be/uBhibtFV964)"
                             ))
 knitr::kable(tbl_video)
 ```
