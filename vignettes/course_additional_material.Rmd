@@ -29,7 +29,7 @@ tbl_sl <- tibble::tibble(Week    = c(1,2),
                            paste0("[original](", s_sl_url, "asm-w01-v01-intro.pdf) | ", 
                                   "[with notes](", s_sl_url, "asm-w01-v01-intro_with_notes.pdf)", collapse = ''),
                            paste0("[original](", s_sl_url, "asm-w02-v02-flem.pdf) | ", 
-                                  "[with notes](", s_sl_url, "asm-w02-v02-flem_with_notes.pdf", collapse = '')
+                                  "[with notes](", s_sl_url, "asm-w02-v02-flem_with_notes.pdf)", collapse = '')
                          ))
 knitr::kable(tbl_sl)
 ```
