@@ -158,7 +158,7 @@ $$LS = (y - X\hat{b})^T(y - X\hat{b}) = y^Ty - y^TX\hat{b} - \hat{b}^TX^Ty + \ha
 
 - Set partial derivative of $LS$ with respect to $\hat{b}$ to $0$
 
-$$\frac{\partial LS}{\partial \hat{b}} = -y^TX - y^TX + 2\hat{b}^TX^TX = 0$$
+$$\frac{\partial LS}{\partial \hat{b}} = -X^Ty - X^Ty + 2X^TX\hat{b} = 0$$
 
 - Take the $\hat{b}$ that satisfies the above equation as the least squares estimate $\hat{b}_{LS}$
 
