@@ -1,3 +1,7 @@
+# gelasmss2021 0.2.3
+
+* Slides with notes after lecture
+
 # gelasmss2021 0.2.2
 
 * Link to slides for week 2
