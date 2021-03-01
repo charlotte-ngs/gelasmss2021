@@ -141,6 +141,15 @@ cd /home/quagadmin/courses/gelasmss2021/bash
 # test
 ./docker_student_start.sh -f ../students/test_students_gelasmss2021.txt -c /home/quagadmin/courses/gelasmss2021/home -p 10187
 # real
+./docker_student_start.sh -f ../students/students_gelasmss2021.txt -c /home/quagadmin/courses/gelasmss2021/home
+```
+
+
+## Cloning Material
+The exercise material must be cloned to the directories of the students. First start with preparing the branch.
 
 ```
+
+```
+
 
