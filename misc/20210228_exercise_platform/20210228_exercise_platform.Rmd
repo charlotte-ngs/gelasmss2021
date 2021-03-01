@@ -149,6 +149,85 @@ cd /home/quagadmin/courses/gelasmss2021/bash
 The exercise material must be cloned to the directories of the students. First start with preparing the branch.
 
 ```
+# on mac
+cd /Users/pvr/Data/Projects/Github/charlotte-ngs/gelasmss2021_gh-root
+mkdir -p rexpf
+cd rexpf
+git clone https://github.com/charlotte-ngs/gelasmss2021.git
+cd rexpf
+git branch rexpf
+git checkout rexpf
+ls -1 | while read d
+do
+  echo " * Checking element: $d ..."
+  if [ "$d" != "ex" ] 
+  then
+    echo " ** Deleting $d ..."
+    rm -rf $d
+  fi
+  sleep 2
+done
+545  git add .
+546  git commit -m"Deleted all unneeded material"
+547  git push origin rexpf
+```
+
+Cloning the material
+
+```
+# on 2-htz
+export GITURI=https://github.com/charlotte-ngs/gelasmss2021.git
+export GELSRC=/home/quagadmin/courses/gelasmss2021
+export GELHOME=${GELSRC}/home
+cd $GELSRC
+# test student
+cat students/test_student_usernames_gelasmss2021.txt | while read s
+do
+  cd $GELHOME/$s
+  echo " * Cloning repo for $s ..."
+  git clone $GITURI -b rexpf
+  sleep 2
+done
+
+# students
+cd $GELSRC
+# test student
+cat students/student_usernames_gelasmss2021.txt | while read s
+do
+  cd $GELHOME/$s
+  echo " * Cloning repo for $s ..."
+  git clone $GITURI -b rexpf
+  sleep 2
+done
+```
+
+## Sending E-Mails
+The following commands are used to send e-mails to students
+
+```
+export GELSRC=/home/quagadmin/courses/gelasmss2021
+cd $GELSRC
+if [ ! -d "email_sent" ]; then mkdir -p email_sent;fi
+cat students/test_students_gelasmss2021.txt  | while read s
+do
+  user=$(echo "$s" | cut -d ',' -f1)
+  email=$(echo "$s" | cut -d ',' -f5)
+  echo " * Sending ${user}_mail.txt to $email ..."
+  cat bash/${user}_email.txt | ssmtp $email
+  sleep 2
+  mv bash/${user}_email.txt email_sent
+done
+
+# real students
+cat students/students_gelasmss2021.txt  | while read s
+do
+  user=$(echo "$s" | cut -d ',' -f1)
+  email=$(echo "$s" | cut -d ',' -f5)
+  echo " * Sending ${user}_mail.txt to $email ..."
+  cat bash/${user}_email.txt | ssmtp $email
+  sleep 2
+  mv bash/${user}_email.txt email_sent
+done
 
 ```
 
