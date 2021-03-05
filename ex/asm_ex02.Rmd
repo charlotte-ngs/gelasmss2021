@@ -165,5 +165,3 @@ The result of the predicted `Body Weight` for "Animal 11" corresponds to `r tbl_
 if (params$doctype != 'solution')
   cat('--> \n')
 ```
-
-

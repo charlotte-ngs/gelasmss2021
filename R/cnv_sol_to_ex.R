@@ -67,42 +67,126 @@ deploy_ex <- function(ps_ex_name){
 #' # Generate a Notebook for exercise
 #' In a notebook, only the part of the problem without the solution should be contained.
 #' To have this, we have to cut out the part that contains the solution.
-s_ex_path <- file.path(here::here(), 'ex', 'asm_ex02.Rmd')
-con_ex_src <- file(description = s_ex_path, open = 'r')
-vec_ex_src <- readLines(con = con_ex_src)
-close(con = con_ex_src)
+# s_ex_path <- file.path(here::here(), 'ex', 'asm_ex02.Rmd')
+# con_ex_src <- file(description = s_ex_path, open = 'r')
+# vec_ex_src <- readLines(con = con_ex_src)
+# close(con = con_ex_src)
+#
+# # adapt the yample front matter
+# l_yml_fm_ex <- rmarkdown::yaml_front_matter(input = s_ex_path)
+# l_yml_fm_nb <- list(title = gsub(pattern = '`r tools::toTitleCase(params$doctype)`',
+#                                  replacement = 'Notebook', l_yml_fm_ex$title, fixed = TRUE),
+#                     author = l_yml_fm_ex$author,
+#                     date = l_yml_fm_ex$date,
+#                     output = 'html_notebook')
+#
+#
+# head(vec_ex_src)
+#
+# # get yaml boundaries
+# (vec_yaml_bound <- grep('---', vec_ex_src, fixed = TRUE))
+#
+# # get vector of comment starts and ends
+# (vec_comment_start <- grep(pattern = "comment-start", vec_ex_src))
+# (vec_comment_end <- grep(pattern = "comment-end", vec_ex_src))
+#
+# # put together the nb source
+# vec_nb_src <- c('---',
+#                 paste('title: ', l_yml_fm_nb$title, sep = ''),
+#                 paste('author: ', l_yml_fm_nb$author, sep = ''),
+#                 paste('date: ', l_yml_fm_nb$date, sep = ''),
+#                 paste('output: ', l_yml_fm_nb$output, sep = ''),
+#                 '---',
+#                 vec_ex_src[(vec_yaml_bound[2]+1):(vec_comment_start[1]-1)])
+# if (length(vec_comment_start) > 1){
+#   for (idx in 2:length(vec_comment_start)){
+#     vec_nb_src <- c(vec_nb_src,
+#                     vec_ex_src[(vec_comment_end[idx-1]+4):(vec_comment_start[idx]-1)])
+#   }
+# }
+#
+# if (length(vec_ex_src) > (vec_comment_end[length(vec_comment_end)]+4))
+#   vec_nb_src <- c(vec_nb_src, vec_ex_src[ (vec_comment_end[length(vec_comment_end)]+4):length(vec_ex_src) ])
+#
+# s_nb_out_dir <- file.path(here::here(), 'nb')
+# if (!dir.exists(s_nb_out_dir)) dir.create(s_nb_out_dir, recursive = TRUE)
+# s_nb_out_path <- file.path(s_nb_out_dir, 'asm_ex02_nb.Rmd')
+# cat(paste0(vec_nb_src, collapse = '\n'), '\n', file = s_nb_out_path)
+#
+# # render
+# s_nb_deploy_dir <- file.path(here::here(), 'docs', 'nb')
+# if (!dir.exists(s_nb_deploy_dir)) dir.create(s_nb_deploy_dir)
+# rmarkdown::render(input = s_nb_out_path, output_dir = s_nb_deploy_dir)
 
-# adapt the yample front matter
-l_yml_fm_ex <- rmarkdown::yaml_front_matter(input = s_ex_path)
-l_yml_fm_nb <- list(title = gsub(pattern = '`r tools::toTitleCase(params$doctype)`',
-                                 replacement = 'Notebook', l_yml_fm_ex$title, fixed = TRUE),
-                    author = l_yml_fm_ex$author,
-                    date = l_yml_fm_ex$date,
-                    output = 'html_notebook')
-
-
-head(vec_ex_src)
-
-# get yaml boundaries
-(vec_yaml_bound <- grep('---', vec_ex_src, fixed = TRUE))
-
-# get vector of comment starts and ends
-vec_comment_start <- grep(pattern = "comment-start", vec_ex_src)
-vec_comment_end <- grep(pattern = "comment-end", vec_ex_src)
-
-# put together the nb source
-vec_nb_src <- c('---',
-                paste('title: ', l_yml_fm_nb$title, sep = ''),
-                paste('author: ', l_yml_fm_nb$author, sep = ''),
-                paste('date: ', l_yml_fm_nb$date, sep = ''),
-                paste('output: ', l_yml_fm_nb$output, sep = ''),
-                '---',
-                vec_ex_src[(vec_yaml_bound[2]+1):(vec_comment_start[1]-1)])
-if (length(vec_comment_start) > 1){
-  for (idx in 2:length(vec_comment_start)){
-    vec_nb_src <- c(vec_nb_src,
-                    vec_ex_src[(vec_comment_end[idx-1]+1):(vec_comment_start[idx]-1)])
+#'
+#' # Function To Create NB
+#' Take the Rmd source file for the exercise and convert it into a notebook
+create_ex_nb <- function(ps_ex_name, pb_force = FALSE){
+  # check for file extension
+  if (tolower(tools::file_ext(ps_ex_name)) == 'rmd'){
+    s_ex_name <- ps_ex_name
+  } else {
+    s_ex_name <- paste(ps_ex_name, '.Rmd', sep = '')
   }
+  # add directory path and check
+  s_ex_path <- file.path(here::here(), 'ex', s_ex_name)
+  cat(" * Setting source path to: ", s_ex_path, '\n')
+  if (!file.exists(s_ex_path))
+    stop(" *** [deploy_ex] ERROR: CANNOT FIND exercise source path: ", s_ex_path)
+
+  # read exercise source to a vector
+  con_ex_src <- file(description = s_ex_path, open = 'r')
+  vec_ex_src <- readLines(con = con_ex_src)
+  close(con = con_ex_src)
+
+  # adapt the yample front matter
+  l_yml_fm_ex <- rmarkdown::yaml_front_matter(input = s_ex_path)
+  l_yml_fm_nb <- list(title = gsub(pattern = '`r tools::toTitleCase(params$doctype)`',
+                                   replacement = 'Notebook', l_yml_fm_ex$title, fixed = TRUE),
+                      author = l_yml_fm_ex$author,
+                      date = l_yml_fm_ex$date,
+                      output = 'html_notebook')
+
+  # get yaml boundaries
+  vec_yaml_bound <- grep('---', vec_ex_src, fixed = TRUE)
+
+  # get vector of comment starts and ends
+  vec_comment_start <- grep(pattern = "comment-start", vec_ex_src)
+  vec_comment_end <- grep(pattern = "comment-end", vec_ex_src)
+
+  # put together the nb source
+  vec_nb_src <- c('---',
+                  paste('title: ', l_yml_fm_nb$title, sep = ''),
+                  paste('author: ', l_yml_fm_nb$author, sep = ''),
+                  paste('date: ', l_yml_fm_nb$date, sep = ''),
+                  paste('output: ', l_yml_fm_nb$output, sep = ''),
+                  '---',
+                  vec_ex_src[(vec_yaml_bound[2]+1):(vec_comment_start[1]-1)])
+  if (length(vec_comment_start) > 1){
+    for (idx in 2:length(vec_comment_start)){
+      vec_nb_src <- c(vec_nb_src,
+                      vec_ex_src[(vec_comment_end[idx-1]+4):(vec_comment_start[idx]-1)])
+    }
+  }
+
+  if (length(vec_ex_src) > (vec_comment_end[length(vec_comment_end)]+4))
+    vec_nb_src <- c(vec_nb_src, vec_ex_src[ (vec_comment_end[length(vec_comment_end)]+4):length(vec_ex_src) ])
+
+  s_nb_out_dir <- file.path(here::here(), 'nb')
+  if (!dir.exists(s_nb_out_dir)) dir.create(s_nb_out_dir, recursive = TRUE)
+  s_nb_out_path <- file.path(s_nb_out_dir, paste(tools::file_path_sans_ext(s_ex_name), '_nb.Rmd', sep = ''))
+  if (!file.exists(s_nb_out_path) || pb_force)
+    cat(paste0(vec_nb_src, collapse = '\n'), '\n', file = s_nb_out_path)
+
+  # render
+  s_nb_deploy_dir <- file.path(here::here(), 'docs', 'nb')
+  if (!dir.exists(s_nb_deploy_dir)) dir.create(s_nb_deploy_dir)
+  rmarkdown::render(input = s_nb_out_path, output_dir = s_nb_deploy_dir)
+
+  return(invisible(TRUE))
 }
 
-cat(paste0(vec_nb_src, collapse = '\n'), '\n', file = 'asm_ex02_nb.Rmd')
+create_ex_nb(ps_ex_name = 'asm_ex02')
+
+
+
