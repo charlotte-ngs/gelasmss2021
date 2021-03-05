@@ -53,7 +53,7 @@ The same dataset is also available from the website at `r paste(s_data_root_onli
 
 
 ```{r p01-comment-start, echo=FALSE, results='asis'}
-if (params$doctype == 'exercise')
+if (params$doctype != 'solution')
   cat('<!-- \n')
 ```
 
@@ -104,7 +104,7 @@ summary(lm_bwbc)
 
 
 ```{r p01-comment-end, echo=FALSE, results='asis'}
-if (params$doctype == 'exercise')
+if (params$doctype != 'solution')
   cat('--> \n')
 ```
 
@@ -131,7 +131,7 @@ We want to use the results of the simple linear regression of body weight (BW) o
 
 
 ```{r p02-comment-start, echo=FALSE, results='asis'}
-if (params$doctype == 'exercise')
+if (params$doctype != 'solution')
   cat('<!-- \n')
 ```
 
@@ -162,7 +162,7 @@ knitr::kable(tbl_reg_results,
 The result of the predicted `Body Weight` for "Animal 11" corresponds to `r tbl_reg_results[1,3]` which is a plausible result. The predicted `Body Weight` for "Calf 12" is `r tbl_reg_results[2,3]` which does not make any sense. As a consequence, we can say that extrapolation of response values based on predictors that are so far away from the range of predictors used to estimate the regression equation is not allowed. 
 
 ```{r p02-comment-end, echo=FALSE, results='asis'}
-if (params$doctype == 'exercise')
+if (params$doctype != 'solution')
   cat('--> \n')
 ```
 
