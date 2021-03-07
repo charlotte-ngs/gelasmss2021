@@ -1,3 +1,7 @@
+# gelasmss2021 0.3.1
+
+* Exercise 02 added
+
 # gelasmss2021 0.3.0
 
 * Chapter 03 of course notes
