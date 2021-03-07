@@ -1,6 +1,6 @@
 Package: gelasmss2021
 Title: Genetic Evaluation of Livestock and Applied Statistical Methods in Animal Science
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: 
     person(given = "Peter",
            family = "von Rohr",

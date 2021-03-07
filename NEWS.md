@@ -1,3 +1,7 @@
+# gelasmss2021 0.3.2
+
+* Added slides for GBLUP I
+
 # gelasmss2021 0.3.1
 
 * Exercise 02 added
