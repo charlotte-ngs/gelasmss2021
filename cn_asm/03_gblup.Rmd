@@ -4,7 +4,7 @@ met$set_this_rmd_file(ps_this_rmd_file = ifelse(rstudioapi::isAvailable(),
                                                  rstudioapi::getSourceEditorContext()$path, 
                                                  rprojroot::thisfile()))
 ```
-In chapter \@ref(asm-flem) we introduced the fixed linear effects model to estimate additive genotypic values for SNP-Loci. In most real-world genomic datasets the number of SNP loci is larger than the number of observations. But from the point of view of quantitative genetics, we still assume that only a subset of the observed SNP-Loci is linked to a QTL and could therefore have an estimable effect on our trait of interest. Hence the original problem of estimating SNP-effect parameter is extended by a new problem of determining which SNPs are important for the expression of a given trait of interest. 
+In chapter \@ref(asm-flem) we introduced the fixed linear effects model to estimate additive genotypic values for SNP-Loci. In most real-world genomic datasets the number of SNP loci is larger than the number of observations. But from the point of view of quantitative genetics, we still assume that only a subset of the observed SNP-Loci is linked to a QTL and could therefore have an estimable effect on our trait of interest. Hence the original problem of estimating SNP-effect parameters is extended by a new problem of determining which SNPs are important for the expression of a given trait of interest. 
 
 
 ## Finding Relevant SNP Loci {#asm-gblup-find-snp}
@@ -24,23 +24,37 @@ In fixed linear effects model when the number of predictors is excessively large
 1. Forward selection
 2. Backward elimination
 
-In what follows these two approaches are only described very shortly. Due to some practical problems with these techniques they did not find their way into the practical analyses of genomic data.
+In Statistics textbooks, the procedure of finding relevant predictor variables in a fixed linear model is called `model selection`. In what follows these two approaches are only described very shortly. Due to some practical problems with these techniques they did not find their way into the practical analyses of genomic data.
 
 
 ### Forward Selection {#asm-gblup-forward}
-The starting point of the forward approach is the empty model with no predictor variables. In an iterative sequence of steps additional predictors are included into the model until a pre-defined model quality criterion cannot be improved any further. As model quality criterion, different quantities can be used. In a summary output of R's `lm()` function, the quantity `adjusted` $R^2$ is shown. Alternative quantities are the Mallow $C_p$ value, the Akaike Information Criterion (AIC) or Bayes Information Criterion (BIC). The problem with the forward selection approach is that it is heavily dependent on the starting point, that means the resulting subset of predictors depends on the predictor with which we started. Similarly the order in which the predictors are tested can also have an influence on the final result. These problems make it very difficult to end up with a stable selection procedure for relevant predictor variables.
+The forward selection approach is described by the following step-wise procedure. 
+
+1. Start with an empty model $\mathcal{M}_0$ that contains no predictor variables but only an intercept.
+2. Include the predictor variable that reduces the residual sum of squares the most. 
+3. Continue with step 2 until all predictor variables are included. This results in a series of models $\mathcal{M}_0 \subseteq \mathcal{M}_1 \subseteq \mathcal{M}_2 \subseteq ...$.
+4. From the series of models select the one that optimizes a previously defined selection criterion.
+
+As model quality criterion, different quantities can be used. Possible quantities are the Mallow $C_p$ criterion, the Akaike Information Criterion (AIC) or Bayes Information Criterion (BIC). 
 
 
 ### Backward Elimination {#asm-gblup-backward}
-Backward elimination starts with the full model where the full model contains all predictor variables. In an iterative procedure smaller models are constructed by eliminating predictor variables which have a very small effect on the response variable. This elimination process is continued until a certain model quality criterion reaches an optimum. This model selection technique is often used in practical data analyses. But due to the greedy nature of this technique and with large numbers of predictors it can also be difficult to get stable results.
+Backward elimination can be viewed as the reverse process of forward selection. The following steps constitute the backward elimination algorithm
+
+1. Start with the full model $\mathcal{M}_0$ containing all available predictor variables. 
+2. Drop the predictor variable that increases the residual sum of squares the least. 
+3. Continue with step 2 until all predictor variables are dropped. This results in a series of models $\mathcal{M}_0 \subseteq \mathcal{M}_1 \subseteq \mathcal{M}_2 \subseteq ...$.
+4. From the series of models select the one that optimizes a defined selection criterion.
+
+Backward elimination yields often better results compared to forward selection but it is more computationally expensive. In the case where the number of predictor variables ($p$) is larger than the number of observations ($n$), the full model cannot be fit to the data. Hence in that case forward selection would be a possible way to select an optimal model. Although if the number of predictors is very large and therefore many different predictor variables cause a similar reduction of the residual sum of squares, no unique series of models can be generated in the process of forward selection. The result of the forward selection depends on the order of the inclusion of the predictor variables. 
 
 
 ## Model Selection With Genomic Data {#asm-gblup-model-selection-genomic-data}
-In real-world genomic data analyses, the number of predictors can be as high as $1.5 * 10^5$. Therefore the forward selection approach as described in \@ref(asm-gblup-forward) cannot be used because of the above shown problems. Also the backward elimination approach does not yield a stable procedure for finding the subset of relevant SNPs. This has several reasons which are shortly described in the following subsections. 
+In real-world genomic data analyses, the number of predictors ($p$) can be as high as $1.5 * 10^5$. Therefore the backward elimination approach as described in \@ref(asm-gblup-backward) cannot be used because of the problem of $n <<p$ . Also the forward selection approach does not yield a stable procedure for finding the subset of relevant SNPs. This has several reasons which are shortly described in the following subsections. 
 
 
 ### Fitting The Full Model {#asm-gblup-fitting-full-model}
-Fitting the full model with such a high number of predictors leads to the problem that the design matrix $X$ will not have full column rank. The solution of the least squares normal equation then depends on a generalized inverse $(X^TX)^{-}$ of $X^TX$. Generalized inverses are not unique and furthermore for a given generalized inverse, there are infinitely many solutions that satisfy the normal equation coming out of least squares. Instead of the non-unique solutions, we have to focus on estimable functions of the solutions which are independent of the choice of a concrete solution. Although, even if it is possible to fit the full model of a genomic dataset, applying the backward elimination procedure is very time consuming and due to its greediness is not expected to result in a stable subset of relevant SNPs that has an influence on a given trait of interest.
+Fitting the full model with such a high number of predictors leads to the problem that the design matrix $X$ will not have full column rank. The solution of the least squares normal equation then depends on a generalized inverse $(X^TX)^{-}$ of $X^TX$. Generalized inverses are not unique and furthermore for a given generalized inverse, there are infinitely many solutions that satisfy the normal equation coming out of least squares. Instead of the non-unique solutions, we have to focus on estimable functions (see section \@ref(#asm-flem-estimable-functions)) of the solutions which are independent of the choice of a concrete solution. Although, even if it is possible to fit the full model of a genomic dataset, applying the backward elimination procedure is very time consuming and due to its greediness is not expected to result in a stable subset of relevant SNPs that has an influence on a given trait of interest.
 
 
 ## Mixed Linear Effects Model {#asm-gblup-mlem}
@@ -257,26 +271,5 @@ Based on the last line of \@ref(eq:asm-gblup-gblupmme) the predicted breeding va
 \end{equation}
 
 Equation \@ref(eq:GenomicBvAnimalNoPhen) is referred to as genomic regression of predicted breeding values of animals without observation on the predicted genomic breeding values of animals with observations.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
