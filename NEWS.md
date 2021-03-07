@@ -1,3 +1,7 @@
+# gelasmss2021 0.3.0
+
+* Chapter 03 of course notes
+
 # gelasmss2021 0.2.3
 
 * Slides with notes after lecture
