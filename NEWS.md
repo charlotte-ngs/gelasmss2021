@@ -1,3 +1,7 @@
+# gelasmss2021 0.3.3
+
+* Added link to video of lecture 3
+
 # gelasmss2021 0.3.2
 
 * Added slides for GBLUP I
