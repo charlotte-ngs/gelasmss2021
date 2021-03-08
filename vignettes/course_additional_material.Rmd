@@ -41,12 +41,14 @@ knitr::kable(tbl_sl)
 ## Video
 
 ```{r, echo=FALSE}
-tbl_video <- tibble::tibble(Week = c(1, 2),
+tbl_video <- tibble::tibble(Week = c(1, 2, 3),
                             Date = c("2021-02-22",
-                                     "2021-03-01"),
+                                     "2021-03-01",
+                                     "2021-03-08"),
                             Topic = c(
                               "[Introduction to Applied Statistical Methods](https://youtu.be/wMHUiDgAUI8)",
-                              "[Fixed Linear Effects Models](https://youtu.be/uBhibtFV964)"
+                              "[Fixed Linear Effects Models](https://youtu.be/uBhibtFV964)",
+                              "[Regression Model and Exercises](https://youtu.be/OwvR1k4WMrE)"
                             ))
 knitr::kable(tbl_video)
 ```
