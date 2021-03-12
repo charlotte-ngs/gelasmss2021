@@ -186,7 +186,7 @@ create_ex_nb <- function(ps_ex_name, pb_force = FALSE){
   return(invisible(TRUE))
 }
 
-create_ex_nb(ps_ex_name = 'asm_ex02')
+# create_ex_nb(ps_ex_name = 'asm_ex02')
 
 
 
