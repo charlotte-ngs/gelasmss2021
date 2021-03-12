@@ -31,7 +31,7 @@ where $\beta_0$ is the intercept, $a$ is the vector of additive SNP-effects, $W_
 
 ```{r dataurldeclare, echo=FALSE}
 ### # specify path to data file depending on online status
-s_data_file <- "https://charlotte-ngs.github.io/GELASMSS2020/ex/w04/ex03p01_data.csv"
+s_data_file <- "https://charlotte-ngs.github.io/gelasmss2021/data/ex03p01_data.csv"
 ```
 
 The data can be read from `r s_data_file`. The address from where the data can be downloaded is assigned to a variable. 
@@ -84,22 +84,14 @@ mat_X <- matrix(c(rep(1, n_nr_animal), tbl_geno_data$`SNP G`, tbl_geno_data$`SNP
 The matrix $X$ corresponds then to
 
 ```{r showmatx, echo=FALSE, results='asis'}
-cat("$$\n")
-cat("X = \\left[\n")
-cat(paste0(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_X, pnDigits = 0), collapse = "\n"), "\n")
-cat("\\right]\n")
-cat("$$\n")
+cat(paste0(rmdhelp::bmatrix(pmat = mat_X, ps_name = 'X', ps_env = '$$'), collapse = '\n'), '\n')
 ```
 
 The vector $y$ corresponds to 
 
 ```{r showvecy, echo=FALSE, results='asis'}
 vec_y <- tbl_geno_data$Observation
-cat("$$\n")
-cat("y = \\left[\n")
-cat(paste0(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_y, pnDigits = 0), collapse = "\n"), "\n")
-cat("\\right]\n")
-cat("$$\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_y, ps_name = 'y', ps_env = '$$'), collapse = '\n'), '\n')
 ```
 
 
@@ -128,9 +120,13 @@ summary(lm_snpflem)
 
 
 ## Problem 2: Genomic Relationship Matrix {-}
+```{r declaredataex03p02, echo=FALSE}
+s_data_ex03p02 <- "https://charlotte-ngs.github.io/gelasmss2021/data/ex03p02_data.csv"
+```
+
 From the given dataset that can be obtained from 
 
-`https://charlotte-ngs.github.io/GELASMSS2020/ex/w04/ex03p02_data.csv`, 
+`r s_data_ex03p02`, 
 
 compute the genomic relationship matrix $G$. The dataset is organised such that animals are in rows and SNPs are in columns.
 
@@ -143,10 +139,14 @@ compute the genomic relationship matrix $G$. The dataset is organised such that 
 
 
 ### Solution {-}
-Start by reading the data from the file. 
+Start by assigning the address of the input file to a variable.
 
-```{r readdataex03p02}
-s_data_ex03p02 <- "https://charlotte-ngs.github.io/GELASMSS2020/ex/w04/ex03p02_data.csv"
+```{r declaredataex03p02, echo=TRUE}
+```
+
+Now the data can be read from the file. 
+
+```{r readdataex03p02, message=FALSE}
 tbl_grm_data <- readr::read_csv(file = s_data_ex03p02)
 n_nr_animal <- nrow(tbl_grm_data)
 n_nr_snp <- ncol(tbl_grm_data)
