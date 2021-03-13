@@ -132,7 +132,7 @@ create_ex_nb <- function(ps_ex_name, pb_force = FALSE){
   s_ex_path <- file.path(here::here(), 'ex', s_ex_name)
   cat(" * Setting source path to: ", s_ex_path, '\n')
   if (!file.exists(s_ex_path))
-    stop(" *** [deploy_ex] ERROR: CANNOT FIND exercise source path: ", s_ex_path)
+    stop(" *** [create_ex_nb] ERROR: CANNOT FIND exercise source path: ", s_ex_path)
 
   # read exercise source to a vector
   con_ex_src <- file(description = s_ex_path, open = 'r')

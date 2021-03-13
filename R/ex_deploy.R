@@ -28,4 +28,6 @@ deploy_exercise <- function(ps_ex_name){
                          ps_ex_out_dir = file.path(s_out_dir, 'ex'),
                          ps_sol_out_dir = file.path(s_out_dir, 'sol'))
 
+  return(invisible(TRUE))
+
 }
