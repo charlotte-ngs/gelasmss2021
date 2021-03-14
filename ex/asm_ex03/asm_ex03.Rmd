@@ -206,6 +206,21 @@ if (params$doctype != 'solution')
 ## Additional Problem {-}
 Write a function in R that accepts a matrix of genotypes and that computes the genomic relationship matrix. Verify your results from Problem 2.
 
+
+### Hints
+ * A function in R can be declared using the keyword `function` 
+ * A function in R consists of three parts
+     1. the name of the function
+     2. the function arguments and 
+     3. the body of the function.
+     
+The following figure shows the general structure of an R-function
+
+```{r rfunctionstructure, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width='11cm'}
+#rmdhelp::use_odg_graphic(ps_path = 'odg/rfunctionstructure.odg')
+knitr::include_graphics(path = "odg/rfunctionstructure.png")
+```
+
 ```{r addp01-comment-start, echo=FALSE, results='asis'}
 if (params$doctype != 'solution')
   cat('<!-- \n')
@@ -245,4 +260,4 @@ all.equal(mat_grm, mat_grm_func)
 if (params$doctype != 'solution')
   cat('--> \n')
 ```
-
+ 
