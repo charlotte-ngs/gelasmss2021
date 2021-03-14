@@ -20,8 +20,8 @@
 convert_exercise_to_nb <- function(ps_ex_name, pb_force = FALSE){
   s_proj_dir <- here::here()
   s_out_dir <- file.path(s_proj_dir, 'docs')
-  rteachtools::convert_ex_to_nb(ps_ex_path      = file.path(s_proj_dir, 'ex', ps_ex_name),
-                               ps_nb_out_dir    = file.path(s_proj_dir, 'nb'),
+  rteachtools::convert_ex_to_nb(ps_ex_path      = file.path(s_proj_dir, 'ex', ps_ex_name, ps_ex_name),
+                               ps_nb_out_dir    = file.path(s_proj_dir, 'nb', ps_ex_name),
                                ps_nb_deploy_dir = file.path(s_out_dir, 'nb'),
                                pb_force         = pb_force)
 

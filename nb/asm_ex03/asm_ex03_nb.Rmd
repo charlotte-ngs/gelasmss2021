@@ -57,8 +57,19 @@ knitr::kable(tbl_geno_data,
 ### Hints {-}
 * Read the data using the function `readr::read_csv()`
 
+### Your Solution
+Start your solution by reading the data. Then specify the design matrix $X$
+
+```{r}
+# read data with readr::read_csv
+
+# specify the matrix X
+
+# compute the solution for the intercept and the a-values
 
 ```
+
+
 
 
 ## Problem 2: Genomic Relationship Matrix {-}
@@ -79,6 +90,7 @@ compute the genomic relationship matrix $G$. The dataset is organised such that 
 * Use the function `apply(mat, 2, mean)` to compute the columnwise mean of matrix `mat`
 * Use the `matrix` function to construct the matrix $P$ from the vector of SNP allele frequencies
 
+
 ### Your Solution
 Start your solution by reading the data
 
@@ -93,7 +105,7 @@ Start your solution by reading the data
 
 ```
 
-```
+
 
 
 ## Additional Problem {-}
@@ -114,6 +126,7 @@ The following figure shows the general structure of an R-function
 knitr::include_graphics(path = "odg/rfunctionstructure.png")
 ```
 
+
 ### Your Solution
 Start your solution by reading the data
 
@@ -128,6 +141,4 @@ Start your solution by reading the data
 
 ```
 
-
-```
-  
+ 

@@ -69,11 +69,6 @@ knitr::kable(tbl_geno_data,
 ### Hints {-}
 * Read the data using the function `readr::read_csv()`
 
-
-```{r p01-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
-cat('<!-- \n')
-```
-
 <!-- your-solution-start
 ### Your Solution
 Start your solution by reading the data. Then specify the design matrix $X$
@@ -87,6 +82,11 @@ Start your solution by reading the data. Then specify the design matrix $X$
 
 ```
 ---  your-solution-end -->
+
+
+```{r p01-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+cat('<!-- \n')
+```
 
 ### Solution {-}
 
@@ -164,6 +164,7 @@ compute the genomic relationship matrix $G$. The dataset is organised such that 
 * Use the function `apply(mat, 2, mean)` to compute the columnwise mean of matrix `mat`
 * Use the `matrix` function to construct the matrix $P$ from the vector of SNP allele frequencies
 
+
 <!-- your-solution-start
 ### Your Solution
 Start your solution by reading the data
@@ -179,6 +180,7 @@ Start your solution by reading the data
 
 ```
 ---  your-solution-end -->
+
 
 ```{r p02-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
 cat('<!-- \n')
@@ -246,6 +248,7 @@ The following figure shows the general structure of an R-function
 #rmdhelp::use_odg_graphic(ps_path = 'odg/rfunctionstructure.odg')
 knitr::include_graphics(path = "odg/rfunctionstructure.png")
 ```
+
 
 <!-- your-solution-start
 ### Your Solution
