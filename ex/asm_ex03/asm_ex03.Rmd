@@ -70,10 +70,23 @@ knitr::kable(tbl_geno_data,
 * Read the data using the function `readr::read_csv()`
 
 
-```{r p01-comment-start, echo=FALSE, results='asis'}
-if (params$doctype != 'solution')
-  cat('<!-- \n')
+```{r p01-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+cat('<!-- \n')
 ```
+
+<!-- your-solution-start
+### Your Solution
+Start your solution by reading the data. Then specify the design matrix $X$
+
+```{r}
+# read data with readr::read_csv
+
+# specify the matrix X
+
+# compute the solution for the intercept and the a-values
+
+```
+---  your-solution-end -->
 
 ### Solution {-}
 
@@ -128,9 +141,8 @@ lm_snpflem <- lm(Observation ~ `SNP G` + `SNP H`, data = tbl_geno_data)
 summary(lm_snpflem)
 ```
 
-```{r p01-comment-end, echo=FALSE, results='asis'}
-if (params$doctype != 'solution')
-  cat('--> \n')
+```{r p01-comment-end, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+cat('--> \n')
 ```
 
 
@@ -152,9 +164,24 @@ compute the genomic relationship matrix $G$. The dataset is organised such that 
 * Use the function `apply(mat, 2, mean)` to compute the columnwise mean of matrix `mat`
 * Use the `matrix` function to construct the matrix $P$ from the vector of SNP allele frequencies
 
-```{r p02-comment-start, echo=FALSE, results='asis'}
-if (params$doctype != 'solution')
-  cat('<!-- \n')
+<!-- your-solution-start
+### Your Solution
+Start your solution by reading the data
+
+```{r}
+# read the data using readr::read_csv
+
+# convert intput data to a matrix
+
+# compute the mean across columns
+
+# compute the matrix P
+
+```
+---  your-solution-end -->
+
+```{r p02-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+cat('<!-- \n')
 ```
 
 ### Solution {-}
@@ -197,9 +224,8 @@ The genomic relationship matrix is obtained by
 mat_grm <- tcrossprod(mat_U) / (2*sumpq)
 ```
 
-```{r p02-comment-end, echo=FALSE, results='asis'}
-if (params$doctype != 'solution')
-  cat('--> \n')
+```{r p02-comment-end, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+cat('--> \n')
 ```
 
 
@@ -221,9 +247,25 @@ The following figure shows the general structure of an R-function
 knitr::include_graphics(path = "odg/rfunctionstructure.png")
 ```
 
-```{r addp01-comment-start, echo=FALSE, results='asis'}
-if (params$doctype != 'solution')
-  cat('<!-- \n')
+<!-- your-solution-start
+### Your Solution
+Start your solution by reading the data
+
+```{r}
+# read the data using readr::read_csv
+
+# convert intput data to a matrix
+
+# compute the mean across columns
+
+# compute the matrix P
+
+```
+---  your-solution-end -->
+
+
+```{r addp01-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+cat('<!-- \n')
 ```
 
 ### Solution {-}
@@ -256,8 +298,7 @@ all.equal(mat_grm, mat_grm_func)
 ```
 
 
-```{r addp01-comment-end, echo=FALSE, results='asis'}
-if (params$doctype != 'solution')
-  cat('--> \n')
+```{r addp01-comment-end, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+cat('--> \n')
 ```
  

@@ -68,7 +68,6 @@ Start your solution by reading the data. Then specify the design matrix $X$
 
 # compute the solution for the intercept and the a-values
 
-
 ```
 
 
@@ -103,7 +102,6 @@ Start your solution by reading the data
 # compute the mean across columns
 
 # compute the matrix P
-
 
 ```
 
