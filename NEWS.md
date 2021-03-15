@@ -1,3 +1,7 @@
+# gelasmss2021 0.4.1
+
+* Released solutions to exercise 1
+
 # gelasmss2021 0.4.0
 
 * Released exercise 3
