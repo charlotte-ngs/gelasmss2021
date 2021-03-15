@@ -183,7 +183,7 @@ For every $m\times n$ matrix $A$ and every $n\times p$ matrix $B$, it holds that
 $$(AB)^T = B^T A^T$$
 
 
-#### Inverse of a Matrix  {#intro-linalg-inverse-matrix}
+### Inverse of a Matrix  {#intro-linalg-inverse-matrix}
 In this section, we are looking at square matrices. The **inverse** $X$ of a square matrix $A$ is defined as the square matrix that satisfies the condition $AX = I$. If the inverse matrix $X$ exists, then the matrix $A$ is called invertable. If $X$ does not exist, $A$ is called singular. If the inverse of a matrix $A$ exists, it is uniquely determined and we call it $A^{-1}$. 
 
 Let us assume two invertable $n\times n$ matrices $A$ and $B$, then the following equations hold
@@ -201,7 +201,7 @@ For every square matrix $A$, the following statements are equivalent.
 3. The system of equations $Ax = 0$ has only the trivial solution $x=0$.
 
 
-#### Orthogonal Matrices  {#intro-linalg-orthogonal-matrix}
+### Orthogonal Matrices  {#intro-linalg-orthogonal-matrix}
 A square matrix $A$ is called **orthogonal**, if the condition $A^TA = I$ holds. For two orthogonal matrices $A$ and $B$, the following statements hold.
 
 1. $A$ is invertable and $A^{-1} = A^T$
@@ -209,6 +209,46 @@ A square matrix $A$ is called **orthogonal**, if the condition $A^TA = I$ holds.
 3. $AB$ is orthogonal
 4. $I$ is orthogonal
 
+
+### Positive Definite Matrices {#intro-linalg-positive-definite-matrix}
+<!-- TODO: Add a paragraph on PDM
+Check on 
+* https://en.wikipedia.org/wiki/Definite_symmetric_matrix
+* https://stat.ethz.ch/R-manual/R-patched/library/Matrix/html/nearPD.html and reference there in
+* https://ocw.mit.edu/courses/mathematics/18-06sc-linear-algebra-fall-2011/positive-definite-matrices-and-applications/symmetric-matrices-and-positive-definiteness/MIT18_06SCF11_Ses3.1sum.pdf
+* https://nhigham.com/2013/01/28/second-edition-2013-of-matrix-analysis/
+-->
+
+A symmetric $n\times n$ real matrix $A$ is said to be __positive-definite__, if the scalar quantity $x^TAx$ is positive for every non-zero vector $x$. This definition is not useful for checking whether a given matrix $M$ is positive-definite or not. The condition contained in the definition of positive definiteness implies that all the eigenvalues of a positive-definite matrix are positive. 
+
+Eigenvalues $\lambda$ of a matrix $M$ satisfy the condition 
+
+$$M\cdot y = \lambda y$$
+where $y$ is called an eigenvector of $M$. Hence if the condition of positive-definitness is satisfied for a given real symmetric matrix $A$, that means it is also true for any eigenvector $y$ of matrix $A$. Then we can write
+
+\begin{equation}
+A \cdot y = \lambda y
+(\#eq:intro-linalg-eigeneq)
+\end{equation}
+
+Premultiplying both sides of \@ref(eq:intro-linalg-eigeneq) with $y^T$ leads to 
+
+\begin{align}
+y^T \cdot (A \cdot y) &= y^T \cdot (\lambda y) \notag \\
+y^T \cdot A \cdot y &= \lambda y^T \cdot y
+(\#eq:intro-linalg-eigenpdm)
+\end{align}
+
+The definition of positive-definiteness imposes that the left side of \@ref(eq:intro-linalg-eigenpdm) is positive and hence the right side of  \@ref(eq:intro-linalg-eigenpdm) must also be positive. Because $y^T \cdot y$ is a sum of squared real numbers, it is guaranteed to be positive and hence $\lambda$ must also be positive. This argument can be established for all eigenvalues $\lambda$ of $A$ and hence, all eigenvalues of a positive-definite matrix $A$ must be positive.
+
+The property with the eigenvalues can be used to check whether a given matrix $M$ is positive-definit. In R, the function `eigen()` can be used to compute eigenvalues of a given matrix. The following code-junk illustrates such a computation.
+
+```{r mat_def}
+M <- matrix(c(2, -1, 0,
+              -1, 2, -1,
+              0, -1, 3), nrow = 3)
+eigen(M, only.values = TRUE)
+```
 
 
 
