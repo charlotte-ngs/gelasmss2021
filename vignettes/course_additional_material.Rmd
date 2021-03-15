@@ -14,6 +14,16 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Notebooks
+
+```{r, echo=FALSE}
+s_misc_url <- 'https://charlotte-ngs.github.io/gelasmss2021/misc/'
+tbl_add_nb <- tibble(Week = c(4),
+                     Date = c("2021-03-15"),
+                     Topic = c(paste0("[Fixed Linear Effect Models with Genomic Data](", s_misc_url, "20210315_flem_problem_genomic_data.nb.html)", collapse = '')))
+knitr::kable(tbl_add_nb)
+```
+
 ## Slides
 
 ```{r, echo=FALSE}

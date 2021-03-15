@@ -1,0 +1,127 @@
+---
+title: "Two Problems of FLEM with Genomic Data"
+date: "2021-03-15"
+output: html_notebook
+---
+
+
+## Data
+We use the data from excercise 3, problem 1:
+
+```{r}
+s_data_file <- "https://charlotte-ngs.github.io/gelasmss2021/data/ex03p01_data.csv"
+tbl_geno_data <- readr::read_csv(file = s_data_file)
+tbl_geno_data
+```
+
+For the data set in `tbl_geno_data`, marker effects for loci G and H can be estimated.
+
+
+## Two Problems
+
+1. The number of parameter (marker effects) is larger than the number of observations ($p>>N$)
+2. Not all SNP are relevant and we have to find those which are relevant.
+
+
+## First Problem
+In our given dataset in `tbl_geno_data`, the first problem of $p>>N$ does not exist. The first step is to create a data set where this problem exists.
+
+```{r, echo=FALSE}
+n_nr_obs <- 5
+```
+
+First, we reduce the number of observations to `r n_nr_obs`
+
+```{r}
+# old style base-R version
+tbl_first_problem <- tbl_geno_data[1:n_nr_obs,]
+tbl_first_problem
+```
+
+Alternatively, we can use features of the R-Package `dplyr`
+
+```{r}
+# more modern style
+library(dplyr)
+tbl_first_problem <- tbl_geno_data %>% filter(Animal <= n_nr_obs)
+tbl_first_problem
+```
+
+Secondly, the number of parameters (for our example, the number of loci) must be increased.
+
+```{r}
+n_nr_loci_add <- 10
+vec_genotypes <- c(-1,0,1)
+for (idx in 1:n_nr_loci_add){
+  vec_cur_geno <- sample(vec_genotypes, size = n_nr_obs, replace = TRUE)
+  tbl_first_problem <- bind_cols(tbl_first_problem, tibble::tibble(cur_geno = vec_cur_geno))
+  names(tbl_first_problem)[ncol(tbl_first_problem)] <- paste0('SNP_', idx)
+}
+tbl_first_problem
+```
+
+
+The dataset in `tbl_first_problem` has the problem of $p>>N$, because p is 12 and N is 5.
+
+Trying to use least squares to estimate marker effects, 
+
+```{r}
+lm_fit_lsq <- lm(formula = Observation ~ `SNP G` + `SNP H` + SNP_1 + SNP_2 + SNP_3 + SNP_4 + SNP_5 + SNP_6 + SNP_7 + SNP_8 + SNP_9 + SNP_10, data = tbl_first_problem)
+summary(lm_fit_lsq)
+```
+
+This result is a clear sign of too many parameter.
+
+## Second Problem
+We do not know which of the SNPs are important. To show the effect of the second problem, we use a different data set
+
+```{r}
+tbl_second_problem <- tbl_geno_data
+n_nr_obs <- nrow(tbl_second_problem)
+n_nr_loci_add <- 2
+vec_genotypes <- c(-1,0,1)
+for (idx in 1:n_nr_loci_add){
+  vec_cur_geno <- sample(vec_genotypes, size = n_nr_obs, replace = TRUE)
+  tbl_second_problem <- bind_cols(tbl_second_problem, tibble::tibble(cur_geno = vec_cur_geno))
+  names(tbl_second_problem)[ncol(tbl_second_problem)] <- paste0('SNP_', idx)
+}
+tbl_second_problem
+```
+
+
+```{r}
+lm_fit_sp <- lm(Observation ~ `SNP G` + `SNP H` + SNP_1 + SNP_2, data = tbl_second_problem)
+summary(lm_fit_sp)
+```
+
+Because, we do not have the first problem of $p>>N$, we can use model selection. In R this can be done using 
+
+```{r}
+MASS::stepAIC(lm_fit_sp)
+```
+
+
+## Exercise
+Do the model selection procedure according to the forward selection process as described and also do the backward elminiation and compare the results.
+
+### Forward Selection
+
+* Step 1: start with empty model
+
+```{r}
+lm_fs_m0 <- lm(Observation ~ 1, data = tbl_second_problem)
+summary(lm_fs_m0)
+```
+
+Sum of the squared residuals
+
+```{r}
+(vec_residuals <- residuals(lm_fs_m0))
+crossprod(vec_residuals)
+```
+
+
+
+
+
+
