@@ -1,3 +1,7 @@
+# gelasmss2021 0.4.2
+
+* Link to notebook started during class
+
 # gelasmss2021 0.4.1
 
 * Released solutions to exercise 1
