@@ -4,6 +4,19 @@ met$set_this_rmd_file(ps_this_rmd_file = ifelse(rstudioapi::isAvailable(),
                                                  rstudioapi::getSourceEditorContext()$path, 
                                                  rprojroot::thisfile()))
 ```
+
+<!-- 
+  -- TODO: Move the model selection part to the FLEM chapter
+  -- TODO: Use Fernando2014 as a template for the structure of the chapter
+  -- TODO: Use Chapter 13 of Gondro2013 for the examples section
+-->
+
+The content of this chapter is based on `r met$add("Fernando2014")` and chapter 13 of `r met$add("Gondro2013")`. In this chapter the different models that extend the fixed linear model to predict genomic breeding values are described. The described methods are illustrated with an example analysis that demonstrates the advantage of a genomic evaluation compared to a traditional analysis based on only phenotypes and pedigree data. The topic of alternative parameter estimation approaches is deferred to chapters \@ref(asm-lasso) and \@ref(asm-bayes).
+
+
+
+<!-- OLD STUFF below this line -->
+
 In chapter \@ref(asm-flem) we introduced the fixed linear effects model to estimate additive genotypic values for SNP-Loci. In most real-world genomic datasets the number of SNP loci is larger than the number of observations. But from the point of view of quantitative genetics, we still assume that only a subset of the observed SNP-Loci is linked to a QTL and could therefore have an estimable effect on our trait of interest. Hence the original problem of estimating SNP-effect parameters is extended by a new problem of determining which SNPs are important for the expression of a given trait of interest. 
 
 
