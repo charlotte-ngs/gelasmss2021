@@ -1,3 +1,7 @@
+# gelasmss2021 (development version)
+
+* Modify chapter on GBLUP
+
 # gelasmss2021 0.4.2
 
 * Link to notebook started during class
