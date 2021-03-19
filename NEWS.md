@@ -1,3 +1,7 @@
+# gelasmss2021 0.5.1
+
+* Released chapter 5 of course notes
+
 # gelasmss2021 0.5.0
 
 * Released solutions and exercises for week 5
