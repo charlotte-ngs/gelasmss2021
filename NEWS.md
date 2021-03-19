@@ -1,3 +1,7 @@
+# gelasmss2021 0.5.0
+
+* Released solutions and exercises for week 5
+
 # gelasmss2021 0.4.2
 
 * Link to notebook started during class
