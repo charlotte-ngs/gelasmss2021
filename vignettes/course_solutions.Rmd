@@ -25,7 +25,7 @@ tbl_asm_sol <- tibble::tibble(Week = c(2, 3),
                                       "2021-03-08"),
                              Topic = c(
                                paste0("[Fixed Linear Effects Models](", s_sol_url, "asm-w02-sol01.pdf)", collapse = ''),
-                               paste0("Regression Models [pdf](", s_sol_url, "asm_ex02_sol.pdf)", collapse = '')))
+                               paste0("[Regression Models](", s_sol_url, "asm_ex02_sol.pdf)", collapse = '')))
 # show the table
 knitr::kable(tbl_asm_sol)                             
 ```
