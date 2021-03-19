@@ -8,7 +8,7 @@ output:
 params:
   doctype:
     label: 'Document Type'
-    value: 'exercise'
+    value: 'solution'
     choices: ['exercise', 'solution']
 ---
 
