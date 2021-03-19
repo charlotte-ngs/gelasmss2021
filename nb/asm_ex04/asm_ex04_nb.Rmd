@@ -161,6 +161,6 @@ The prediction of the genomic breeding values is done the same way as the predic
  
 
 
-```{r, echo=FALSE}
-cat('\n---\n_Latest Change: ', format(Sys.time(), '%Y-%m-%d %H:%M:%S'), ' (', Sys.info()['user'], ')_\n', sep = '')
+```{r, echo=FALSE, results='asis'}
+cat('\n---\n\n _Latest Changes: ', format(Sys.time(), '%Y-%m-%d %H:%M:%S'), ' (', Sys.info()['user'], ')_\n', sep = '')
 ```
