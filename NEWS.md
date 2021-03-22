@@ -1,3 +1,7 @@
+# gelasmss2021 0.5.3
+
+* Added links to video, notebook and slides
+
 # gelasmss2021 0.5.2
 
 * Released links to slides of week 5
