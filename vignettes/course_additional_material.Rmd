@@ -27,7 +27,7 @@ tbl_add_nb <- tibble::tibble(Week = c(4, 5),
                               "20210315_flem_problem_genomic_data.nb.html)", collapse = ''),
                        paste0("[Genomic Breeding Values Using MLEM](", 
                               s_misc_url, 
-                              "20210322_mlem_genomic_data.nb.html", collapse = '')
+                              "20210322_mlem_genomic_data.nb.html)", collapse = '')
                        ))
 knitr::kable(tbl_add_nb)
 ```
@@ -59,7 +59,7 @@ tbl_sl <- tibble::tibble(Week    = c(1, 2, 3, 4, 5),
                            paste0("[original](", s_sl_url, "asm-w04-v04-grm.pdf) | ", 
                                   "[with notes](", s_sl_url, "asm-w04-v04-grm_with_notes.pdf)", collapse = ''), 
                            paste0("[original](", s_sl_url, "asm-w05-v05-lasso.pdf) | ", 
-                                  "[with notes](", s_sl_url, "asm-w05-v05-lasso_with_notes.pdf", collapse = '')
+                                  "[with notes](", s_sl_url, "asm-w05-v05-lasso_with_notes.pdf)", collapse = '')
                          ))
 knitr::kable(tbl_sl)
 ```
