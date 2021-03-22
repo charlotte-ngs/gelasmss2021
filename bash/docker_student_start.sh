@@ -146,7 +146,7 @@ COURSEHOME=""
 RSTPORT=10087
 DRYRUN='FALSE'
 DOCKERIMAGE='docker/rverse'
-while getopts ":c:df:i:p:h" FLAG; do
+while getopts ":c:df:i:p:w:h" FLAG; do
   case $FLAG in
     h)
       usage "Help message for $SCRIPT"
