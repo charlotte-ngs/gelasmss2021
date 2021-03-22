@@ -58,11 +58,13 @@ SERVER=`hostname`                          # put hostname of server in variable 
 usage () {
   local l_MSG=$1
   $ECHO "Usage Error: $l_MSG"
-  $ECHO "Usage: $SCRIPT -c <course_home> -d <dry_run> -f <username_input_file> -p <start_port>"
+  $ECHO "Usage: $SCRIPT -c <course_home> -d <dry_run> -f <username_input_file> -i <docker_image> -p <start_port> -w <pass_dir>"
   $ECHO "  where -f <username_input_file>  --  specify username or file with list of usernames ..."
   $ECHO "        -p <start_port>           --  start port where rstudio maps to"
   $ECHO "        -d                        --  run script in dry-run mode w/out starting container"
   $ECHO "        -c <course_home>          --  directory where course home directories are"
+  $ECHO "        -w <pass_dir>             --  directory with existing passwords"
+  $ECHO "        -i <docker_image>         --  docker image"
   $ECHO ""
   exit 1
 }
@@ -108,12 +110,17 @@ docker_start () {
   local email=$(echo $l_user_info | cut -d ',' -f4)
   local name=$(echo $l_user_info | cut -d ',' -f2)
   local firstname=$(echo $l_user_info | cut -d ',' -f3)
-  local pass=`tr -dc A-Za-z0-9_ < /dev/urandom | head -c8`
-  local dcmd="docker run -d -p $RSTPORT:8787 -e PASSWORD=$pass -v $COURSEHOME/${user}:/home/rstudio --name ${user}_rstudio rocker/verse"
+  if [ -f "$PASSDIR/.${user}.pwd" ]
+  then
+    local pass=$(cat "$PASSDIR/.${user}.pwd")
+  else
+    local pass=`tr -dc A-Za-z0-9_ < /dev/urandom | head -c8`
+  fi
+  local dcmd="docker run -d -p $RSTPORT:8787 -e PASSWORD=$pass -v $COURSEHOME/${user}:/home/rstudio --name ${user}_rstudio $DOCKERIMAGE"
   echo $dcmd
   if [ "$DRYRUN" != "TRUE" ]
   then
-    docker run -d -p $RSTPORT:8787 -e PASSWORD=$pass -v $COURSEHOME/${user}:/home/rstudio --name ${user}_rstudio rocker/verse
+    docker run -d -p $RSTPORT:8787 -e PASSWORD=$pass -v $COURSEHOME/${user}:/home/rstudio --name ${user}_rstudio $DOCKERIMAGE
     sudo chmod -R 777 $COURSEHOME/${user}
     # firewall
     sudo ufw allow $RSTPORT/tcp
@@ -133,11 +140,13 @@ start_msg
 #' Notice there is no ":" after "h". The leading ":" suppresses error messages from
 #' getopts. This is required to get my unrecognized option code to work.
 #+ getopts-parsing, eval=FALSE
+PASSDIR=""
 USERNAME=""
 COURSEHOME=""
 RSTPORT=10087
 DRYRUN='FALSE'
-while getopts ":c:df:p:h" FLAG; do
+DOCKERIMAGE='docker/rverse'
+while getopts ":c:df:i:p:h" FLAG; do
   case $FLAG in
     h)
       usage "Help message for $SCRIPT"
@@ -151,8 +160,14 @@ while getopts ":c:df:p:h" FLAG; do
     f)
       USERNAME=$OPTARG
       ;;
+    i)
+      DOCKERIMAGE=$OPTARG
+      ;;
     p)
       RSTPORT=$OPTARG
+      ;;
+    w)
+      PASSDIR=$OPTARG
       ;;
     :)
       usage "-$OPTARG requires an argument"
