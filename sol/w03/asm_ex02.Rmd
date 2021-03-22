@@ -24,15 +24,9 @@ During the lecture the regression model was explained using the dataset on body 
 ```{r dataregression, echo=FALSE, results='asis', message=FALSE}
 ### # define constant paths
 s_data_root_online <- "https://charlotte-ngs.github.io/gelasmss2021/data"
-s_data_root_local <- here::here() 
 s_data_dir <- "asm_w03_ex02_bw_mult_reg.csv"
 ### # define data path depending on whether we are online or not
-b_online <- TRUE
-if (b_online){
-  s_data_root <- s_data_root_online
-} else {
-  s_data_root <- s_data_root_local
-}
+s_data_root <- s_data_root_online
 s_data_path <- file.path(s_data_root, s_data_dir)
 ### # read data from s_data_path
 tbl_reg <- readr::read_csv(file = s_data_path)
