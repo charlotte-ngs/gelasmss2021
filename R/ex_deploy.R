@@ -23,11 +23,15 @@
 deploy_exercise <- function(ps_ex_name){
 
   s_proj_dir <- here::here()
+  s_proj_name <- basename(s_proj_dir)
   s_out_dir <- file.path(s_proj_dir, 'docs')
+  s_rexpf_dir <- file.path(dirname(dirname(s_proj_dir)), 'rexpf', s_proj_name)
   # call rteachtools deployment function with a set of default parameters
   rteachtools::deploy_ex(ps_ex_path = file.path(s_proj_dir, 'ex', ps_ex_name, ps_ex_name),
                          ps_ex_out_dir = file.path(s_out_dir, 'ex'),
-                         ps_sol_out_dir = file.path(s_out_dir, 'sol'))
+                         ps_sol_out_dir = file.path(s_out_dir, 'sol'),
+                         ps_rexpf_src   = file.path(s_proj_dir, 'nb'),
+                         ps_rexpf_trg   = s_rexpf_dir)
 
   return(invisible(TRUE))
 
