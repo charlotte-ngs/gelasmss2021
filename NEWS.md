@@ -1,3 +1,7 @@
+# gelasmss2021 0.6.0
+
+* Material for exercise 5 and all solutions for previous exercises
+
 # gelasmss2021 0.5.3
 
 * Added links to video, notebook and slides
