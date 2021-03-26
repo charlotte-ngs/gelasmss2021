@@ -1,8 +1,8 @@
 #!/bin/bash
 
 SCRIPTDIR=/home/quagadmin/source/misctools/
-# DIRTOFETCH=ex/w05
-DIRTOFETCH=sol/w03
+DIRTOFETCH=ex/asm_ex05
+# DIRTOFETCH=sol/w03
 TESTSTUDENT=/home/quagadmin/courses/gelasmss2021/students/test_student_usernames_gelasmss2021.txt
 STUDENTUSER=/home/quagadmin/courses/gelasmss2021/students/student_usernames_gelasmss2021.txt
 #' fetch individual directory
