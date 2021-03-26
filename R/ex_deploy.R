@@ -13,6 +13,7 @@
 #'
 #' @examples
 #' \dontrun{
+#' devtools::load_all()
 #' deploy_exercise(ps_ex_name = 'asm_ex02')
 #' }
 #'

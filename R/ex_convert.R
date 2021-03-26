@@ -10,6 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
+#' devtools::load_all()
 #' convert_exercise_to_nb(ps_ex_name = 'asm_ex02')
 #' }
 #'

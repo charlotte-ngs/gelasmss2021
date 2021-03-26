@@ -25,6 +25,8 @@ knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
 ```{r ex05prob01setup, echo=FALSE, results='hide'}
 n_id_sire <- 6
 n_id_dam <- 9
+# course url used for defining paths to data files
+s_course_url <- "https://charlotte-ngs.github.io/gelasmss2021"
 ```
 
 According to the results from Exercise 4, animals `r n_id_sire` and `r n_id_dam` are mated to each other. The result of this mating are two male and two female offspring. From the two brothers and the two sisters the better male offspring and the better female offspring should be selected. Figure \@ref(fig:pedigreemating) shows the pedigree of the described matings.
@@ -73,16 +75,15 @@ cat('<!-- \n')
 ```
 
 ### Solution
-The argument from quantitative genetics about predicted breeding values of parents and progeny is that for an animal $i$ with parents $s$ and $d$ the predicted breeding value $\hat{a}_i$ is the average of the predicted breeding values $\hat{a}_s$ and $\hat{a}_d$ of parents $s$ and $d$, provided that animal $i$ does not have any own performance records. Because the two brothers and sisters have the same parents $`r n_id_sire`$ and $`r n_id_dam`$, they all have the same predicted breeding values. With this it is clear that the task of finding the better male and female of the brothers and sisters cannot be solved with the traditionally predicted breeding values.
+The argument from quantitative genetics about predicted breeding values of parents and progeny is that for an animal $i$ with parents $s$ and $d$ the predicted breeding value $\hat{u}_i$ is the average of the predicted breeding values $\hat{u}_s$ and $\hat{u}_d$ of parents $s$ and $d$, provided that animal $i$ does not have any own performance records. Because the two brothers and sisters have the same parents $`r n_id_sire`$ and $`r n_id_dam`$, they all have the same predicted breeding values. With this it is clear that the task of finding the better male and female of the brothers and sisters cannot be solved with the traditionally predicted breeding values.
 
 We are going to verify the above described argument by extending the computations of Problem 1 from Exercise 4. The same procedure is used to come up with the predicted breeding values for the extended pedigree. We start by specifying the model components such as the design matrices $X$ and $Z$ and the vector $y$ of phenotypic observations. Together with the numerator relationship matrix, we can set up the mixed model equations.
 
-Because the four offspring $22$, $23$, $24$ and $25$ do not have any phenotypic observations, the vector $y$ and the design matrix $X$ do not changed compared to the solution of Problem 1 in Exercise 4. Because there are four offspring animals added to the pedigree, the vector $a$ of all breeding values and with that the matrices $Z$ and $A$ have to be changed. 
+Because the four offspring $22$, $23$, $24$ and $25$ do not have any phenotypic observations, the vector $y$ and the design matrix $X$ do not changed compared to the solution of Problem 1 in Exercise 4. Because there are four offspring animals added to the pedigree, the vector $u$ of all breeding values and with that the matrices $Z$ and $A$ have to be changed. 
 
 ```{r tpbvreaddata, message=FALSE}
 ### # define the path to the phenotypic data
-s_course_url <- "https://charlotte-ngs.github.io/gelasmss2021/"
-s_phe_path <- file.path(s_course_url, "data/data_ex04_p01_phe.csv")
+s_phe_path <- file.path(s_course_url, "data", "data_ex04_p01_phe.csv")
 tbl_phe <- readr::read_csv(file = s_phe_path)
 ```
 
@@ -98,7 +99,7 @@ mat_X <- matrix(1, nrow = n_nr_obs, ncol = 1)
 The extended pedigree is read and the inverse of the numerator relationship matrix is constructed
 
 ```{r, message=FALSE}
-s_ped_ext_path <- file.path(s_course_url, "data/data_ex05_p01_ped.csv")
+s_ped_ext_path <- file.path(s_course_url, "data", "data_ex05_p01_ped.csv")
 tbl_ped_ext <- readr::read_csv(file = s_ped_ext_path, col_types = "iii")
 ped_ext <- pedigreemm::pedigree(sire = tbl_ped_ext$Sire, 
                                 dam = tbl_ped_ext$Dam, 
@@ -176,7 +177,7 @@ cat('--> \n')
 
 ## Problem 2: Genomic Breeding Values For Progeny
 ```{r ex05p02genread, echo=FALSE, results='hide', message=FALSE}
-s_gen_path <- file.path(s_course_url, "data/data_ex05_p02_gen.csv")
+s_gen_path <- file.path(s_course_url, "data", "data_ex05_p02_gen.csv")
 tbl_gen <- readr::read_csv(file = s_gen_path)
 ```
 
@@ -198,8 +199,22 @@ The four offsprings of parents `r n_id_sire` and `r n_id_dam` also have genotype
 
 <!-- your-solution-start
 ### Your Solution
+We are predicting breeding values using Genomic BLUP (GBLUP). This means, we have to set up the mixed model equations, but instead of the numerator relationship matrix $A$, we are using the genomic relationship matrix $G$. The steps to the solution are the same, but we have to adapt the matrices that are required. 
 
+```{r}
+# vector y
 
+# matrix X
+
+# matrix Z
+
+# inverse matrix G
+
+# mixed model equations
+
+# solve mixed model equations
+
+```
 
 ---  your-solution-end -->
 
