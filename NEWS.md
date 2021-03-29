@@ -1,3 +1,7 @@
+# gelasmss2021 0.6.2
+
+* Released notebook and link to video
+
 # gelasmss2021 0.6.1
 
 * Released slides
