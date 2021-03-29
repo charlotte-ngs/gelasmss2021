@@ -145,7 +145,7 @@ USERNAME=""
 COURSEHOME=""
 RSTPORT=10087
 DRYRUN='FALSE'
-DOCKERIMAGE='rocker/rverse'
+DOCKERIMAGE='rocker/verse'
 while getopts ":c:df:i:p:w:h" FLAG; do
   case $FLAG in
     h)
