@@ -123,7 +123,10 @@ docker_start () {
     docker run -d -p $RSTPORT:8787 -e PASSWORD=$pass -v $COURSEHOME/${user}:/home/rstudio --name ${user}_rstudio $DOCKERIMAGE
     sudo chmod -R 777 $COURSEHOME/${user}
     # firewall
-    sudo ufw allow $RSTPORT/tcp
+    if [ `sudo ufw status | grep "$RSTPORT/tcp" | grep ALLOW | wc -l` eq 0 ]
+    then
+      sudo ufw allow $RSTPORT/tcp
+    fi
   fi
   printf "To: $email \nSubject: Exercise Platform \n\nDear $firstname $name \nThis e-mail contains the required information for the exercise platform. \n\nPort: $RSTPORT \nPassword: $pass \n\nBest regards, Peter" > ${user}_email.txt
   RSTPORT=$((RSTPORT+1))
