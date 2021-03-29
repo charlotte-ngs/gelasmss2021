@@ -152,6 +152,9 @@ else
   docker_stop $USERNAME
 fi
 
+# clean up all instances with status exited
+log_msg "$SCRIPT" " * Clean up all instances with status exited ..."
+docker rm $(docker ps --filter "status=exited" -q)
 
 #' ## End of Script
 #' This is the end of the script with an end-of-script message.
