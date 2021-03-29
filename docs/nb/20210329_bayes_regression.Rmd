@@ -1,0 +1,87 @@
+---
+title: "Baysian Analysis"
+output: html_notebook
+---
+
+# Data
+As data we use the regression data of body weight and breast circumference.
+
+```{r}
+s_data_file <- "asm_w03_ex02_bw_bc_reg.csv"
+s_url <- "https://charlotte-ngs.github.io/gelasmss2021/data"
+s_data_path <- file.path(s_url, s_data_file)
+# read data
+tbl_reg <- readr::read_csv(s_data_path)
+tbl_reg
+```
+
+
+# Goal
+Bayesian estimates for slope and intercept of the regression model
+
+$$y = X\beta + e$$
+
+where $\beta^T = [ \beta_0 \text{ } \beta_1]$
+
+# Full Conditional Distributions
+
+1. $f(\beta_0 | \beta_1, y)$ and
+2. $f(\beta_1 | \beta_0, y)$
+
+
+To specify the full conditional distribution, we use the following
+
+For the regression model
+
+$$y = \beta_0 + x\beta_1 + w$$
+
+We define $w_0 = \beta_0 + e$, which is equivalent to $w_0 = y - x\beta_1$
+
+The least-squares estimate for $\beta_0$ can be written as 
+
+$$\hat{\beta_0}_{LS} = (1^T1)^{-1}1^Tw_0$$
+
+The variance of $\hat{\beta_0}_{LS}$ is
+
+$$var(\hat{\beta_0}_{LS}) = (1^T1)^{-1}\sigma^2$$
+
+The same for $\beta_1$
+
+
+# Gibbs Sampler
+The Gibbs sampler is the technique to generate random numbers from the full conditional distributions.
+
+```{r}
+### # prepare the vector y
+nobs <- nrow(tbl_reg)
+y <- tbl_reg$`Body Weight`
+X <- matrix(c(rep(1, nobs), tbl_reg$`Breast Circumference`), nrow = nobs)
+### # start with initial values, \beta_0 = \beta_1 = 0
+beta <- c(0, 0)
+### # number of interations N
+niter <- 10^5
+### # collect the results in a given vector
+meanBeta <- c(0, 0)
+### # loop over all iterations (steps 2-5 which are repeated)
+for (iter in 1:niter){
+  # expected value of first full conditional distribution
+  w <- y - X[,2] * beta[2]
+  x <- X[,1]
+  xpxi <- 1/(t(x) %*% x)
+  betaHat <- t(x) %*% w * xpxi
+  # draw first beta0
+  beta[1] <- rnorm(1,betaHat, sqrt(xpxi))
+  # beta1
+  # expected valuea nd variance for beta1
+  w <-  y - X[, 1] * beta[1]
+  x <-  X[, 2]
+  xpxi  <-  1/(t(x) %*% x)
+  betaHat  <-  t(x) %*% w * xpxi
+  # ### new random number for beta1
+  beta[2]  <-  rnorm(1, betaHat, sqrt(xpxi))
+  meanBeta <-  meanBeta + beta
+}
+cat(sprintf("Achsenabschnitt = %6.3f \n", meanBeta[1]/iter))
+cat(sprintf("Steigung = %6.3f \n", meanBeta[2]/iter))
+```
+
