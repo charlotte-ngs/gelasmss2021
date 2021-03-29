@@ -123,7 +123,7 @@ docker_start () {
     docker run -d -p $RSTPORT:8787 -e PASSWORD=$pass -v $COURSEHOME/${user}:/home/rstudio --name ${user}_rstudio $DOCKERIMAGE
     sudo chmod -R 777 $COURSEHOME/${user}
     # firewall
-    if [ `sudo ufw status | grep "$RSTPORT/tcp" | grep ALLOW | wc -l` eq 0 ]
+    if [ `sudo ufw status | grep "$RSTPORT/tcp" | grep ALLOW | wc -l` -eq 0 ]
     then
       sudo ufw allow $RSTPORT/tcp
     fi
