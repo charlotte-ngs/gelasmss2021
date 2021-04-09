@@ -20,6 +20,9 @@ params:
 ```{r setup, include=FALSE}
 # knitr::opts_chunk$set(echo = FALSE, results = 'asis', fig.pos = 'H')
 knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
+vec_pkg <- c("glmnet")
+if (!is.element(vec_pkg, installed.packages()))
+  install.packages(vec_pkg, dependencies = TRUE)
 ```
 
 
@@ -33,127 +36,131 @@ s_course_url <- "https://charlotte-ngs.github.io/gelasmss2021"
 s_lasso_data_path <- file.path(s_course_url, "data", s_lasso_data_filename)
 ```
 
-The file `r s_lasso_data_path` contains a dataset with 
+The file `r s_lasso_data_path` contains a dataset with genotypes from `r n_nr_snp` SNP-Loci. In addition to that the dataset also has observations of a certain trait for `r n_nr_ani` animals. The dataset can be read into a matrix with the following statement.
 
-Gegeben ist ein Datensatz in der Datei `r s_lasso_data_filename`, welcher Genotypen an `r n_nr_snp` SNP-Loci und Beobachtungen für ein bestimmtes Merkmal für insgesamt `r n_nr_ani` Tiere enthält. Sie können den gesamten Datensatz mit dem folgenden Statement in eine Matrix einlesen.
-
-```{r, echo=FALSE, results='markup'}
-s_input_cmd <- paste0("mat_lasso_data <- matrix(scan(\"", s_lasso_data_filename, "\"), nrow = ", n_nr_ani, ", byrow = TRUE)", collapse = "")
+```{r data-scan-stmt, echo=FALSE, results='markup'}
+s_input_cmd <- paste0("mat_lasso_data <- matrix(scan(\"", s_lasso_data_path, "\"), nrow = ", n_nr_ani, ", byrow = TRUE)", collapse = "")
 cat(s_input_cmd, "\n")
 ```
 
-Betrachten wir uns die ersten fünf Zeilen und die ersten fünf Kolonnen dieser Matrix sehen diese wie folgt aus.
-
-```{r, results='markup'}
-mat_lasso_data[1:5,1:5]
+```{r eval-scan-stmt, echo=FALSE, message=FALSE, results='hide'}
+eval(parse(text = s_input_cmd))
+n_nr_row <- 5
+n_nr_col <- 5
 ```
 
-Daraus wird ersichtlich, dass die Beobachtungen aller Tiere in der ersten Kolonne der Datenmatrix `mat_lasso_data` sind und die Genotypen in den Kolonnen 2 bis `r ncol(mat_lasso_data)` .  Für die Anpassung eines linearen Modells mit LASSO verwenden wir die Funktion `glmnet()` aus dem gleichnamigen Package `glmnet`. Wir verwenden jetzt also alle SNP-Genotypen als erklärende Variablen und die Beobachtungswerte sind unsere Zielgrössen.
+Let us have a look at the first `r n_nr_row` rows and the first `r n_nr_col` columns of the matrix that stores the dataset.
 
-### Ihre Aufgaben
-* Verwenden Sie das folgende R-Statement für die Schätzung der SNP-Effekte mit LASSO
+```{r, results='markup'}
+mat_lasso_data[1:n_nr_row,1:n_nr_col]
+```
 
-```{r, eval=FALSE, echo=TRUE, results='markup'}
+From this output, we can see that the observations of all animals can be found in the first column of the data matrix `mat_lasso_data`. In columns  2 to `r ncol(mat_lasso_data)` of the data matrix there are the genotypes of all SNP loci. The linear model is fitted with LASSO using the function `glmnet()` from the package `glmnet`. The SNP genotypes are used as explanatory variables and the observations are the response variables.
+
+
+### Your Tasks
+* Use the following R-Statement to estimate the SNP-effects using LASSO
+
+```{r model-fit, eval=FALSE, echo=TRUE, results='markup'}
 require(glmnet)
 fitsnp <- glmnet(x = mat_lasso_data[, -1], y = mat_lasso_data[, 1])
 ```
 
-* Visualisieren Sie die Abhängigkeit zwischen dem Wert von $\lambda$ und der Anzahl von erklärenden Variablen, welche nicht $0$ sind.
+* Visualize the dependency between the value of the penalty term $\lambda$ and the number of explanatory variables which are not $0$.
 
-```{r, eval=FALSE, echo=TRUE, results='markup'}
+```{r plot-fit, eval=FALSE, echo=TRUE, results='markup'}
 plot(fitsnp, xvar = "lambda", label = TRUE)
 ```
 
-* Machen Sie eine Kreuzvalidierung um den Wert vom $\lambda$ zu bestimmen
+* Use a cross-validation to determine the value of $\lambda$.
 
-```{r, eval=FALSE, echo=TRUE, results='markup'}
+```{r cv-fit, eval=FALSE, echo=TRUE, results='markup'}
 cvfitsnp <- cv.glmnet(x = mat_snp, y = vec_y)
 ```
 
-* Stellen Sie die Resultate der Kreuzvalidierung mit der Funktion `plot()` dar.
+* Show the results of the cross-validation in a plot using the function `plot()`.
 
-```{r, eval=FALSE, echo=TRUE, results='markup'}
+```{r plot-cv, eval=FALSE, echo=TRUE, results='markup'}
 plot(cvfitsnp)
 ```
 
-* Im Plot der Kreuzvalidierungsresultate gibt es zwei gestrichelte Linien, welche zwei spezielle $\lambda$-Werte markieren. Der erste Wert ist das Minimum aller $\lambda$-Werte und der zweite ist der Wert, welcher die meisten Variablen auf $0$ setzt aber nicht weiter als eine Standardabweichung vom minimalen Wert des mittleren quadrierten Fehler entfernt ist. Die beiden $\lambda$-Wert erhalten Sie mit 
+* In the plot of the cross-validation results there are two dashed lines which both indicated special values for $\lambda$. The first value is the minimum of all  $\lambda$-values and the second is the one that sets the most explanatory variables to $0$ with the restriction that the sum of squared errors is not further away than one standard deviation from its minimum. The two $\lambda$-values are obtained with 
 
-```{r, eval=FALSE, echo=TRUE, results='markup'}
+```{r special-lambda, eval=FALSE, echo=TRUE, results='markup'}
 cvfitsnp$lambda.min
 cvfitsnp$lambda.1se
 ```
 
-* Finden Sie alle Koeffizienten, welche nicht $0$ sind, für die beiden $\lambda$-Werte und vergleichen Sie diese mit den wahren Werten aus der Simulation
+* Find all coefficients which are not $0$ for both $\lambda$-values and compare them to the true values taken from the simulation. 
 
-```{r, eval=FALSE, echo=TRUE, results='markup'}
+```{r coef-min, eval=FALSE, echo=TRUE, results='markup'}
 coefmin <- coef(cvfitsnp, s = "lambda.min")
 (cofminnz <- coefmin[coefmin[, 1] != 0,])
 ```
 
-```{r, eval=FALSE, echo=TRUE, results='markup'}
+```{r coef-se, eval=FALSE, echo=TRUE, results='markup'}
 coef1se <- coef(cvfitsnp, s = "lambda.1se")
 (coef1senz <- coef1se[coef1se[, 1] != 0, ])
 ```
 
-Die wahren SNP-Positionen aus der Simulation lauten:
+The true SNP-positions from the simulation are:
 
 ```{r, eval=TRUE, echo=TRUE, results='markup'}
 (vec_sign_snp_idx <- c(73,54,26,30,7))
 ```
 
+<!-- your-solution-start
+### Your Solution
 
-### Lösung
-Die Modellanpassung läuft über das schon gezeigte Kommando
 
-```{r, echo=TRUE, results='markup'}
-require(glmnet)
-fitsnp <- glmnet(x = mat_lasso_data[, -1], y = mat_lasso_data[, 1])
+---  your-solution-end -->
+
+
+```{r p01-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+cat('<!-- \n')
 ```
 
-Das Resultat ist ein `glmnet`-Objekt. Dieses Objekt kann mit der `print()` Funktion angeschaut werden. Informativer als der `print()`-Output ist der folgende Plot.
+### Solution
+The linear model is fitted with the following statement.
 
-```{r, eval=TRUE, echo=TRUE, results='markup'}
-plot(fitsnp, xvar = "lambda", label = TRUE)
+```{r model-fit, eval=TRUE, echo=TRUE, results='markup'}
 ```
 
-Die Kreuzvalidierung wird mit der Funktion `cv.glmnet()` gemacht. 
+The result of the model fit is a `glmnet`-object. The resuling object is best viewed with the following plot.
 
-```{r, eval=TRUE, echo=TRUE, results='markup'}
-cvfitsnp <- cv.glmnet(x = mat_lasso_data[, -1], y = mat_lasso_data[, 1])
+```{r plot-fit, eval=TRUE, echo=TRUE, results='markup'}
 ```
 
-Die Resultate werden mit dem folgenden Plot visualisiert.
+The cross-validation is done with the function `cv.glmnet()`. 
 
-```{r, eval=TRUE, echo=TRUE, results='markup'}
-plot(cvfitsnp)
+```{r cv-fit, eval=TRUE, echo=TRUE, results='markup'}
 ```
 
-Die speziellen $\lambda$-Werte sind im Plot mit den gestrichelten Linien markiert. Die Werte sind
+The results can be shown with the following plot.
 
-```{r, eval=TRUE, echo=TRUE, results='markup'}
-cvfitsnp$lambda.min
-cvfitsnp$lambda.1se
+```{r plot-cv, eval=TRUE, echo=TRUE, results='markup'}
 ```
 
-Die Koeffizienten und somit für unseren Datensatz die SNP-Positionen, welche nicht $0$ sind, werden für die beiden $\lambda$-Werte ausgegeben.
+The special $\lambda$-values indicated with the dashed lines can be obtained with 
 
-```{r, eval=TRUE, echo=TRUE, results='markup'}
-coefmin <- coef(cvfitsnp, s = "lambda.min")
-(cofminnz <- coefmin[coefmin[, 1] != 0,])
+```{r special-lambda, eval=TRUE, echo=TRUE, results='markup'}
 ```
 
-```{r, eval=TRUE, echo=TRUE, results='markup'}
-coef1se <- coef(cvfitsnp, s = "lambda.1se")
-(coef1senz <- coef1se[coef1se[, 1] != 0, ])
+The coefficients corresponding to the SNP-positions which are not $0$ for both $\lambda$-values are obtained with
+
+```{r coef-min, eval=TRUE, echo=TRUE, results='markup'}
 ```
 
-Wir extrahieren die SNP-Positionen aus den Koeffizienten
+```{r coef-se, eval=TRUE, echo=TRUE, results='markup'}
+```
+
+The SNP-positions are extracted from the coefficients as follows 
 
 ```{r, eval=TRUE, echo=TRUE, results='markup'}
 (s_snp_pos_min <- gsub(pattern = "V", replacement = "", setdiff(names(cofminnz), "(Intercept)"), fixed = TRUE))
 ```
 
-Die Übereinstimmung zwischen den gefundenen und den wahren SNP-Positionen lauten
+The match between the estimated and the true SNP-positons using minimal $\lambda$ are 
 
 
 ```{r, eval=TRUE, echo=TRUE, results='markup'}
@@ -164,7 +171,7 @@ Die Übereinstimmung zwischen den gefundenen und den wahren SNP-Positionen laute
 (s_snp_pos_1senz <- gsub(pattern = "V", replacement = "", setdiff(names(coef1senz), "(Intercept)"), fixed = TRUE))
 ```
 
-Die Übereinstimmung zwischen den gefundenen und den wahren SNP-Positionen lauten
+The match between the estimated and the true SNP-positons using the SE-$\lambda$ are 
 
 
 ```{r, eval=TRUE, echo=TRUE, results='markup'}
@@ -172,9 +179,9 @@ Die Übereinstimmung zwischen den gefundenen und den wahren SNP-Positionen laute
 ```
 
 
-
-
-
+```{r p01-comment-end, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+cat('--> \n')
+```
 
 
 
@@ -303,7 +310,7 @@ In the problem description, the residual variance $\sigma^2$ is assumed to be kn
 ---  your-solution-end -->
 
 
-```{r p01-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+```{r p02-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
 cat('<!-- \n')
 ```
 
@@ -371,7 +378,7 @@ The last line of the above output corresponds to the Bayesian estimate of the in
 summary(lm_reg_bwbc)
 ```
 
-```{r p01-comment-end, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
+```{r p02-comment-end, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
 cat('--> \n')
 ```
 
