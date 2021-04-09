@@ -1,20 +1,8 @@
 ---
-title: Applied Statistical Methods - `r tools::toTitleCase(params$doctype)` 6
+title: Applied Statistical Methods - Notebook 6
 author: Peter von Rohr
-date: "2021-03-29"
-output:
-  bookdown::pdf_document2:
-    toc: false
-    number_sections: false
-    keep_tex: false
-header-includes:
- \usepackage{longtable}
- \usepackage{float}
-params:
-  doctype:
-    label: 'Document Type'
-    value: 'solution'
-    choices: ['exercise', 'solution']
+date: 2021-03-29
+output: html_notebook
 ---
 
 ```{r setup, include=FALSE}
@@ -109,7 +97,6 @@ The true SNP-positions from the simulation are:
 (vec_sign_snp_idx <- c(73,54,26,30,7))
 ```
 
-<!-- your-solution-start
 ### Your Solution
 Run the R-statements as they are shown in the hints. This will result in a set of SNP-positions with an effect that is different from $0$. These SNP-positions can then be compared to the true positions from the simulation. The LASSO-estimates of the SNP-effects are obtained with the following steps.
 
@@ -149,79 +136,8 @@ Run the R-statements as they are shown in the hints. This will result in a set o
 
 ```
 
----  your-solution-end -->
 
 
-```{r p01-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
-cat('<!-- \n')
-```
-
-### Solution
-The linear model is fitted with the following statement.
-
-```{r model-fit, eval=TRUE, echo=TRUE, results='markup'}
-```
-
-The result of the model fit is a `glmnet`-object. The resuling object is best viewed with the following plot.
-
-```{r plot-fit, eval=TRUE, echo=TRUE, results='markup'}
-```
-
-The cross-validation is done with the function `cv.glmnet()`. 
-
-```{r cv-fit, eval=TRUE, echo=TRUE, results='markup'}
-```
-
-The results can be shown with the following plot.
-
-```{r plot-cv, eval=TRUE, echo=TRUE, results='markup'}
-```
-
-The special $\lambda$-values indicated with the dashed lines can be obtained with 
-
-```{r special-lambda, eval=TRUE, echo=TRUE, results='markup'}
-```
-
-The coefficients corresponding to the SNP-positions which are not $0$ for both $\lambda$-values are obtained with
-
-```{r coef-min, eval=TRUE, echo=TRUE, results='markup'}
-```
-
-```{r coef-se, eval=TRUE, echo=TRUE, results='markup'}
-```
-
-The SNP-positions are extracted from the coefficients as follows 
-
-```{r, eval=TRUE, echo=TRUE, results='markup'}
-(s_snp_pos_min <- gsub(pattern = "V", replacement = "", 
-                       setdiff(names(cofminnz), "(Intercept)"), 
-                       fixed = TRUE))
-```
-
-The match between the estimated and the true SNP-positons using minimal $\lambda$ are 
-
-
-```{r, eval=TRUE, echo=TRUE, results='markup'}
-(vec_match_snp_min <- intersect(s_snp_pos_min, as.character(vec_sign_snp_idx)))
-```
-
-```{r, eval=TRUE, echo=TRUE, results='markup'}
-(s_snp_pos_1senz <- gsub(pattern = "V", replacement = "", 
-                         setdiff(names(coef1senz), "(Intercept)"), 
-                         fixed = TRUE))
-```
-
-The match between the estimated and the true SNP-positons using the SE-$\lambda$ are 
-
-
-```{r, eval=TRUE, echo=TRUE, results='markup'}
-(vec_match_snp_1senz <- intersect(s_snp_pos_1senz, as.character(vec_sign_snp_idx)))
-```
-
-
-```{r p01-comment-end, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
-cat('--> \n')
-```
 
 
 
@@ -332,7 +248,6 @@ with variance $var(\hat{\beta}_1) = (x^Tx)^{-1} \sigma^2$ where $w_1 = y - 1\bet
 * Use the mean of the generated samples as an estimate for the unknowns $\beta_0$ and $\beta_1$.
 
 
-<!-- your-solution-start
 ### Your Solution
 In the problem description, the residual variance $\sigma^2$ is assumed to be known. Instead of using a fixed value, we use the estimate that can be computed based on the residuals from a least squares model.
 
@@ -347,79 +262,12 @@ In the problem description, the residual variance $\sigma^2$ is assumed to be kn
 
 ```
 
----  your-solution-end -->
 
 
-```{r p02-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
-cat('<!-- \n')
+
+ 
+
+
+```{r, echo=FALSE, results='asis'}
+cat('\n---\n\n _Latest Changes: ', format(Sys.time(), '%Y-%m-%d %H:%M:%S'), ' (', Sys.info()['user'], ')_\n', sep = '')
 ```
-
-### Solution
-We have mentioned earlier that we are using the residual variance that is obtained from the least squares analysis which is shown just below.
-
-```{r lmreganalysis, echo=TRUE}
-```
-
-We start by setting up the matrix $X$ with two columns. The first column contains only ones and the second column contains the measured breast circumference data. 
-
-```{r}
-n_nr_obs <- nrow(tbl_reg)
-X <- matrix(c(rep(1, n_nr_obs), tbl_reg$`Breast Circumference`), ncol = 2)
-```
-
-In the next step, we assign the observed body weights to the vector $y$.
-
-```{r}
-y <- tbl_reg$`Body Weight`
-```
-
-Before, the sampling iterations are started, the vector used for the sampled values is initialised.
-
-```{r}
-beta <- c(0,0)
-meanBeta <- c(0,0)
-```
-
-The random samples are drawn in a loop where in turn the unknowns are updated. Before starting the loop, we have to fix the random number generator seed, such that we get reproducible results.
-
-```{r}
-#' fix the seed
-set.seed(123942)
-#' fix the number of samples
-niter <- 100000
-#' loop over the iterations
-for (iter in 1:niter){
-  # sampling the intercept beta_0
-  w <- y - X[,2] * beta[2]
-  x <- X[,1]
-  xtxi <- 1/crossprod(x)
-  betaHat <- crossprod(x, w) * xtxi
-  beta[1] <- rnorm(1, betaHat, sqrt(xtxi * n_res_var))
-  # sample the slope beta_1
-  w <- y - X[,1] * beta[1]
-  x <- X[,2]
-  xtxi <- 1/crossprod(x)
-  betaHat <- crossprod(x, w) * xtxi
-  beta[2] <- rnorm(1, betaHat, sqrt(xtxi * n_res_var))
-  # sum up the estimate
-  meanBeta <- meanBeta + beta
-  # output every 10000 rounds
-  if ((iter%%10000) == 0){
-    cat(sprintf("Iteration: %d \n", iter))
-    cat(sprintf("Intercept: %6.3f \n", meanBeta[1]/iter))
-    cat(sprintf("Slope:     %6.3f \n", meanBeta[2]/iter))
-  }
-}
-```
-
-The last line of the above output corresponds to the Bayesian estimate of the intercept and the slope. That would need to be compared to the least squares estimate which is obtained from 
-
-```{r}
-summary(lm_reg_bwbc)
-```
-
-```{r p02-comment-end, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
-cat('--> \n')
-```
-
-
