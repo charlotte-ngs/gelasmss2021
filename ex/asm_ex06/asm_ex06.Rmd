@@ -6,7 +6,8 @@ output:
   bookdown::pdf_document2:
     toc: false
     number_sections: false
-    keep_tex: false
+    keep_md: true
+    keep_tex: true
 header-includes:
  \usepackage{longtable}
  \usepackage{float}
@@ -115,7 +116,6 @@ Run the R-statements as they are shown in the hints. This will result in a set o
 
 ```{r}
 # fit the linear model with glmnet
-
 
 ```
 
