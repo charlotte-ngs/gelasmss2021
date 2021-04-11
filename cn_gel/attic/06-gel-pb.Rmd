@@ -1,0 +1,309 @@
+# Prediction Of Breeding Values {#gel-pb}
+```{r mrtminitpb, include=FALSE}
+met$set_this_rmd_file(ps_this_rmd_file = ifelse(rstudioapi::isAvailable(), 
+                                                 rstudioapi::getSourceEditorContext()$path, 
+                                                 rprojroot::thisfile()))
+```
+
+The breeding value $u_i$ of animal $i$ cannot be observed or measured. It has to be estimated from phenotypic observations using the genetic model shown in \@ref(eq:gel-pb-genmodel) and in .
+
+\begin{equation}
+y_i= \mu + u_i + d_i + i_i + e_i
+(\#eq:gel-pb-genmodel)
+\end{equation}
+
+where $y_i$ is the observation of animal $i$, $\mu$ corresponds to a general population mean of the observed phenotypic values, $u_i$ is the breeding value of animal $i$, $d_i$ is the dominance deviation and $i_i$ the epistasis effect. The random error term is symbolized with $e_i$. For the prediction of breeding values, dominance deviations and epistasis effects are not considered to be important. Therefore they are ignored. This leads to a simpler model shown in \@ref(eq:gel-pb-genmodel-simplified). 
+
+\begin{equation}
+y_i= \mu + u_i + e_i
+(\#eq:gel-pb-genmodel-simplified)
+\end{equation}
+
+The expected values and the variance-covariance matrix of the model shown in \@ref(eq:gel-pb-genmodel-simplified) are specified as
+
+\begin{align}
+E \left[\begin{array}{c} y_i \\ u_i \\ e_i \end{array} \right]   &= \left[\begin{array}{c} \mu \\ 0 \\ 0 \end{array} \right] \notag \\
+var \left[\begin{array}{c} y_i \\ u_i \\ e_i \end{array} \right] &= \left[\begin{array}{ccc} \sigma_y^2  &  \sigma_u^2   &  \sigma_e^2 \\
+                                                                                             \sigma_u^2  &  \sigma_u^2   &  0  \\
+                                                                                             \sigma_e^2  &  0            &  \sigma_e^2  \end{array} \right] 
+\end{align}
+
+
+## Genetic Properties of Predicted Breeding Values {#gel-pb-gen-prop-pbv}
+As already mentioned, breeding values cannot be observed but must be estimated or predicted from phenotypic data. Prediction or estimation of an unknown parameter using statistical modelling expresses the predicted or estimated quantity as a mathematical function of the observed data. The question is how this function should look like and what properties the predicted breeding values should fulfill. In the case of livestock breeding, one objective for the predicted breeding values is that the response to selection is maximized.
+
+`r met$add('Henderson1963')` found that the improvement of an offspring generation compared to the parent generation can be maximized when parents are selected based on the conditional expected value ($E(u | y)$) of the true breeding value $u$ given the observed phenotypic values $y$. Under the assumption of multivariate normality for $u$ and $y$, the conditional expected value ($E(u | y)$) can be written as
+
+\begin{equation}
+E(u | y) = E(u) + cov(u,y^T) * var(y)^{-1} * (y - E(y))
+(\#eq:gel-pb-cond-exp-val)
+\end{equation}
+
+Applying the expression in \@ref(eq:gel-pb-cond-exp-val) for the prediction of breeding values, we can use the property that the breeding value was defined as deviation from the general mean which means that the expected value $E(u)$ of the true breeding value $u$ is $E(u) = 0$.
+
+\begin{align}
+\hat{u} &= E(u | y) = 0 + cov(u,y^T) * var(y)^{-1} * (y - E(y)) \notag \\
+        &= cov(u,y^T) * var(y)^{-1} * (y - \mu)
+(\#eq:gel-pb-cond-exp-val-pbv)
+\end{align}
+
+Equation \@ref(eq:gel-pb-cond-exp-val-pbv) shows that the predicted breeding value consists of two parts. 
+
+1. $(y - \mu)$ shows that the observed phenotypic values are corrected for the fixed non-genetic environmental effects represented by $\mu$.
+2. $cov(u,y^T) * var(y)^{-1}$ corresponds to a weighting factor with which the corrected phenotypic values are multiplied. The weighting factor depends on population parameters such as the heritability and the genetic correlation.
+
+Based on the definition of the predicted breeding value $\hat{u}$ given in \@ref(eq:gel-pb-cond-exp-val-pbv), the following properties can be derived. 
+
+
+### Unbiasedness
+The expected value ($E(\hat{u})$) of the predicted breeding value $\hat{u}$ can be computed as: 
+
+\begin{align}
+E(\hat{u}) &= E(cov(u,y^T) * var(y)^{-1} * (y - E(y))) \notag \\
+           &= cov(u,y^T) * var(y)^{-1} * E(y-E(y)) \notag \\
+           &= cov(u,y^T) * var(y)^{-1} * (E(y) - E(y)) = 0
+(\#eq:gel-pb-pbv-unbiased)           
+\end{align}
+
+Because we have already specified that $E(u) = 0$, it follows that $E(\hat{u}) = E(u) = 0$. This means that $\hat{u}$ is an unbiased estimator of $u$.
+
+
+### Variance
+The variance $var(\hat{u})$ is the same as the covariance $cov(u, \hat{u})$ between the true and predicted breeding value. 
+
+\begin{align}
+var(\hat{u})    &= var(cov(u,y^T) * var(y)^{-1} * (y - E(y))) \notag \\
+                &= cov(u,y^T) * var(y)^{-1} * var(y - E(y)) * var(y)^{-1} * cov(y,u^T) \notag \\
+                &= cov(u,y^T) * var(y)^{-1}  * cov(y,u^T) \notag \\
+cov(u, \hat{u}) &= cov(u, (cov(u,y^T) * var(y)^{-1} * (y - E(y)))^T) \notag \\
+                &= cov(u, (y-E(y))^T) * var(y)^{-1} * cov(y,u^T) \notag \\
+                &= cov(u,y^T)  * var(y)^{-1} * cov(y,u^T) = var(\hat{u})
+(\#eq:gel-pb-pbv-variance)           
+\end{align}
+
+
+### Accuracy
+The accuracy of a predicted breeding value is measured by the correlation $r_{u,\hat{u}}$ between true and estimated breeding value. This correlation is computed as
+
+\begin{equation}
+r_{u,\hat{u}} = \frac{cov(u, \hat{u})}{\sqrt{var(u)*var(\hat{u})}} = \sqrt{\frac{var(\hat{u})}{var(u)}}
+(\#eq:gel-pb-pbv-accuracy)
+\end{equation}
+
+Alternatively, the reliability $B$ which corresponds to the square of the accuracy is often specified when predicted breeding values are published.
+
+
+### Conditional Density {#gel-pb-cond-density}
+In some cases, e.g., for specifying confidence intervals of true breeding values, it might be interesting to have a look at the conditional density $f(u|\hat{u})$. This density is a multivariate normal density with expected value $E(u|\hat{u})$ and variance $var(u|\hat{u})$. These values can be computed based on the theory of conditional multivariate normal densities.
+
+\begin{align}
+E(u |\hat{u})   &= E(u) + cov(u, \hat{u}^T) * var(\hat{u})^{-1} * (\hat{u} - E(\hat{u})) = \hat{u} \notag \\
+var(u |\hat{u}) &= var(u) - cov(u, \hat{u}^T) * var(\hat{u})^{-1} * cov(\hat{u}, u^T) \notag \\
+                &= var(u) * \left[ 1 - \frac{cov(u, \hat{u}^T)^2}{var(u) * var(\hat{u})}\right] \notag \\
+                &= var(u) * \left[ 1 - r_{u,\hat{u}}^2 \right] 
+(\#eq:gel-pb-pbv-conddens)
+\end{align}
+
+
+### Prediction Error Variance (PEV)
+Because every prediction is associated with an error, the same is true for the predicted breeding values $\hat{u}$. The variability of the error for the predicted breeding values are quantified by the prediction error variance (PEV). This is computed as
+
+\begin{align}
+var(u - \hat{u}) &=  var(u) - 2cov(u,\hat{u}) + var(\hat{u}) = var(u) - var(\hat{u}) \notag \\
+                 &= var(u) * \left[1 - \frac{var(\hat{u})}{var(u)} \right] \notag \\
+                 &= var(u) * \left[1 - r_{u,\hat{u}}^2 \right] 
+(\#eq:gel-pb-pbv-pev)
+\end{align}
+
+As shown in subsection \@ref(gel-pb-conf-interval), the standard error of prediction (SEP) can be a useful quantity. SEP corresponds just to the square root of PEV. Hence 
+
+\begin{align}
+SEP(\hat{u}) = \sqrt{var(u - \hat{u})} &=  \sqrt{var(u) * \left[1 - r_{u,\hat{u}}^2 \right]} \notag \\
+                                       &=  \sqrt{1 - r_{u,\hat{u}}^2} * \sigma_u 
+(\#eq:gel-pb-pbv-sep)
+\end{align}
+
+with $\sigma_u = \sqrt{var(u)}$. 
+
+
+### Confidence Intervals  {#gel-pb-conf-interval}
+The confidence interval (CI) must always be associated with a certain error-level which is usually denoted by $\alpha$. Typical values of $\alpha$ might be $0.05$ or $0.01$. For $\alpha = 0.05$, we can specify the $95\%$-confidence interval. Within this interval around the expected value, the enclosed surface by the density curve corresponds to $0.95$. 
+
+In the context of predicted breeding values, the confidence interval for a specified error-level $\alpha$ of the true breeding value $u$ given a predicted breeding value $\hat{u}$ might be of interest for certain quantification of risks when using parents with predicted breeding values with different accuracy values. 
+
+To get the desired confidence interval, we have a look at the conditional density described in \@ref(gel-pb-cond-density). An example of such a density is shown in the diagram below.
+
+```{r prep-dnorm-plot, echo=FALSE, eval=FALSE}
+require(ggplot2)
+p1 <- ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) + ylab("") +
+  scale_y_continuous(breaks = NULL)
+ggsave('dnorm-plot.pdf', plot = p1)
+```
+
+
+```{r gel-pb-cond-density-plot, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.pos="!H", fig.cap="Conditional Density with Confidence Interval"}
+##rmdhelp::use_odg_graphic(ps_path = 'odg/gel-pb-cond-density-plot.odg')
+knitr::include_graphics(path = "odg/gel-pb-cond-density-plot.png")
+```
+
+When comparing \@ref(eq:gel-pb-pbv-conddens) and \@ref(eq:gel-pb-pbv-sep), it follows that the standard deviation of the conditional density that determines the CI is given by SEP. 
+
+The confidence interval CI at a given error-level (as in Figure \@ref(fig:gel-pb-cond-density-plot) we assume $\alpha = 0.05$) is defined by the lower limit $l$ and the upper limit $m$. From the plot in Figure \@ref(fig:gel-pb-cond-density-plot), the limits are defined as
+
+\begin{align}
+l &= \hat{u} - z * SEP \notag \\
+m &= \hat{u} + z * SEP
+\end{align}
+
+where $z$ is the quantile value such that the surface under the curve corresponds to $1-\alpha$. For $\alpha = 0.05$, the value of $z$ corresponds to $1.96$. The values for $z$ are obtained via the R-function `qnorm()`. 
+
+
+## Best Linear Unbiased Prediction
+The abbreviation `BLUP` stands for **B**est **L**inear **U**nbiased **P**rediction and summarizes statistical properties of a certain class of predictors. `r met$add('Henderson1975')` showed that the predicted breeding value as defined in \@ref(eq:gel-pb-cond-exp-val-pbv) has the BLUP properties. BLUP-based procedures are the de-facto standard methods to predict breeding values. These procedures use linear mixed effects models to simultaneously estimate fixed effects and predict breeding values. Linear models that contain besides the random error other random effects are called linear mixed effects model. The classification into fixed and random effects is not based on a universally accepted definition. For some effects with distinct and a finite number of classes it is easy to classify them as fixed effects. On the other hand breeding values of animals are always modeled as random effects.
+
+
+## The Linear Mixed Effects Model{#gel-pb-lmem}
+In general the linear mixed effects model has the following structure
+
+
+\begin{equation}
+y = Xb + Zu + e
+(\#eq:gel-pb-genlmem)
+\end{equation}
+
+\begin{tabular}{lll}
+where  &       &  \\
+       &  $y$  &  vector of length $n$ with observations  \\
+       &  $b$  &  vector of length $p$ with fixed effects  \\
+       &  $u$  &  vector of length $q$ with random breeding values  \\
+       &  $e$  &  vector of length $n$ with random error terms      \\
+       &  $X$  &  $n\times p$ incidence matrix linking fixed effects to observations  \\
+       &  $Z$  &  $n\times q$ incidence matrix linking random breeding values to observations
+\end{tabular}
+
+With a linear mixed effects model, we also have to specify the expected values and the variance-covariance matrices for the random components in the model. We start with the expected values in vector-notation. 
+
+\begin{equation}
+E \left[\begin{array}{c} y \\ u \\ e \end{array} \right] = \left[\begin{array}{c} Xb \\ 0 \\ 0 \end{array} \right]
+(\#eq:gel-pb-exvallmem)
+\end{equation}
+
+The variance-covariance matrices can be written as
+
+\begin{equation}
+var \left[\begin{array}{c} y \\ u \\ e \end{array} \right] 
+= 
+\left[\begin{array}{rrr} 
+ZGZ^T + R  &  ZG  &  0  \\ 
+GZ^T       &  G   &  0  \\ 
+0          &  0   &  R 
+\end{array} \right]
+(\#eq:gel-pb-varcovlmem)
+\end{equation}
+
+
+
+## Solutions To The Linear Mixed Effects Model{#gel-pb-sollmem}
+In the linear mixed effects model \@ref(eq:gel-pb-genlmem) the vectors $b$ and $u$ are unknown and are of primary interest when using the model in livestock breeding applications. Applying the BLUP properties to the model \@ref(eq:gel-pb-genlmem) leads to the following solutions for $b$ and $u$. 
+
+\begin{equation}
+\hat{u} = GZ^TV^{-1}(y - X\hat{b})
+(\#eq:gel-pb-solhatu)
+\end{equation}
+
+where $V$ stands for the variance covariance matrix $var(y)$ of the phenotypic observations. From \@ref(eq:gel-pb-varcovlmem), we can see that $V$ can be computed as $V=ZGZ^T + R$. The vector $\hat{b}$ stands for the best linear unbiased estimate of the fixed effects $b$ which are given by
+
+\begin{equation}
+\hat{b} = (X^TV^{-1}X)^{-}X^TV^{-1}y
+(\#eq:gel-pb-solhatb)
+\end{equation}
+
+where $(X^TV^{-1}X)^{-}$ stands for a generalized inverse of $(X^TV^{-1}X)$. 
+
+Both solutions in \@ref(eq:gel-pb-solhatu) and \@ref(eq:gel-pb-solhatb) contain the matrix $V^{-1}$ which has the dimensions $n\times n$ where $n$ stands for the number of observations. In practical breeding programs the number of observations is frequently in the order of $10^6$ which makes the computation of $V^{-1}$ practically impossible. CR Henderson and his team found that the solution of the so-called mixed model equations lead to equivalent solutions for $\hat{b}$ and $\hat{u}$. The mixed model equations are given by 
+
+\begin{equation}
+\left[ 
+\begin{array}{lr}
+X^TR^{-1}X  &  X^TR^{-1}Z \\
+Z^TR^{-1}X  &  Z^TR^{-1}Z + G^{-1}
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+\hat{b} \\
+\hat{u}
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+X^TR^{-1}y \\
+Z^TR^{-1}y
+\end{array}
+\right]
+(\#eq:gel-pb-solmme)
+\end{equation}
+
+The application of the linear mixed effects model \@ref(eq:gel-pb-genlmem) in Livestock Breeding have led to two specially named models depending on what was used as random effects. These models are 
+
+1. **sire model**: for each observation the influence of the animals sire was used as random effect. 
+2. **animal model**: the influence of the genetic component of each animal was used as random effect.
+
+
+## Sire Model {#gel-pb-siremodel}
+In the sire model the effect of the sire is taken as a random effect. This leads to the following model
+
+\begin{equation}
+y = Xb + Zs + e
+(\#eq:gel-pb-gensiremodel)
+\end{equation}
+
+where $s$ is a vector of length $q_s$ with all sire effects. All other components are the same as specified for the model \@ref(eq:gel-pb-genlmem). The variance-covariance matrix $var(s)$ of all sire effects corresponds to 
+
+\begin{equation}
+var(s) = A_s * \sigma_s^2
+(\#eq:gel-pb-varcovarsireeffect)
+\end{equation}
+
+where $A_s$ is the numerator relationship matrix only considering relations on the male side of the pedigree. The variance component $\sigma_s^2$ is obtained from the variance components estimation using a sire model and it corresponds to $0.25 \sigma_a^2$ where $\sigma_a^2$ is the genetic additive variance.
+
+The sire model was developed for livestock populations with large half-sib families where a given sire has a large number of offspring. As a result all sires get predicted breeding values. All female animals are not considered in the evaluation and do not get predicted breeding values. 
+
+The usage of sire models for predicting breeding values was mainly at the beginning of the introduction of the BLUP methodology. It was motivated by the lower requirements of computing power. 
+
+
+## Animal Model {#gel-pb-animalmodel}
+The so-called animal model uses the breeding value of each animal as a random effect. In matrix-vector notation the animal model has the following structure. 
+
+\begin{equation}
+y = Xb + Za + e
+(\#eq:gel-pb-genanimalmodel)
+\end{equation}
+
+where $a$ is a vector of length $q_a$ containing the breeding values of all animals in the pedigree. All other components are the same as specified for the model \@ref(eq:gel-pb-genlmem). The variance-covariance matrix $var(a)$ of the breeding values is defined as
+
+\begin{equation}
+var(a) = A \sigma_a^2
+(\#eq:gel-pb-varcovaranimaleffect)
+\end{equation}
+
+where $A$ is the numerator relationship matrix containing all identity by descent relationships in a pedigree. The matrix $A$ is symmetric. The off-diagonal elements $(A)_{ij}$ in row $i$ and column $j$ contain the probability of animals $i$ and $j$ sharing alleles that are identical by descent. Identity by descent of two alleles means that two alleles can be traced back in the pedigree to a common ancestor. As an example the value of $(A)_{ij}$ between two half-sibs $i$ and $j$ is $1/4$ and between two full-sibs it is $1/2$. The diagonal elements $(A)_{ii}$ of matrix $A$ corresponds to $1+F_i$ where $F_i$ is the inbreeding coefficient of animal $i$. The inbreeding coefficient corresponds to $1/2$ of the relationship coefficient between parents $s$ and $d$ of $i$. 
+
+
+
+## Genomic BLUP {#gel-pb-genomicblup}
+With the rapid increase of animals with genotypic information in the form of SNP-genotypes, this information can be used to predict genomic breeding values. BLUP-based methods can be used to predict genomic breeding values based on genomic information. The genomic BLUP models can have two different forms. 
+
+1. marker-effect models where each SNP-locus is taken as a random effect. 
+2. breeding value based models where genomic breeding values are included as random effects.
+
+As long as the number of genotyped animals is lower than the number of genotypes determined per animal, then model (2) has advantages over model (1) with respect to requirements of computing power. But as the number of genotyped animals increases very rapidly, model (1) might be favorable over model (2). 
+
+At this point it is important to note that whether we use genomic information or not, the goal of the prediction of breeding values remains still the same. We want to get a prediction of the genetic potential of each animal. This prediction must be as accurate as possible. The realized values of the predictions are used to rank the animals. Based on these rankings the selection decisions are taken to determine the parents of the future generations of livestock animals. 
+
+
+
+
+  

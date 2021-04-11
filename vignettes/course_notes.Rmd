@@ -16,6 +16,21 @@ knitr::opts_chunk$set(
 
 This page contains the list of links pointing to the different chapters in the course notes. 
 
+## Applied Genetic Evaluation
+
+```{r echo=FALSE}
+s_cn_gel_url <- "https://charlotte-ngs.github.io/gelasmss2021/cn_gel/"
+tbl_gel_chpt <- tibble::tibble(Week = c(8, 8),
+                               Date = c("2021-04-12",
+                                        "2021-04-12"),
+                               Topic = c(
+                                 paste0("[Introduction](", s_cn_gel_url, "01_intro.pdf)", collapse = ""),
+                                 paste0("[Breeding Program](", s_cn_gel_url, "02_bp.pdf)", collapse = "")
+                               ))
+knitr::kable(tbl_gel_chpt)
+```
+
+
 ## Applied Statistical Methods
 
 ```{r, echo=FALSE}

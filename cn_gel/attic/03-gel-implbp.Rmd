@@ -1,0 +1,116 @@
+# Implementation Of A Breeding Program  {#gel-implbp}
+```{r mrtminitimplbp, include=FALSE}
+met$set_this_rmd_file(ps_this_rmd_file = ifelse(rstudioapi::isAvailable(), 
+                                                 rstudioapi::getSourceEditorContext()$path, 
+                                                 rprojroot::thisfile()))
+```
+
+
+## Introduction {#gel-implbp-intro}
+In chapter \@ref(gel-bprog) (see Figure \@ref(fig:bprogdiag)) the different types of breeding programs and the components of a breeding program are shown and described. This chapter aims at giving an outline of how to implement a specific breeding program for a given population. We assume a beef breeding organisation that approaches us and we have to consult them on how to implement a breeding program. The breeding organisation wants to improve their breeding animals with respect to the economic profitability of the animals sold at the production level. This implies that we want to use a hierarchical structure for the breeding program (see Figure \@ref(fig:gel-implbp-hier-bp)). 
+
+In previous years the beef breeding organisation has included several production and reproduction traits. The traits have been combined into a selection index. The weighting factors of the different traits in the selection index have been determined by the desired gain approach. As shown in section \@ref(gel-implbp-desired-gains) index weights determined by desired gains do not reflect the economic context of a production system. But the more recent developments in the agricultural sector with decreasing market prices puts a lot of pressure on the economic efficiency of the production animal goods. Hence, the beef breeding organisation wants to have a better consideration of the economic context of beef production in their breeding goal. As a consequence of that, the breeding organisation agreed on changing the currently used breeding goal to a scientifically formulated breeding goal. In what follows, we briefly describe the desired gain approach and then develop the breeding goal that is based on the economic context of the animal production system.
+
+```{r gel-implbp-hier-bp, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.pos='H', fig.cap="Hierarchical Structure of a Breeding Program"}
+#rmdhelp::use_odg_graphic(ps_path = "odg/gel-implbp-hier-bp.odg")
+knitr::include_graphics(path = "odg/gel-implbp-hier-bp.png")
+```
+
+
+## Desired Gains {#gel-implbp-desired-gains}
+The desired gains approach is described e.g. in `r met$add('Brascamp1984')` and in `r met$add('Gibson1990')`. There is a fundamental difference between economic selection indices and restricted or desired gains indices. The term **restricted** selection index refers to the situation where the genetic change of one or several traits are set to $0$ whereas in a desired gains index, the genetic change of certain traits is pre-specified. It is also possible to have a mixture of restricted selection indices, desired gains indices and economic indices.
+
+With economic selection indices, the response to selection is entirely determined by the economic weights (also known as economic values) of the traits contributing to the economic merit of the production animals, the phenotypic variance-covariance matrix among the traits in the index, and the genetic covariance between the traits in the index and the traits of economic interest. It has to be noted here, that all traits of economic interest are included in the aggregate genotype ($H$).
+
+With restricted and desired gains indices, there are predetermined constraints on genetic response of some traits that partially or completely override the response determined by their economic weights. In the case of restricted indexes, economic weights of restricted traits are not defined. Justification for the use of restricted or desired gains
+indices has been either that some traits are considered already to be at an economic optimum or that economic weights are difficult or impossible to determine. However, in the former case economic weights at the optimum are by definition zero. It would then be appropriate to use an economic weight of zero or, if there is marked nonlinearity in the economic weights, to use a nonlinear selection index. 
+
+Assuming that a given trait is already at its economic optimum, its economic weight would be set to zero. After a given time corresponding to the planning horizon of the breeding program, it must be verified that the trait is still at its economic optimum. It could very well be the case that via correlated selection responses, the trait changes, even if the economic weight of the trait itself is set to zero. In case where the trait is no longer at its economic optimum it would receive automatically an economic weight different from zero such that the trait mean moves back towards its economic optimum. Such an iterative strategy can be used for traits with a certain economic optimum. Examples of such traits are fatness in beef or in pigs. 
+
+Hence the previous paragraph shows that it is not really necessary to use the tool of restricted indices or desired gains indices. The use of economic selection indices is fully sufficient even for traits with an intermediate economic optimum.
+
+
+## Development Of The Breeding Goal {#gel-implbp-devbg}
+In this section, we focus on the development and the design of a breeding goal that focuses on the economic merit of the production of marketable animal goods. According to `r met$add("Phocas1998")`, three points are to be considered when developing such a breeding goal. 
+
+1. description of production system
+2. modelling the profit for a typical herd
+3. derivation of economic values
+
+For reasons of simplicity we are assuming that all herds have the same production system. It is important to note here that in a hierarchical breeding program such as shown in Figure \@ref(fig:gel-implbp-hier-bp), the herd described in subsection \@ref(gel-implbp-descprodsys) comes from the production sector situated at the bottom of the triangle. The reason for using a herd from the production tier as the basis of the description of the production is that the breeding and possibly the multiplier sections of the breeding program have to adapt their breeding animals to the needs and requirements of the production herds. Looking at the different participants of the breeding program as a client-supplier relationship, the producers are clients of the breeding and the multiplier farms for young production animals. These animals must meet the requirements of the production farms. As a consequence of that the breeding and multiplier farms have to raise young animals that fit the needs of the production farms. This is done by designing the breeding program implemented in the breeding farms according to the needs of the production farms. The implementation of the breeding program must yield tools for the breeding farms to be able to select the best animals as parents. One possibility of such an implementation is shown here for an idealized and simplified situation.
+
+
+### Description Of Production System {#gel-implbp-descprodsys}
+A production system is defined by its required inputs consisting of feed, housing, labor and other fixed costs and by the products (output) that are sold. Furthermore housing systems, feeding regimes and other management components that affect the production costs are important properties of a production system. On the output-side it is important to know what type of markets the animal products can be sold to. 
+
+Overall the production system helps us to identify which traits of the animals have an economic impact. Those traits with an economic importance for the production system have to be included in the aggregate genotype.
+
+Figure \@ref(fig:gel-implbp-prodsys) illustrates a production system by showing the most important components affecting the profitability of a typical herd.
+
+```{r gel-implbp-prodsys, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Production system illustrated by a typical herd"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/gel-implbp-prodsys.odg")
+knitr::include_graphics(path = "odg/gel-implbp-prodsys.png")
+```
+
+In our example, the assumed herd has $N$ cows. Cows are inseminated using artificial insemination. Once a year the cows are expected to produce a calf. The calves are raised, fattened and sold as slaughter animals. From the $N$ cows each years a proportion of $0.18$ is culled and is replaced with young heifers which are bought from breeding or multiplier farms. Figure \@ref(fig:gel-implbp-demogherd) corresponds to a simplified version of Figure 1 of `r met$add("Phocas1998")`. 
+
+```{r gel-implbp-demogherd, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Assumed demography of typical production herd"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/gel-implbp-demogherd.odg")
+knitr::include_graphics(path = "odg/gel-implbp-demogherd.png")
+```
+
+
+## Determine Traits Of Economic Interest {#gel-implbp-dettrint} 
+Inputs shown in Figure \@ref(fig:gel-implbp-prodsys) generate costs ($C$) and Outputs generate revenues ($R$). The difference between revenues and costs corresponds to profit ($P$) which is the key objective of the whole system that we want to improve. The traits of the animals in the production system which have an influence on the profit of the system are grouped together in the set of the __economically important__ traits. The economically important traits are included in the aggregate genotype which is then used as selection criterion for the breeding animals. 
+
+For our example production herd, we are focusing on the carcass performance traits 
+
+* carcass conformation (CC)
+* carcass fatness (CF) and
+* carcass weight (CW).
+
+At this stage of our analysis, we are ignoring all traits related to reproduction or survival of calves which are also important for the economic profitability of the production herd. For the moment, we focus on the three traits listed above. This means, we construct the aggregate genotype based on the three traits _CC_, _CF_, and _CW_. The weights of the different traits in the aggregate genotype is the result from the derivation of economic values listed as point 3 of subsection \@ref(gel-implbp-devbg). 
+
+
+## Genetic Evaluation {#gel-implbp-geneval}
+Once we have determined the traits of economic interest as described in subsection \@ref(gel-implbp-dettrint), we can start to have a look at the genetic part of our analysis of the breeding program. This is done in a genetic evaluation which consists of two parts
+
+1. Variance components estimation
+2. Prediction of breeding values.
+
+In a practical analysis both parts are using linear mixed effect models with the traits of interest as response variables ($y$) and other characteristics as predictor variables ($x$). The difference between the two evaluation parts are the results that are of interest. In the first part we are primarily looking for the estimates of the variance components in the model. The second part produces predictions of the breeding values for all breeding animals.
+
+Depending on the number of predictor variables that are available in the dataset that we have available from our breeding organisation, we first have to separate the important predictor variables from the variables that do not have an important effect on the response variable. This separation is done with a preparatory model selection step. In short, we are using all predictor variables available in a fixed linear effects model with the trait of interest as the response variable. Then we are in turn, eliminating the response variable with the smallest impact until a previously chosen model selection criterion is optimized. The remaining set of predictor variables in the optimal model is then used in the linear mixed effects model to estimate variance components and to predict breeding values.
+
+In the chapters that follow, we are having a closer look at how to do the model selection and how to perform the two parts of the genetic evaluation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
