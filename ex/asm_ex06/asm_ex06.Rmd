@@ -6,8 +6,8 @@ output:
   bookdown::pdf_document2:
     toc: false
     number_sections: false
-    keep_md: true
-    keep_tex: true
+    keep_md: false
+    keep_tex: false
 header-includes:
  \usepackage{longtable}
  \usepackage{float}
@@ -15,7 +15,7 @@ params:
   doctype:
     label: 'Document Type'
     value: 'solution'
-    choices: ['exercise', 'solution']
+    choices: ['exercise', 'solution', 'notebook']
 ---
 
 ```{r setup, include=FALSE}
@@ -152,9 +152,7 @@ Run the R-statements as they are shown in the hints. This will result in a set o
 ---  your-solution-end -->
 
 
-```{r p01-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
-cat('<!-- \n')
-```
+<!-- master-solution-start -->
 
 ### Solution
 The linear model is fitted with the following statement.
@@ -218,10 +216,7 @@ The match between the estimated and the true SNP-positons using the SE-$\lambda$
 (vec_match_snp_1senz <- intersect(s_snp_pos_1senz, as.character(vec_sign_snp_idx)))
 ```
 
-
-```{r p01-comment-end, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
-cat('--> \n')
-```
+<!-- master-solution-end -->
 
 
 
@@ -350,9 +345,7 @@ In the problem description, the residual variance $\sigma^2$ is assumed to be kn
 ---  your-solution-end -->
 
 
-```{r p02-comment-start, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
-cat('<!-- \n')
-```
+<!-- master-solution-start -->
 
 ### Solution
 We have mentioned earlier that we are using the residual variance that is obtained from the least squares analysis which is shown just below.
@@ -418,8 +411,5 @@ The last line of the above output corresponds to the Bayesian estimate of the in
 summary(lm_reg_bwbc)
 ```
 
-```{r p02-comment-end, echo=FALSE, results='asis', include=(params$doctype != 'solution')}
-cat('--> \n')
-```
-
+<!-- master-solution-end -->
 
