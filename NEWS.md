@@ -1,4 +1,6 @@
-# gelasmss2021 0.7.0
+# gelasmss2021 0.8.0
+
+* Chapters 1 and 2 of course notes for gel
 
 # gelasmss2021 0.6.2
 
