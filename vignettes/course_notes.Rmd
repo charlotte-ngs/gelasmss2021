@@ -37,14 +37,15 @@ knitr::kable(tbl_asm_chpt)
 ```
 
 
-## Appendix
+### Appendix and Bibliography
 
 ```{r, echo=FALSE}
-tbl_asm_app <- tibble::tibble(Week = c(1,1),
-                              Date = c('2021-02-22', '2021-02-22'),
+tbl_asm_app <- tibble::tibble(Week = c(1,1,6),
+                              Date = c('2021-02-22', '2021-02-22', '2021-03-29'),
                               Topic = c(
                                 paste0("[Linear Algebra](", s_cn_asm_url, "91_app_lin_alg.pdf)", collapse = ""),
-                                paste0("[Quantitative Genetics](", s_cn_asm_url, "92_app_qg.pdf)", collapse = "")
+                                paste0("[Quantitative Genetics](", s_cn_asm_url, "92_app_qg.pdf)", collapse = ""),
+                                paste0("[Bibliography](", s_cn_asm_url, "99_bibliography.pdf", collapse = "")
                               ))
 knitr::kable(tbl_asm_app)
 ```
