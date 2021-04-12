@@ -1,3 +1,7 @@
+# gelasmss2021 0.8.3
+
+* Video and slides with notes
+
 # gelasmss2021 0.8.2
 
 * Slides for lecture 1 of gel
