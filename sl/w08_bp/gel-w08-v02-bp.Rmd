@@ -1,0 +1,152 @@
+---
+title: "Implementation Of A Breeding Programs"
+author: "Peter von Rohr"
+date: "12.04.2021"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
+```
+
+
+## Recall
+
+Types of breeding programs:
+
+* focus on selection response (scientific)
+* focus on customers and services (political)
+
+
+## Components of a Breeding Program
+
+```{r bprogdiag, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/bprogdiag.odg")
+knitr::include_graphics(path = "odg/bprogdiag.png")
+```
+
+
+## Example of Implementation
+
+* Assume: beef breeding organisation
+* Improvement of animal at production level with respect to economic profitability
+* Implementation of scientific breeding program
+* Start to design and to develop economic breeding goal
+* Combine economically important traits into an aggregate genotype ($H$)
+* Use hierarchical structure
+
+
+## Hierarchical Breeding Program
+
+```{r gel-implbp-hier-bp, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
+#rmdhelp::use_odg_graphic(ps_path = "odg/gel-implbp-hier-bp.odg")
+knitr::include_graphics(path = "odg/gel-implbp-hier-bp.png")
+```
+
+
+## Three Steps To Design Economic Breeding Goal
+
+The following steps are needed to implement a breeding program
+
+1. description of production system
+2. modelling profit of a typical herd
+3. derive economic values
+
+
+## Production System
+
+```{r implbp-prodsys, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/implbp-prodsys.odg")
+knitr::include_graphics(path = "odg/implbp-prodsys.png")
+```
+ 
+
+## What is a Production System
+
+* Simulation of production herd
+* Collect input parameters (costs, biological parameters, labor, ...) from literature
+* Use collected input parameters for simulation
+* Run simulation
+* Record output quantities (revenue, animals sold)
+
+
+## Why Production System
+
+* Profit is computed based on revenue and costs
+* Characteristics and traits of animals with impact on profitability are found
+* Impact of traits on profitability detected by changing input parameters
+* Progeny must meet needs of production farms
+* Breeders must select parents such that optimal progeny produced for production farms
+
+
+## Structure of Production System
+
+* Assume a hierarchical structure of the breeding program
+* Alternatively: mixed farms in monolithic structure
+* Breeding (and possibly multiplier) farms are selling their progeny to production farms
+
+
+## Example Of Typical Production Farm
+
+```{r example-prodfarm, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/example-prodfarm.odg")
+knitr::include_graphics(path = "odg/example-prodfarm.png")
+```
+
+
+## Traits Of Interest
+
+* Profit ($P$) of production farm determined by revenues ($R$) and costs ($C$)
+
+$$P = R - C$$
+
+* Traits of economic interest influence $P$
+* Restrict ourselves to output 
+    + age corrected carcass weight (CW)
+    + carcass confirmation (CC)
+    + carcass fat (CF)
+* Above traits will be included in aggregate genotype ($H$)
+
+$$H = a^T \cdot u$$
+
+
+## Economic Evaluation
+
+```{r gel-implbp-prodsys, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/gel-implbp-prodsys.odg")
+knitr::include_graphics(path = "odg/gel-implbp-prodsys.png")
+```
+
+
+## Economic Values
+
+* ... also known as economic weights
+* Change of profit ($P$) due to small change of trait mean ($\mu_x$)
+* For trait $x$ with mean $\mu_x$, the economic value $a_x$ is defined as
+
+$$a_x = \frac{\partial P}{\partial \mu_x}$$
+
+
+## Genetic Evaluation
+
+* Statistical modelling
+* Stochastic relationship between genetic background and phenotypic expression
+* Contrast: deterministic modelling in physics, e.g. law of gravity
+
+
+## Statistical Modelling
+* In most cases, two steps plus preparation
+* Given: dataset on breeding animals containing traits of interest as response variables and predictor variables
+* Preparation: do model selection to eliminate unimportant predictor variables
+* Steps:
+    1. variance components estimation
+    2. prediction of breeding values
+
+
+
+
+
+
+
+ 
