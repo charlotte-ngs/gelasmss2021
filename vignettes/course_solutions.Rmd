@@ -33,7 +33,7 @@ tbl_asm_sol <- tibble::tibble(Week = c(2, 3, 4, 5, 6, 8),
                                paste0("[Marker Effects](", s_sol_url, "asm_ex03_sol.pdf)", collapse = ''),
                                paste0("[Genomic Breeding Values](", s_sol_url, "asm_ex04_sol.pdf)", collapse = ''),
                                paste0("[How GBLUP works](", s_sol_url, "asm_ex05_sol.pdf)", collapse = ''),
-                               paste0("[LASSO and Bayes](", s_sol_url, "asm_ex06_sol.pdf", collapse = "")
+                               paste0("[LASSO and Bayes](", s_sol_url, "asm_ex06_sol.pdf)", collapse = "")
                                ))
 # show the table
 knitr::kable(tbl_asm_sol)                             
