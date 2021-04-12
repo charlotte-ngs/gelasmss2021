@@ -1,3 +1,7 @@
+# gelasmss2021 0.8.2
+
+* Slides for lecture 1 of gel
+
 # gelasmss2021 0.8.1
 
 * Release exercise asm_ex06
