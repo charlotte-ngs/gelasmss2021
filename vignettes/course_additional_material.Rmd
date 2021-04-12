@@ -92,7 +92,7 @@ tbl_sl <- tibble::tibble(Week    = c(1, 2, 3, 4, 5, 6),
                            paste0("[original](", s_sl_url, "asm-w05-v05-lasso.pdf) | ", 
                                   "[with notes](", s_sl_url, "asm-w05-v05-lasso_with_notes.pdf)", collapse = ''),
                            paste0("[original](", s_sl_url, "asm-w06-v06-bayes.pdf) | ", 
-                                  "[with notes](", s_sl_url, "asm-w05-v05-lasso_with_notes.pdf)", collapse = '')
+                                  "[with notes](", s_sl_url, "asm-w06-v06-bayes_with_notes.pdf)", collapse = '')
                          ))
 knitr::kable(tbl_sl)
 ```
