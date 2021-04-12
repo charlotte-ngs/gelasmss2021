@@ -1,3 +1,7 @@
+# gelasmss2021 0.8.1
+
+* Release exercise asm_ex06
+
 # gelasmss2021 0.8.0
 
 * Chapters 1 and 2 of course notes for gel
