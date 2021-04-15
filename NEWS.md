@@ -1,3 +1,15 @@
+# gelasmss2021 0.8.3
+
+* Video and slides with notes
+
+# gelasmss2021 0.8.2
+
+* Slides for lecture 1 of gel
+
+# gelasmss2021 0.8.1
+
+* Release exercise asm_ex06
+
 # gelasmss2021 0.8.0
 
 * Chapters 1 and 2 of course notes for gel

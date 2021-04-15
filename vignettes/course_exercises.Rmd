@@ -21,18 +21,21 @@ This page contains links to exercises in pdf-format and as Rmarkdown notebooks.
 ```{r, echo=FALSE}
 s_ex_url <- 'https://charlotte-ngs.github.io/gelasmss2021/ex/'
 s_nb_url <- 'https://charlotte-ngs.github.io/gelasmss2021/nb/'
-tbl_asm_ex <- tibble::tibble(Week = c(2, 3, 4, 5, 6),
+tbl_asm_ex <- tibble::tibble(Week = c(2, 3, 4, 5, 6, 8),
                              Date = c("2021-03-01",
                                       "2021-03-08",
                                       "2021-03-15",
                                       "2021-03-22",
-                                      "2021-03-29"),
+                                      "2021-03-29",
+                                      "2021-04-12"),
                              Topic = c(
                                paste0("Fixed Linear Effects Models [pdf](", s_ex_url, "asm-w02-ex01.pdf) | [nb](", s_ex_url, "asm-w02-ex01_nb.nb.html)", collapse = ''),
                                paste0("Regression Models [pdf](", s_ex_url, "asm_ex02.pdf) | [nb](", s_nb_url, "asm_ex02_nb.nb.html)", collapse = ''),
                                paste0("Marker Effects [pdf](", s_ex_url, "asm_ex03.pdf) | [nb](", s_nb_url, "asm_ex03_nb.nb.html)", collapse = ''),
                                paste0("Genomic Breeding Values [pdf](", s_ex_url, "asm_ex04.pdf) | [nb](", s_nb_url, "asm_ex04_nb.nb.html)", collapse = ''),
-                               paste0("How GBLUP works [pdf](", s_ex_url, "asm_ex05.pdf) | [nb](", s_nb_url, "asm_ex05_nb.nb.html)", collapse = '')))
+                               paste0("How GBLUP works [pdf](", s_ex_url, "asm_ex05.pdf) | [nb](", s_nb_url, "asm_ex05_nb.nb.html)", collapse = ''),
+                               paste0("LASSO and Bayes [pdf](", s_ex_url, "asm_ex06.pdf) | [nb](", s_nb_url, "asm_ex06_nb_src.nb.html)", collapse = "")
+                               ))
 
 # show the table
 knitr::kable(tbl_asm_ex)

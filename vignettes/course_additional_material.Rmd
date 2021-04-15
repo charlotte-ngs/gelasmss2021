@@ -14,6 +14,40 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Genetic Evaluation in Livestock
+
+## Slides
+
+```{r, echo=FALSE}
+s_sl_url <- 'https://charlotte-ngs.github.io/gelasmss2021/sl/'
+tbl_sl_gel <- tibble::tibble(Week    = c(8, 8),
+                         Date    = c("2021-04-12",
+                                     "2021-04-12"),
+                         Topic   = c(
+                           "Introduction to Genetic Evaluation",
+                           "Breeding Programs"
+                         ),
+                         Link    = c(
+                           paste0("[original](", s_sl_url, "gel-w08-v01-intro.pdf)", 
+                                  " | [with notes](", s_sl_url, "gel-w08-v01-intro_with_notes.pdf)", collapse = ''),
+                           paste0("[original](", s_sl_url, "gel-w08-v02-bp.pdf)", collapse = '')
+                                  # " | [with notes](", s_sl_url, "asm-w02-v02-flem_with_notes.pdf)", collapse = ''),
+                         ))
+knitr::kable(tbl_sl_gel)
+
+```
+
+## Videos
+
+```{r, echo=FALSE}
+tbl_video_gel <- tibble::tibble(Week = c(8),
+                                Date = c("2021-04-12"),
+                                Topic = c("[Introduction To Genetic Evaluation](https://youtu.be/7dBS2H1uydk)"))
+knitr::kable(tbl_video_gel)
+```
+
+
+# Applied Statistical Methods
 ## Notebooks
 
 ```{r, echo=FALSE}
@@ -67,7 +101,7 @@ tbl_sl <- tibble::tibble(Week    = c(1, 2, 3, 4, 5, 6),
                            paste0("[original](", s_sl_url, "asm-w05-v05-lasso.pdf) | ", 
                                   "[with notes](", s_sl_url, "asm-w05-v05-lasso_with_notes.pdf)", collapse = ''),
                            paste0("[original](", s_sl_url, "asm-w06-v06-bayes.pdf) | ", 
-                                  "[with notes](", s_sl_url, "asm-w05-v05-lasso_with_notes.pdf)", collapse = '')
+                                  "[with notes](", s_sl_url, "asm-w06-v06-bayes_with_notes.pdf)", collapse = '')
                          ))
 knitr::kable(tbl_sl)
 ```
