@@ -1,3 +1,7 @@
+# gelasmss2021 0.9.0
+
+* Chapter 3 of ourse notes
+
 # gelasmss2021 0.8.3
 
 * Video and slides with notes
