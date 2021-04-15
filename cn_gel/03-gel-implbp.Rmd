@@ -11,7 +11,7 @@ In chapter \@ref(gel-bprog) (see Figure \@ref(fig:bprogdiag)) the different type
 
 In previous years the beef breeding organisation has included several production and reproduction traits. The traits have been combined into a selection index. The weighting factors of the different traits in the selection index have been determined by the desired gain approach. As shown in section \@ref(gel-implbp-desired-gains) index weights determined by desired gains do not reflect the economic context of a production system. But the more recent developments in the agricultural sector with decreasing market prices puts a lot of pressure on the economic efficiency of the production animal goods. Hence, the beef breeding organisation wants to have a better consideration of the economic context of beef production in their breeding goal. As a consequence of that, the breeding organisation agreed on changing the currently used breeding goal to a scientifically formulated breeding goal. In what follows, we briefly describe the desired gain approach and then develop the breeding goal that is based on the economic context of the animal production system.
 
-```{r gel-implbp-hier-bp, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.pos='H', fig.cap="Hierarchical Structure of a Breeding Program"}
+```{r gel-implbp-hier-bp, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.pos='H', fig.cap="Hierarchical Structure of a Breeding Program", out.width="11cm"}
 #rmdhelp::use_odg_graphic(ps_path = "odg/gel-implbp-hier-bp.odg")
 knitr::include_graphics(path = "odg/gel-implbp-hier-bp.png")
 ```
@@ -22,8 +22,7 @@ The desired gains approach is described e.g. in `r met$add('Brascamp1984')` and 
 
 With economic selection indices, the response to selection is entirely determined by the economic weights (also known as economic values) of the traits contributing to the economic merit of the production animals, the phenotypic variance-covariance matrix among the traits in the index, and the genetic covariance between the traits in the index and the traits of economic interest. It has to be noted here, that all traits of economic interest are included in the aggregate genotype ($H$).
 
-With restricted and desired gains indices, there are predetermined constraints on genetic response of some traits that partially or completely override the response determined by their economic weights. In the case of restricted indexes, economic weights of restricted traits are not defined. Justification for the use of restricted or desired gains
-indices has been either that some traits are considered already to be at an economic optimum or that economic weights are difficult or impossible to determine. However, in the former case economic weights at the optimum are by definition zero. It would then be appropriate to use an economic weight of zero or, if there is marked nonlinearity in the economic weights, to use a nonlinear selection index. 
+With restricted and desired gains indices, there are predetermined constraints on genetic response of some traits that partially or completely override the response determined by their economic weights. In the case of restricted indexes, economic weights of restricted traits are not defined. Justification for the use of restricted or desired gains indices has been either that some traits are considered already to be at an economic optimum or that economic weights are difficult or impossible to determine. However, in the former case economic weights at the optimum are by definition zero. It would then be appropriate to use an economic weight of zero or, if there is marked nonlinearity in the economic weights, to use a nonlinear selection index. 
 
 Assuming that a given trait is already at its economic optimum, its economic weight would be set to zero. After a given time corresponding to the planning horizon of the breeding program, it must be verified that the trait is still at its economic optimum. It could very well be the case that via correlated selection responses, the trait changes, even if the economic weight of the trait itself is set to zero. In case where the trait is no longer at its economic optimum it would receive automatically an economic weight different from zero such that the trait mean moves back towards its economic optimum. Such an iterative strategy can be used for traits with a certain economic optimum. Examples of such traits are fatness in beef or in pigs. 
 
@@ -47,14 +46,14 @@ Overall the production system helps us to identify which traits of the animals h
 
 Figure \@ref(fig:gel-implbp-prodsys) illustrates a production system by showing the most important components affecting the profitability of a typical herd.
 
-```{r gel-implbp-prodsys, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Production system illustrated by a typical herd"}
+```{r gel-implbp-prodsys, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Production system illustrated by a typical herd", out.width="11cm"}
 #rmddochelper::use_odg_graphic(ps_path = "odg/gel-implbp-prodsys.odg")
 knitr::include_graphics(path = "odg/gel-implbp-prodsys.png")
 ```
 
 In our example, the assumed herd has $N$ cows. Cows are inseminated using artificial insemination. Once a year the cows are expected to produce a calf. The calves are raised, fattened and sold as slaughter animals. From the $N$ cows each years a proportion of $0.18$ is culled and is replaced with young heifers which are bought from breeding or multiplier farms. Figure \@ref(fig:gel-implbp-demogherd) corresponds to a simplified version of Figure 1 of `r met$add("Phocas1998")`. 
 
-```{r gel-implbp-demogherd, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Assumed demography of typical production herd"}
+```{r gel-implbp-demogherd, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Assumed demography of typical production herd", out.width="11cm"}
 #rmddochelper::use_odg_graphic(ps_path = "odg/gel-implbp-demogherd.odg")
 knitr::include_graphics(path = "odg/gel-implbp-demogherd.png")
 ```
