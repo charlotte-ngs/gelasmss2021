@@ -1,7 +1,7 @@
 ---
-title: {{course_name}} - `r tools::toTitleCase(params$doctype)` {{exercise_count}}
-author: {{author}}
-date: {{creation_date}}
+title: Genetic Evaluation - `r tools::toTitleCase(params$doctype)` 1
+author: Peter von Rohr
+date: 2021-04-16
 output:
   bookdown::pdf_document2:
     toc: false
@@ -24,7 +24,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-## Problem
+## Problem 1: Breeding Programs
+What are the components of a breeding program. Insert the components into the following diagram.
+
 
 <!-- your-solution-start
 ### Your Solution
@@ -37,3 +39,19 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Solution
 
 <!-- master-solution-end -->
+
+
+## Problem 2
+
+<!-- your-solution-start
+### Your Solution
+
+---  your-solution-end -->
+
+
+<!-- master-solution-start -->
+
+### Solution
+
+<!-- master-solution-end -->
+ 
