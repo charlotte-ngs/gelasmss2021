@@ -16,6 +16,20 @@ knitr::opts_chunk$set(
 
 This page contains links to exercises in pdf-format and as Rmarkdown notebooks.
 
+## Applied Genetic Evaluation
+
+```{r, echo=FALSE}
+s_ex_url <- 'https://charlotte-ngs.github.io/gelasmss2021/ex/'
+s_nb_url <- 'https://charlotte-ngs.github.io/gelasmss2021/nb/'
+tbl_asm_gel <- tibble::tibble(Week = c(9),
+                              Date = c("2021-04-19"),
+                              Topic = c(
+                                paste0("Breeding Program [pdf](", s_ex_url, "gel_ex01.pdf) | [nb](", s_nb_url, "gel_ex01_nb_src.nb.html)", collapse = "")
+                              ))
+knitr::kable(tbl_asm_gel)
+```
+
+
 ## Applied Statistical Methods
 
 ```{r, echo=FALSE}
