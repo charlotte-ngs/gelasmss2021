@@ -16,7 +16,7 @@ knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
 ## Problem 1: Breeding Programs
 What are the components of a breeding program. Insert the components into the following diagram.
 
-```{r empty-bp-diagram, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
+```{r empty-bp-diagram, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="80%"}
 #rmdhelp::use_odg_graphic(ps_path = "odg/empty-bp-diagram.odg")
 knitr::include_graphics(path = "odg/empty-bp-diagram.png")
 ```
