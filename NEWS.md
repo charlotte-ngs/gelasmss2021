@@ -1,3 +1,7 @@
+# gelasmss2021 0.9.1
+
+* Exercise gel_ex01
+
 # gelasmss2021 0.9.0
 
 * Chapter 3 of ourse notes
