@@ -20,9 +20,9 @@ knitr::opts_chunk$set(
 
 ```{r, echo=FALSE}
 s_sl_url <- 'https://charlotte-ngs.github.io/gelasmss2021/sl/'
-tbl_sl_gel <- tibble::tibble(Week    = c(8, 8),
+tbl_sl_gel <- tibble::tibble(Week    = c(8, 9),
                          Date    = c("2021-04-12",
-                                     "2021-04-12"),
+                                     "2021-04-19"),
                          Topic   = c(
                            "Introduction to Genetic Evaluation",
                            "Breeding Programs"
