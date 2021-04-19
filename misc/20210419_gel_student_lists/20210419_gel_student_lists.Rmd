@@ -1,0 +1,191 @@
+---
+title: "Student Lists for GEL"
+author: "Peter von Rohr"
+date: "4/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Disclaimer
+This document shows how the student lists for GEL are created. 
+
+```{r}
+vec_pkg <- c('openxlsx', 'dplyr', 'tidyr')
+if (!all(is.element(vec_pkg, installed.packages())))
+  install.packages(vec_pkg, dependencies = TRUE)
+
+s_bl_path <- '~/Downloads/BelegungenLerneinheit_751621200L_Fruehjahrssemester_2021.xlsx'
+wb <- openxlsx::read.xlsx(xlsxFile = s_bl_path)
+```
+
+First create a list of students with their names, firstnames and e-mail addresses
+
+```{r}
+require(dplyr)
+tbl_student_info <- wb %>% 
+    select(Familienname, Rufname, Nummer, `E-Mail`) %>%
+    mutate(UDName = `E-Mail`) %>%
+    tidyr::separate(UDName, c("Username", NA), sep = '@') %>%
+    select(Username, Familienname, Rufname, Nummer, `E-Mail`)
+tbl_student_info$Username <- tolower(tbl_student_info$Username)
+tbl_student_info
+```
+
+The student information is written to a file. 
+
+```{r}
+s_student_dir <- file.path(here::here(), 'students')
+if (!dir.exists(s_student_dir)) dir.create(s_student_dir)
+readr::write_csv(tbl_student_info, path = file.path(s_student_dir, 'gel_students_gelasmss2021.txt'), col_names = FALSE)
+```
+
+A test-student is created manually. 
+
+```{r}
+tbl_test_student_info <- tibble::tibble(Username     = c('vrohrp'),
+                                        Familienname = c('von Rohr'), 
+                                        Rufname      = c('Peter'), 
+                                        Nummer       = c('00-000-000') , 
+                                        `E-Mail`     = c('peter.vonrohr@usys.ethz.ch'))
+readr::write_csv(tbl_test_student_info, path = file.path(here::here(), 'students', 'test_gel_students_gelasmss2021.txt'), col_names = FALSE)
+```
+
+## Student Usernames
+From the e-mail addresses, we extract usernames as follows
+
+```{r}
+(tbl_student_username <- tbl_student_info %>% select(Username))
+```
+
+Write the usernames to a file
+
+```{r}
+readr::write_csv(tbl_student_username, path = file.path(s_student_dir, 'gel_student_usernames_gelasmss2021.txt'), col_names = FALSE)
+```
+
+The username for the test-student is specified manually and is not extracted from the e-mail. 
+
+```{r}
+tbl_test_student_username <- tbl_test_student_info %>% select(Username)
+readr::write_csv(tbl_test_student_username, path = file.path(here::here(), 'students', 'test_gel_student_usernames_gelasmss2021.txt'), col_names = FALSE)
+```
+
+## File Upload
+Upload the created files to the server
+
+```
+$ cd /Users/peter/Data/Projects/GitHub/charlotte-ngs/gelasmss2021_gh-root/master/gelasmss2021
+$ scp students/gel_student_usernames_gelasmss2021.txt quagadmin@2-htz.quagzws.com:/home/quagadmin/courses/gelasmss2021/students
+$ scp students/test_gel_student_usernames_gelasmss2021.txt quagadmin@2-htz.quagzws.com:/home/quagadmin/courses/gelasmss2021/students
+scp students/gel_students_gelasmss2021.txt  quagadmin@2-htz.quagzws.com:/home/quagadmin/courses/gelasmss2021/students
+scp students/test_gel_students_gelasmss2021.txt  quagadmin@2-htz.quagzws.com:/home/quagadmin/courses/gelasmss2021/students
+
+scp bash/docker_student_start.sh quagadmin@2-htz.quagzws.com:/home/quagadmin/courses/gelasmss2021/bash
+scp bash/docker_student_stop.sh quagadmin@2-htz.quagzws.com:/home/quagadmin/courses/gelasmss2021/bash
+
+```
+
+## Starting Docker Containers
+
+```
+cd /home/quagadmin/courses/gelasmss2021
+# test
+./bash/docker_student_start.sh -f students/test_gel_students_gelasmss2021.txt -c /home/quagadmin/courses/gelasmss2021/home -p 10187 -i gelasmss2021 -w `pwd`/created
+# real students
+./bash/docker_student_start.sh -f students/gel_students_gelasmss2021.txt -c /home/quagadmin/courses/gelasmss2021/home -p 10096 -i gelasmss2021 -w `pwd`/created
+```
+
+## Creating Password Files
+
+```
+cd /home/quagadmin/courses/gelasmss2021
+# test
+cat students/test_gel_student_usernames_gelasmss2021.txt | while read u
+do
+  echo " * Extract pwd for $u ..."
+  if [ ! -e "created/.${u}.pwd" ]
+  then
+    echo " ** Create pwd-file for $u: ..."
+    grep 'Password' email_sent/${u}_email.txt  | cut -d ' ' -f 2 > created/.${u}.pwd
+  else
+    echo " ** Found pwd-file for $u: ..."
+  fi
+done
+# real
+cat students/gel_student_usernames_gelasmss2021.txt | while read u
+do
+  echo " * Extract pwd for $u ..."
+  if [ ! -e "created/.${u}.pwd" ]
+  then
+    echo " ** Create pwd-file for $u: ..."
+    grep 'Password' email_sent/${u}_email.txt   | cut -d ' ' -f 2 > created/.${u}.pwd
+  else
+    echo " ** Found pwd-file for $u: ..."
+  fi
+done
+
+```
+
+
+## Cloning
+
+```
+export GITURI=https://github.com/charlotte-ngs/gelasmss2021.git
+export GELSRC=/home/quagadmin/courses/gelasmss2021
+export GELPROJ=$(basename $GELSRC)
+export GELHOME=${GELSRC}/home
+cd $GELSRC
+# test student
+cat students/test_gel_student_usernames_gelasmss2021.txt | while read s
+do
+  cd $GELHOME/$s
+  if [ -d "$GELPROJ" ]
+  then
+    echo " * $GELPROJ exists ..."
+  else
+    echo " * Cloning repo for $s ..."
+    git clone $GITURI -b rexpf
+  fi  
+  sleep 2
+done
+
+# real
+cat students/gel_student_usernames_gelasmss2021.txt | while read s
+do
+  cd $GELHOME/$s
+  if [ -d "$GELPROJ" ]
+  then
+    echo " * $GELPROJ exists ..."
+  else
+    echo " * Cloning repo for $s ..."
+    git clone $GITURI -b rexpf
+  fi  
+  sleep 2
+done
+
+# removed asm for new students
+
+```
+
+## Sending E-Mails
+The following commands are used to send e-mails to students
+
+```
+cd /home/quagadmin/courses/gelasmss2021/bash
+ls -1 | while read f
+do
+  echo " * Checking $f ..."
+  if [ -e "../email_sent/$f" ]
+  then
+    echo " * $f exists ..."
+    rm $f
+  else
+    echo " * $f new ..."
+  fi
+  sleep 2
+done
+```
+

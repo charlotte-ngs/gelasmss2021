@@ -116,21 +116,26 @@ docker_start () {
   else
     local pass=`tr -dc A-Za-z0-9_ < /dev/urandom | head -c8`
   fi
-  local dcmd="docker run -d -p $RSTPORT:8787 -e PASSWORD=$pass -v $COURSEHOME/${user}:/home/rstudio --name ${user}_rstudio $DOCKERIMAGE"
-  echo $dcmd
-  if [ "$DRYRUN" != "TRUE" ]
+  # check whether docker container image is already running
+  if [ $(docker ps -a | grep "${user}_rstudio" | wc -l) -eq 0 ]
   then
-    docker run -d -p $RSTPORT:8787 -e PASSWORD=$pass -v $COURSEHOME/${user}:/home/rstudio --name ${user}_rstudio $DOCKERIMAGE
-    sudo chmod -R 777 $COURSEHOME/${user}
-    # firewall
-    if [ `sudo ufw status | grep "$RSTPORT/tcp" | grep ALLOW | wc -l` -eq 0 ]
+    local dcmd="docker run -d -p $RSTPORT:8787 -e PASSWORD=$pass -v $COURSEHOME/${user}:/home/rstudio --name ${user}_rstudio $DOCKERIMAGE"
+    echo $dcmd
+    if [ "$DRYRUN" != "TRUE" ]
     then
-      sudo ufw allow $RSTPORT/tcp
+      docker run -d -p $RSTPORT:8787 -e PASSWORD=$pass -v $COURSEHOME/${user}:/home/rstudio --name ${user}_rstudio $DOCKERIMAGE
+      sudo chmod -R 777 $COURSEHOME/${user}
+      # firewall
+      if [ `sudo ufw status | grep "$RSTPORT/tcp" | grep ALLOW | wc -l` -eq 0 ]
+      then
+        sudo ufw allow $RSTPORT/tcp
+      fi
     fi
+    printf "To: $email \nSubject: Exercise Platform \n\nDear $firstname $name \nThis e-mail contains the required information for the exercise platform. \n\nPort: $RSTPORT \nPassword: $pass \n\nBest regards, Peter" > ${user}_email.txt
+    RSTPORT=$((RSTPORT+1))
+  else
+    echo " * Docker container image for ${user} is already running ..."
   fi
-  printf "To: $email \nSubject: Exercise Platform \n\nDear $firstname $name \nThis e-mail contains the required information for the exercise platform. \n\nPort: $RSTPORT \nPassword: $pass \n\nBest regards, Peter" > ${user}_email.txt
-  RSTPORT=$((RSTPORT+1))
-
 }
 
 #' ## Main Body of Script

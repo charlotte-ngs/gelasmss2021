@@ -1,10 +1,10 @@
 #!/bin/bash
 
 SCRIPTDIR=/home/quagadmin/source/misctools/
-DIRTOFETCH=ex/asm_ex06
+DIRTOFETCH=ex/gel_ex01
 # DIRTOFETCH=sol/asm_ex06
-TESTSTUDENT=/home/quagadmin/courses/gelasmss2021/students/test_student_usernames_gelasmss2021.txt
-STUDENTUSER=/home/quagadmin/courses/gelasmss2021/students/student_usernames_gelasmss2021.txt
+TESTSTUDENT=/home/quagadmin/courses/gelasmss2021/students/test_gel_student_usernames_gelasmss2021.txt
+STUDENTUSER=/home/quagadmin/courses/gelasmss2021/students/gel_student_usernames_gelasmss2021.txt
 #' fetch individual directory
 #' change to progdir
 cd $SCRIPTDIR
