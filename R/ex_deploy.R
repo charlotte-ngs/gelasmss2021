@@ -59,8 +59,8 @@ deploy_uni_src <- function(ps_ex_name){
                                     ps_ex_out_dir   = file.path(s_out_dir,"ex"),
                                     ps_sol_out_dir  = file.path(s_out_dir,"sol"),
                                     ps_nb_src_dir   = file.path(s_proj_dir, "nb", ps_ex_name),
-                                    ps_nb_out_dir   = file.path(s_out_dir, "nb")) #,
-                                    # ps_rexpf_trg    = s_rexpf_dir) # needs to be implemented first
+                                    ps_nb_out_dir   = file.path(s_out_dir, "nb"),
+                                    ps_rexpf_trg    = s_rexpf_dir) # needs to be implemented first
 
   return(invisible(TRUE))
 }
