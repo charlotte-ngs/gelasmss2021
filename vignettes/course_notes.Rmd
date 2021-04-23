@@ -20,7 +20,7 @@ This page contains the list of links pointing to the different chapters in the c
 
 ```{r echo=FALSE}
 s_cn_gel_url <- "https://charlotte-ngs.github.io/gelasmss2021/cn_gel/"
-tbl_gel_chpt <- tibble::tibble(Week = c(8, 8, 9),
+tbl_gel_chpt <- tibble::tibble(Week = c(8, 8, 9, 10),
                                Date = c("2021-04-12",
                                         "2021-04-12",
                                         "2021-04-19",
