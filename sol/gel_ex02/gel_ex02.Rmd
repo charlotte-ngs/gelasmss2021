@@ -1,0 +1,135 @@
+---
+title: Genetic Evaluation - `r tools::toTitleCase(params$doctype)` 2
+author: Peter von Rohr
+date: 2021-04-26
+output:
+  bookdown::pdf_document2:
+    toc: false
+    number_sections: false
+    keep_md: false
+    keep_tex: false
+header-includes:
+ \usepackage{longtable}
+ \usepackage{float}
+params:
+  doctype:
+    label: 'Document Type'
+    value: 'solution'
+    choices: ['exercise', 'solution', 'notebook']
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r pr01-read-data, echo=FALSE, message=FALSE, warning=FALSE}
+s_data_file <- "https://charlotte-ngs.github.io/gelasmss2021/data/gel_model_sel_ex02.csv"
+tbl_modsel <- readr::read_csv2(s_data_file)
+```
+
+
+## Problem 1: Model Selection
+We assume that we have a dataset for the response variable `carcass weight` (CW) and for some predictor variables
+
+* sex (`sex`)
+* slaughterhouse (`slh`)
+* herd (`hrd`)
+* age at slaughter (`age`)
+* day of month when animal was slaughtered (`day`) and
+* humidity (`hum`)
+
+Use a fixed linear effects model and determine which of the predictor variables are important for the response. 
+
+The data is available from `r s_data_file`. 
+
+
+### Hint
+* Use the function `lm` in R to fit the fixed linear effects model
+* Use either Mallow $C_p$ statistic or the adjusted coefficient of determination $R_{adj}^2$ or AIC as model selection criteria
+* Use the backward model selection approach
+
+
+<!-- your-solution-start
+### Your Solution
+Start with reading the data into a tibble or a dataframe.
+
+```{r ys01-read-data}
+# reading data
+
+```
+
+Convert all fixed effects into factors using the function `as.factor()`
+
+```{r ys01-convert-to-factor}
+# convert fixed effects to factors using as.factor()
+
+```
+
+Define the full model 
+
+```{r ys01-full-model}
+# define full model using function lm()
+
+```
+
+Use result of full model as input for a function like stepAIC() from package MASS
+
+```{r ys01-stepAIC}
+# use function MASS:stepAIC()
+
+```
+
+---  your-solution-end -->
+
+
+<!-- master-solution-start -->
+
+### Solution
+As preparatory step we have to first read the data from the file
+
+```{r pr01-read-data, echo=TRUE, message=FALSE, warning=FALSE}
+```
+
+
+Before we can do any model fits, we have to convert all fixed effects into `factors`. Fixed effects will be
+
+* `sex`
+* `slh`
+* `hrd`
+* `day`
+
+These must be converted into factors. All other predictors are fit as covariables and can stay as numeric types.
+
+```{r}
+tbl_modsel$sex <- as.factor(tbl_modsel$sex)
+tbl_modsel$slh <- as.factor(tbl_modsel$slh)
+tbl_modsel$hrd <- as.factor(tbl_modsel$hrd)
+tbl_modsel$day <- as.factor(tbl_modsel$day)
+```
+
+
+The backward model selection approach starts with the full model. 
+
+```{r}
+lm_full <- lm(cw ~ sex + slh + hrd + age + day + hum, data = tbl_modsel)
+summary(lm_full)
+```
+
+Using `stepAIC()` to do the backward selection results in
+
+```{r}
+lm_back <- MASS::stepAIC(lm_full, direction = "backward")
+summary(lm_back)
+```
+
+Comparing the above result from `MASS::stepAIC()` to the real model that was used in the simulation shows that they agree.
+
+```{r}
+lm_relevant <- lm(cw ~ sex + slh + hrd + age, data = tbl_modsel)
+summary(lm_relevant)
+```
+
+
+<!-- master-solution-end -->
+ 
