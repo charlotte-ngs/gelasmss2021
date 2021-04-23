@@ -21,10 +21,12 @@ This page contains links to exercises in pdf-format and as Rmarkdown notebooks.
 ```{r, echo=FALSE}
 s_ex_url <- 'https://charlotte-ngs.github.io/gelasmss2021/ex/'
 s_nb_url <- 'https://charlotte-ngs.github.io/gelasmss2021/nb/'
-tbl_asm_gel <- tibble::tibble(Week = c(9),
-                              Date = c("2021-04-19"),
+tbl_asm_gel <- tibble::tibble(Week = c(9, 20),
+                              Date = c("2021-04-19",
+                                       "2021-04-26"),
                               Topic = c(
-                                paste0("Breeding Program [pdf](", s_ex_url, "gel_ex01.pdf) | [nb](", s_nb_url, "gel_ex01_nb_src.nb.html)", collapse = "")
+                                paste0("Breeding Program [pdf](", s_ex_url, "gel_ex01.pdf) | [nb](", s_nb_url, "gel_ex01_nb_src.nb.html)", collapse = ""),
+                                paste0("Model Selection [pdf](", s_ex_url, "gel_ex02.pdf) | [nb](", s_nb_url, "gel_ex02_nb_src.nb.html)", collapse = "")
                               ))
 knitr::kable(tbl_asm_gel)
 ```

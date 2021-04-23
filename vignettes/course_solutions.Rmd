@@ -16,6 +16,21 @@ knitr::opts_chunk$set(
 
 This page contains links to solutions of exercises in pdf-format.
 
+## Applied Genetic Evaluation
+
+```{r, echo=FALSE}
+s_sol_gel_url <- 'https://charlotte-ngs.github.io/gelasmss2021/sol/'
+tbl_gel_sol <- tibble::tibble(Week = c(9, 10),
+                              Date = c("2021-04-19",
+                                       "2021-04-26"),
+                              Topic = c(
+                                paste0("[Breeding Program](", s_sol_gel_url, "gel_ex01_sol.pdf)", collapse = ""),
+                                paste0("[Model Selection](", s_sol_gel_url, "gel_ex02_sol.pdf", collapse = "")
+                              ))
+knitr::kable(tbl_gel_sol)
+```
+
+
 ## Applied Statistical Methods
 
 ```{r, echo=FALSE}
