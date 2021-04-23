@@ -1,3 +1,7 @@
+# gelasmss2021 0.9.2
+
+* Slides with notes and link to video
+
 # gelasmss2021 0.9.1
 
 * Exercise gel_ex01

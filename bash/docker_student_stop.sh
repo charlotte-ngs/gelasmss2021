@@ -96,13 +96,24 @@ log_msg () {
   $ECHO "[${l_RIGHTNOW} -- ${l_CALLER}] $l_MSG"
 }
 
-
-docker_stop () {
+#' ### Stop docker container from user
+#' Given a username, the docker container name is created by
+#' appending _rstudio
+docker_stop_usr () {
   local l_user_info=$1
   local user=$(echo $l_user_info | cut -d ',' -f1)
-  log_msg 'docker_stop' " * Stopping docker instance: ${user}_rstudio ..."
+  log_msg 'docker_stop_usr' " * Stopping docker instance: ${user}_rstudio ..."
   docker stop ${user}_rstudio
 
+}
+
+
+#' ### Stop docker container from name
+#' Stop docker container image based on container name
+docker_stop_name () {
+  local l_cnt_name=$1
+  log_msg 'docker_stop_name' " * Stopping docker instance: $l_cnt_name ..."
+  docker stop $l_cnt_name
 }
 
 
@@ -144,12 +155,12 @@ then
   cat $USERNAME | while read e
   do
     log_msg "$SCRIPT" " * Current username: $e ..."
-    docker_stop $e
+    docker_stop_usr $e
     sleep 2
   done
 else
   log_msg "$SCRIPT" " * Current username: $USERNAME ..."
-  docker_stop $USERNAME
+  docker_stop_name $USERNAME
 fi
 
 # clean up all instances with status exited
