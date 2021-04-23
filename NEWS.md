@@ -1,3 +1,7 @@
+# gelasmss2021 0.10.1
+
+* Release gel_ex02
+
 # gelasmss2021 0.10.0
 
 * Chapter 4 of course notes

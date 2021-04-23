@@ -25,7 +25,7 @@ tbl_gel_sol <- tibble::tibble(Week = c(9, 10),
                                        "2021-04-26"),
                               Topic = c(
                                 paste0("[Breeding Program](", s_sol_gel_url, "gel_ex01_sol.pdf)", collapse = ""),
-                                paste0("[Model Selection](", s_sol_gel_url, "gel_ex02_sol.pdf", collapse = "")
+                                paste0("[Model Selection](", s_sol_gel_url, "gel_ex02_sol.pdf)", collapse = "")
                               ))
 knitr::kable(tbl_gel_sol)
 ```
