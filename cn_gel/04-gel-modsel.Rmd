@@ -20,7 +20,7 @@ An example for a **deterministic** dependency is Newton's law of gravity in phys
 Other examples of deterministic dependencies are the motion of the planets around the sun or some thermodynamic processes. 
 
 
-```{r deter-vs-stoch, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.pos='H', fig.cap='Deterministic versus Stochastic Dependencies'}
+```{r deter-vs-stoch, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.pos='H', fig.cap='Deterministic versus Stochastic Dependencies', out.width="11cm"}
 #rmdhelp::use_odg_graphic(ps_path = "odg/deter-vs-stoch.odg")
 knitr::include_graphics(path = "odg/deter-vs-stoch.png")
 ```
