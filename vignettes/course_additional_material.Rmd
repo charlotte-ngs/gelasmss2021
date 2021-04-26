@@ -56,11 +56,14 @@ knitr::kable(tbl_sl_gel)
 ## Videos
 
 ```{r, echo=FALSE}
-tbl_video_gel <- tibble::tibble(Week = c(8, 9),
+tbl_video_gel <- tibble::tibble(Week = c(8, 9, 10),
                                 Date = c("2021-04-12",
-                                         "2021-04-19"),
+                                         "2021-04-19",
+                                         "2021-04-26"),
                                 Topic = c("[Introduction To Genetic Evaluation](https://youtu.be/7dBS2H1uydk)",
-                                          "[Implementation of a Breeding Program](https://youtu.be/TqVPKJ97qko)"))
+                                          "[Implementation of a Breeding Program](https://youtu.be/TqVPKJ97qko)",
+                                          "[Model Selection](https://youtu.be/V2TUndbIJ4I)"
+                                          ))
 knitr::kable(tbl_video_gel)
 ```
 

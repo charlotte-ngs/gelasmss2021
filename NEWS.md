@@ -1,3 +1,7 @@
+# gelasmss2021 0.10.2
+
+* Added link to video and to slides with notes
+
 # gelasmss2021 0.10.1
 
 * Release gel_ex02
