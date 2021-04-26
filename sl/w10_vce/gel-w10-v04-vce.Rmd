@@ -37,7 +37,7 @@ p1 <- ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
 p1
 ```
 
-```{r twotraitwithwoutgv, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+```{r twotraitwithwoutgv, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="10cm"}
 #rmddochelper::use_odg_graphic(ps_path = "odg/twotraitwithwoutgv.odg")
 knitr::include_graphics(path = "odg/twotraitwithwoutgv.png")
 ```
