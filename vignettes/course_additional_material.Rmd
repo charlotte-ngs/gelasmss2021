@@ -46,7 +46,8 @@ tbl_sl_gel <- tibble::tibble(Week    = c(8, 9, 10),
                                   " | [with notes](", s_sl_url, "gel-w08-v01-intro_with_notes.pdf)", collapse = ''),
                            paste0("[original](", s_sl_url, "gel-w08-v02-bp.pdf)",
                                    " | [with notes](", s_sl_url, "gel-w08-v02-bp_with_notes.pdf)", collapse = ''),
-                           paste0("[original](", s_sl_url, "gel-w09-v03-bp.pdf)", collapse = "")
+                           paste0("[original](", s_sl_url, "gel-w09-v03-bp.pdf)",
+                                  "| [with notes](", s_sl_url, "gel-w09-v03-bp_with_notes.pdf)", collapse = "")
                          ))
 knitr::kable(tbl_sl_gel)
 
