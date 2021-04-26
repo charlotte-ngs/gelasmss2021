@@ -16,6 +16,18 @@ knitr::opts_chunk$set(
 
 # Genetic Evaluation in Livestock
 
+## Notebooks
+```{r, echo=FALSE}
+s_misc_url <- 'https://charlotte-ngs.github.io/gelasmss2021/misc/'
+tbl_nb_gel <- tibble::tibble(Week = c(10),
+                             Date = c("2021-04-26"),
+                             Topic = c(
+                               paste0("[Model Selection](", s_misc_url, "20210426_model_selection.nb.html)", collapse = "")
+                             ))
+knitr::kable(tbl_nb_gel)
+```
+
+
 ## Slides
 
 ```{r, echo=FALSE}
