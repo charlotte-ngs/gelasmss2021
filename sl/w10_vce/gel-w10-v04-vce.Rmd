@@ -1,0 +1,367 @@
+---
+title: "Variance Components Estimation"
+author: "Peter von Rohr"
+date: "26.04.2021"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
+```
+
+
+
+## Genetic Variation
+
+* Requirement for trait to be considered in breeding goal
+* Breeding means improvement of next generation via selection and mating
+* Only genetic (additive) components are passed to offspring
+* Selection should be based on genetic component of trait
+* Selection only possible with genetic variation
+
+$\rightarrow$ genetic variation indicates how good characteristics are passed from parents to offspring
+
+$\rightarrow$ measured by __heritability__ $h^2 = \frac{\sigma_a^2}{\sigma_p^2}$
+
+
+## Two Traits
+
+```{r preparednormplot, eval=FALSE}
+# according to https://sebastiansauer.github.io/normal_curve_ggplot2/
+require(ggplot2)
+p1 <- ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) + ylab("") +
+  scale_y_continuous(breaks = NULL) + 
+  theme_bw()
+p1
+```
+
+```{r twotraitwithwoutgv, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/twotraitwithwoutgv.odg")
+knitr::include_graphics(path = "odg/twotraitwithwoutgv.png")
+```
+ 
+ 
+
+## Problems
+
+* Genetic components cannot be observed or measured
+* Must be estimated from data
+* Data are mostly phenotypic
+
+$\rightarrow$ topic of variance components estimation
+
+* Model based, that means connection between phenotypic measure and genetic component are based on certain model
+
+$$p = g + e$$
+
+with $cov(g,e) = 0$ 
+
+* __Goal__: separate variation due to $g$ ($\sigma_a^2$) from phenotypic variation
+
+
+## Example of Variance Components Separation 
+
+* Estimation of repeatability
+* Given repeated measurements of same trait at the same animal
+* Repeatability means variation of measurements at the same animal is smaller than variation between measurements at different animals
+
+
+## Repeatability Plot
+
+```{r repmeasurebulldef, echo=FALSE}
+n_nr_bull <- 10
+tbl_repmeasure_bull <- tibble::tibble(Bull = c(1:n_nr_bull),
+                                      M1 = c(135, 129, 135, 127, 126, 128, 127, 129, 126, 132),
+                                      M2 = c(136, 130, 133, 127, 129, 129, 132, 128, 125, 131),
+                                      M3 = c(134, 128, 136, 125, 129, 128, 130 ,125, 127, 134))
+tbl_rm_bull_ga <- tidyr::gather(tbl_repmeasure_bull, "Measurement", "Height", -Bull)
+tbl_rm_bull_ga$Measurement <- as.factor(tbl_rm_bull_ga$Measurement)
+tbl_rm_bull_ga$Bull <- as.factor(tbl_rm_bull_ga$Bull)
+ggplot2::qplot(Bull, Height, data = tbl_rm_bull_ga, colour = Measurement)
+```
+
+
+## Model
+
+\begin{equation}
+y_{ij} = \mu + t_i + \epsilon_{ij} \notag
+\end{equation}
+
+\begin{tabular}{lll}
+where  &  &  \\
+       & $y_{ij}$         &  measurement $j$ of animal $i$    \\
+       & $\mu$            &  expected value of $y$            \\
+       & $t_i$            &  deviation of $y_{ij}$ from $\mu$ attributed to animal $i$ \\
+       & $\epsilon_{ij}$  &  measurement error
+\end{tabular}
+
+
+## Estimation Of Variance Components
+
+* $E(t_i) = 0$
+* $\sigma_t^2 = E(t_i^2)$: variance component of total variance ($\sigma_y^2$) which can be attributed to the $t$-effects
+* $E(\epsilon_{ij}) = 0$
+* $\sigma_{\epsilon}^2 = E(\epsilon_{ij}^2)$: variance component attributed to $\epsilon$-effects
+* $\sigma_y^2 = \sigma_t^2 + \sigma_{\epsilon}^2$
+
+* Repeatability $w$ defined as:
+
+\begin{equation}
+w = \frac{\sigma_t^2}{\sigma_t^2 + \sigma_{\epsilon}^2} \notag
+\end{equation}
+
+$\rightarrow$ estimate of $\sigma_t^2$ needed
+
+
+## Analysis Of Variance (ANOVA)
+
+\begin{center}
+\begin{tabular}{l|r|r|r|r}
+Effect                 &  df      &  Sum Sq             &  Mean Sq                    & $E(Mean\ Sq)$ \\
+\hline
+Bull     $(t)$         &  $r-1$   &  $SSQ(t)$           &  $SSQ(t) / (r-1)$           &  $\sigma_{\epsilon}^2 + n * \sigma_t^2$ \\
+Residual $(\epsilon)$  &  $N-r$   &  $SSQ(\epsilon)$    &  $SSQ(\epsilon) / (N-r)$    &  $\sigma_{\epsilon}^2$
+\end{tabular}
+\end{center}
+
+where 
+
+<!-- Essl1987 p. 212 -->
+
+$$SSQ(t) = \left[ {1 \over n} \sum_{i=1}^r \left( \sum_{j=1}^n y_{ij}\right)^2 \right] - \left(\sum_{i=1}^r\sum_{j=1}^{n}y_{ij}\right)^2 / N$$ 
+
+$$SSQ(\epsilon) =  \sum_{i=1}^r\sum_{j=1}^{n}y_{ij}^2 - \left[ {1 \over n} \sum_{i=1}^r \left( \sum_{j=1}^n y_{ij}\right)^2 \right]$$
+
+
+## Zahlenbeispiel
+
+\scriptsize
+
+```{r gevcerepaov, echo=FALSE}
+lm_bull_height <- lm(Height ~ Bull, data = tbl_rm_bull_ga)
+aov_bull_height <- aov(lm_bull_height)
+(summary_bull_height <- summary(aov_bull_height))
+```
+
+\normalsize
+
+```{r extractmeansq, echo=FALSE}
+# according to https://stat.ethz.ch/pipermail/r-help/2011-February/267554.html
+vec_mean_sq <- summary_bull_height[[1]]$'Mean Sq'
+vec_df <- summary_bull_height[[1]]$Df
+n_nr_rep <- length(levels(tbl_rm_bull_ga$Measurement))
+n_hatsigmat <- (vec_mean_sq[1] - vec_mean_sq[2]) / n_nr_rep
+n_hat_repeat <- n_hatsigmat / (n_hatsigmat + vec_mean_sq[2])
+```
+
+Setting expected values of `Mean Sq` equal to estimates of variance components
+
+$$\hat{\sigma}_{\epsilon}^2 = `r vec_mean_sq[2]` \text{ and } \hat{\sigma}_t^2 = \frac{`r round(vec_mean_sq[1], 2)` - `r vec_mean_sq[2]`}{`r n_nr_rep`} = `r round(n_hatsigmat, 2)`$$
+
+Repeatability 
+
+$$\hat{w} = \frac{\hat{\sigma}_t^2}{\hat{\sigma}_t^2 + \hat{\sigma}_{\epsilon}^2} = `r round(n_hat_repeat, 2)`$$
+
+
+## Same Strategy for Sire Model
+
+* Sire model is a mixed linear effects model with sire effects $s$ as random components
+
+\begin{equation}
+y = Xb + Zs + e \notag
+\end{equation}
+
+* In case where sires are not related, $var(s) = $I * \sigma_s^2$
+* From $\sigma_s^2$, we get genetic additive variance as $\sigma_a^2 = 4*\sigma_s^2$
+
+
+## ANOVA
+
+\scriptsize
+
+\begin{center}
+\begin{tabular}{l|rrr|r}
+Effect          &  Degrees of Freedom  &  Sum Sq      &  Mean Sq             & $E(Mean\ Sq)$ \\
+\hline
+Sire $(s|b)$    &  $r-1$               &  $SSQ(s|b)$  &  $SSQ(s|b) / (r-1)$  &  $\sigma_e^2 + k * \sigma_s^2$ \\
+Residual $(e)$  &  $N-r$               &  $SSQ(e)$    &  $SSQ(e) / (N-r)$    &  $\sigma_e^2$
+\end{tabular}
+\end{center}
+
+\normalsize
+
+with $$k = \frac{1}{r-1} \left[ N - \frac{\sum_{i=1}^{r}n_i^2}{N} \right]$$
+
+
+## Maximum Likelihood (ML)
+
+* Likelihood 
+
+\begin{equation}
+L(\theta) = f(y | \theta) \notag
+\end{equation}
+
+* Normal distribution
+
+\begin{equation}
+L(\theta) = (2\pi)^{-1/2 n} \sigma^{-n}|H|^{-1/2} * exp\left\{-\frac{1}{2\sigma^2}(y-Xb)^T H^{-1} (y-Xb) \right\} \notag
+\end{equation}
+
+with $var(y) = H*\sigma^2$ and $\theta^T = \left[\begin{array}{cc} b  &  \sigma^2 \end{array} \right]$
+
+
+## Maximization of Likelihood
+
+* Set $\lambda = log L$
+* Compute partial derivatives of $\lambda$ with respect to all unknowns
+
+$$\frac{\partial \lambda}{\partial b}$$
+
+$$\frac{\partial \lambda}{\partial \sigma^2}$$
+
+* Set partial derivatives to $0$ and solve for unknowns
+* Use solutions as estimates
+
+
+## Restricted Maximum Likelihood (REML)
+
+* Problem with ML: estimate of $\sigma^2$ depends on $b$ $\rightarrow$ undesirable
+* Do transformations $Sy$ and $Qy$ 
+
+(i) The matrix $S$ has rank $n-t$ and the matrix $Q$ has rank $t$ 
+(ii) The result of the two transformations are independent, that means $cov(Sy,Qy) = 0$ which is met when $SHQ^T = 0$
+(iii) The matrix S is chosen such that $E(Sy) = 0$ which means $SX = 0$
+(iv) The matrix $QX$ is of rank $t$, so that every linear function of the elements of $Qy$ estimate a linear function of $b$. 
+
+
+## REML II
+
+* From (i) and (ii) it follows that the likelihood $L$ of $y$ is the product of the likelihoods of $Sy$ ($L^*$) and $Qy$ ($L^{**}$) that means 
+
+$$\lambda = \lambda^* + \lambda^{**}$$
+
+* Variance components are estimated from $\lambda^*$ which will then be independent of $b$
+
+
+## Bayesian Estimation
+
+* Proposed already in the 80's
+* Full implementation only in 1993
+* Requirements: 
+    + cheap computing and 
+    + good pseudo-random number generators
+* Bayesian estimation is based on conditional posterior distribution of unknowns given the knowns
+* Conditional posterior distribution is computed from prior distribution of unknowns times the likelihood
+    
+
+
+## Model
+
+* Univariate Gaussian linear mixed model
+
+$$y = Xb + Zu + e$$
+
+\begin{tabular}{llp{6cm}}
+where  & & \\
+       &  $y$  &  vector of observations (length $n$) \\
+       &  $b$  &  vector of fixed effects (length $p$) \\
+       &  $u$  &  vector of random breeding values (length $q$) \\
+       &  $e$  &  vector of random residuals (length $n$) \\
+       &  $X$  &  $n\times p$ design matrix linking fixed effects to observations \\
+       &  $Z$  &  $n\times q$ design matrix linking breeding values to observations
+\end{tabular}
+
+
+## Likelihood
+
+* Data generating distribution
+
+$$y | b, u, \sigma_e^2 \sim \mathcal{N}(Xb + Zu, I * \sigma_e^2)$$
+
+where $I$ is a $n\times n$ identity matrix and $\sigma_e^2$ is the variance of the random residuals.
+
+
+## Priors
+
+* Prior distributions must be specified for all unknowns
+* Unknowns in our example are: $b$, $u$, $\sigma_e^2$ and $\sigma_u^2$
+* Prior distribution for 
+    + $b$ is flat, i.e. $p(b) \propto c$
+    + $u$ Normal distribution as $u | G, \sigma_u^2 \sim N(0, G*\sigma_u^2)$
+    + $\sigma_e^2$ scaled inverse $\chi^2$: $p(\sigma_e^2 | \nu_e, s_e^2) \propto (\sigma_e^2)^{-\nu_e/2-1} exp(-{1\over 2}\nu_e s_e^2 / \sigma_e^2)$
+    + $\sigma_u^2$ : $p(\sigma_u^2 | \nu_u, s_u^2) \propto (\sigma_u^2)^{-\nu_u/2-1} exp(-{1\over 2}\nu_u s_u^2 / \sigma_u^2)$
+* $\nu_e$, $\nu_s$, $s_e^2$ and $s_u^2$ are called hyper-parameters and must be determined
+
+
+## Additional Terms
+
+*  Let
+
+$$\theta^T = (b^T, u^T) = (\theta_1, \theta_2, \ldots, \theta_N)$$
+
+$$\theta_{-i} = (\theta_1, \theta_2, \ldots, \theta_{i-1}, \theta_{i+1}, \ldots, \theta_N)$$
+
+* Further, let
+
+$$s^T = (s_u^2, s_e^2)$$
+and
+
+$$\nu^T = (\nu_u, \nu_e)$$
+
+## Joint Posterior Density
+
+The joint posterior distribution can be written as
+
+$$p(\theta, \sigma_u^2, \sigma_e^2 | y, s, \nu) \propto p(\theta) * p(\sigma_u^2 | \nu_u, s_u^2) * p(\sigma_e^2 | \nu_e, s_e^2) * p(y | \theta, \sigma_e^2)$$
+
+
+## Fully Conditional Posterior Densities of $\theta$
+
+* Density of every single unknown component when setting all other components as known
+
+$$\theta_i | y, \theta_{-i}, \sigma_u^2, \sigma_e^2, s, \nu \sim \mathcal{N}(\tilde{\theta_i}, \tilde{v_i}) $$
+
+where $\tilde{\theta_i} = (r_i - \sum_{j=1,j\ne i}^N w_{ij}\theta_j)/w_{ii}$ and $\tilde{v_i} = \sigma_e^2 / w_{ii}$. 
+
+* vector $r$ is the vector of right-hand side of MME
+* matrix $W$ is the coefficient matrix of MME
+
+
+## Fully Conditional Posterior Densities of $\sigma_e^2$
+
+* scaled inverted chi-square distribution for $\sigma_e^2$
+
+$$\sigma_e^2 | y, \theta, \sigma_u^2, s, \nu \sim \tilde{\nu_e}\tilde{s_e}^2\chi_{\tilde{\nu_e}}^{-2}$$
+
+* Parameters of the above distribution are defined as 
+
+$$\tilde{\nu_e} = n + \nu_e$$
+and 
+
+$$\tilde{s_e}^2 = \left[(y - Xb - Zu)^T(y - Xb - Zu) + \nu_e s_e^2 \right] / \tilde{\nu_e}$$
+
+
+## Fully Conditional Posterior Densities of $\sigma_u^2$
+
+* scaled inverted chi-square distribution for $\sigma_u^2$
+
+$$\sigma_u^2 | y, \theta, \sigma_e^2, s, \nu \sim \tilde{\nu_u}\tilde{s_u}^2\chi_{\tilde{\nu_u}}^{-2}$$
+
+* Parameters of the above distribution are defined as 
+
+$$\tilde{\nu_u} = q + \nu_u$$
+and 
+
+$$\tilde{s_u}^2 = \left[u^TG^{-1}u + \nu_u s_u^2 \right] / \tilde{\nu_u}$$
+
+
+## Implementation
+
+* Step 1: set starting values for $\theta$, $\sigma_e^2$ and $\sigma_u^2$
+* Step 2: draw random number for each component $\theta_i$ of $\theta$ from fully conditional distribution $\mathcal{N}(\tilde{\theta_i}, \tilde{v_i})$
+* Step 3: draw random number for $\sigma_e^2$ from $\tilde{\nu_e}\tilde{s_e}^2\chi_{\tilde{\nu_e}}^{-2}$
+* Step 4: draw random number for $\sigma_u^2$ from $\tilde{\nu_u}\tilde{s_u}^2\chi_{\tilde{\nu_u}}^{-2}$
+* Repeat steps 2-4 many times and store random numbers
+* Step 5: compute means of random numbers to get Bayesian estimates of unknowns $\theta$, $\sigma_e^2$ and $\sigma_u^2$
