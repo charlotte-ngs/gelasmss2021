@@ -1,0 +1,7 @@
+#
+#
+# References for ANOVA:
+
+* https://bookdown.org/dereksonderegger/570/
+* https://stat.ethz.ch/~meier/teaching/anova/
+
