@@ -148,7 +148,7 @@ y = Xb + Zs + e
 (\#eq:gelvcesiremodel)
 \end{equation}
 
-where $y$ is a vector of length $N$ of observations, $b$ is a vector of length $p$ of fixed effects, $s$ is a vector of length $r$ with random sire effects and $e$ is a vector of length $N$ of random error terms. The matrices $X$ and $Z$ are incidence matrices for $b$ and $s$, linking the respective effects to the observations. An example of such a data set is used in Problem 1 of Exercise 2. 
+where $y$ is a vector of length $N$ of observations, $b$ is a vector of length $p$ of fixed effects, $s$ is a vector of length $r$ with random sire effects and $e$ is a vector of length $N$ of random error terms. The matrices $X$ and $Z$ are incidence matrices for $b$ and $s$, linking the respective effects to the observations. An example of such a data set is used in Problem 1 of Exercise 3. 
 
 The variance component $\sigma_s^2$ for the random sire component $s$ is estimated the same way as shown in subsection \@ref(gel-vce-estrepeat) using an ANOVA table. For the sire model the ANOVA table has the following structure
 
@@ -177,7 +177,7 @@ $$k = \frac{1}{r-1} \left[ N - \frac{\sum_{i=1}^{r}n_i^2}{N} \right]$$
 
 with $r$ the number of sires and $n_i$ the number of progeny for sire $i$. 
 
-The numeric computation of estimating $\sigma_s^2$ and $\sigma_e^2$ is the topic of Problem 1 of Exercise 2. The dataset that is used in Exercise 2 is a simplified version where only certain genetic relationships occur and where the number of environmental effects are kept at a very low number. To address the higher complexity of real-world datasets obtained in the field, other methods have been developed. Furthermore the ANOVA-based techniques when applied to real data can produce negative estimates for variance components. Because variance components are on a quadratic scale, they cannot be negative and from negative variances, the standard deviations are not defined in the scope of real numbers. Hence negative variance component estimates are outside of the parameter domain.
+The numeric computation of estimating $\sigma_s^2$ and $\sigma_e^2$ is the topic of Problem 1 of Exercise 3. The dataset that is used in Exercise 3 is a simplified version where only certain genetic relationships occur and where the number of environmental effects are kept at a very low number. To address the higher complexity of real-world datasets obtained in the field, other methods have been developed. Furthermore the ANOVA-based techniques when applied to real data can produce negative estimates for variance components. Because variance components are on a quadratic scale, they cannot be negative and from negative variances, the standard deviations are not defined in the scope of real numbers. Hence negative variance component estimates are outside of the parameter domain.
 
 
 ## Development Of Further Methods {#gel-vce-devmethod}
