@@ -12,7 +12,7 @@ y = Xb + Zu + e
 (\#eq:gelvcelmem)
 \end{equation}
 
-where $y$ is a vector of length $N$ of observations, $b$ is a vector of length $p$ of fixed effects, $u$ is a vector of length $q$ of random breeding values and $e$ is a vector of length $N$ of random errors. The matrices $X$ and $Z$ are design matrices linking the corresponding effects to the observations. As part of the model definition, the variances of the random effects are defined as 
+where $y$ is a vector of length $N$ of observations, $b$ is an unknown vector of length $p$ of fixed effects, $u$ is an unknown vector of length $q$ of random breeding values and $e$ is an unknown vector of length $N$ of random error terms. The matrices $X$ and $Z$ are known design matrices linking the corresponding effects to the observations. As part of the model specification, the variances of the random effects are defined as 
 
 \begin{align}
 var(u)  &=  A \sigma_u ^2 \notag \\
@@ -31,7 +31,8 @@ h^2 = \frac{\sigma_u^2}{\sigma_p^2}
 (\#eq:gelvceh2)
 \end{equation}
 
-One first method that we want to introduce is based on the very well-known statistical technique called __analysis of variance__ (ANOVA). ANOVA is shown in the next subsection for a simple application of estimating the repeatability. Later this can be generalized to the estimation of the variability due to genetic components. 
+One first method that we want to introduce is based on the very well-known statistical technique called __analysis of variance__ (ANOVA). ANOVA is shown in the next subsection for a simple application of estimating repeatability for a dataset with repeated observations of the same trait. Later this can be generalized to the estimation of the variability due to genetic components. 
+
 
 ## Estimation Of Repeatability {#gel-vce-estrepeat}
 The term __repeatability__ indicates how similar repeated measurements of the same quantity are. For example, if we measure the same trait on any given animal multiple times, the measurements are expected to vary. But because the measurements are done on the same animal, the variability is probably smaller compared to measurements from different animals. This phenomenon can be quantified by a ratio of variance components which is called repeatability. 
