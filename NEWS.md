@@ -1,3 +1,7 @@
+# gelasmss2021 0.11.2
+
+* Links to solutions and exercises of gel_ex03
+
 # gelasmss2021 0.11.1
 
 * Exercise gel_ex03
