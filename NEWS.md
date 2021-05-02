@@ -1,3 +1,7 @@
+# gelasmss2021 0.11.0
+
+* Chapter 5 of course notes
+
 # gelasmss2021 0.10.2
 
 * Added link to video and to slides with notes
