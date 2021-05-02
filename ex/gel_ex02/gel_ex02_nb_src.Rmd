@@ -1,0 +1,77 @@
+---
+title: Genetic Evaluation - Notebook 2
+author: Peter von Rohr
+date: 2021-04-26
+output: html_notebook
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r pr01-read-data, echo=FALSE, message=FALSE, warning=FALSE}
+s_data_file <- "https://charlotte-ngs.github.io/gelasmss2021/data/gel_model_sel_ex02.csv"
+tbl_modsel <- readr::read_csv2(s_data_file)
+```
+
+
+## Problem 1: Model Selection
+We assume that we have a dataset for the response variable `carcass weight` (CW) and for some predictor variables
+
+* sex (`sex`)
+* slaughterhouse (`slh`)
+* herd (`hrd`)
+* age at slaughter (`age`)
+* day of month when animal was slaughtered (`day`) and
+* humidity (`hum`)
+
+Use a fixed linear effects model and determine which of the predictor variables are important for the response. 
+
+The data is available from `r s_data_file`. 
+
+
+### Hint
+* Use the function `lm` in R to fit the fixed linear effects model
+* Use either Mallow $C_p$ statistic or the adjusted coefficient of determination $R_{adj}^2$ or AIC as model selection criteria
+* Use the backward model selection approach
+
+
+### Your Solution
+Start with reading the data into a tibble or a dataframe.
+
+```{r ys01-read-data}
+# reading data
+
+```
+
+Convert all fixed effects into factors using the function `as.factor()`
+
+```{r ys01-convert-to-factor}
+# convert fixed effects to factors using as.factor()
+
+```
+
+Define the full model 
+
+```{r ys01-full-model}
+# define full model using function lm()
+
+```
+
+Use result of full model as input for a function like stepAIC() from package MASS
+
+```{r ys01-stepAIC}
+# use function MASS:stepAIC()
+
+```
+
+
+
+ 
+
+
+```{r, echo=FALSE, results='asis'}
+cat('\n---\n\n _Latest Changes: ', format(Sys.time(), '%Y-%m-%d %H:%M:%S'), ' (', Sys.info()['user'], ')_\n', sep = '')
+```
+ 
