@@ -34,6 +34,27 @@ Estimate the variance component for the sire effect using an analysis of varianc
 
 <!-- your-solution-start
 ### Your Solution
+Start by reading the data. 
+
+```{r}
+# read data using readr::read_csv2()
+
+```
+
+Compute the anova
+
+```{r}
+# use aov() to get anova result
+
+```
+
+Compute variance components using the Mean Sq.
+
+```{r}
+# Mean Sq from aov results to get variance components
+
+```
+
 
 ---  your-solution-end -->
 
@@ -120,6 +141,19 @@ where $y$ is the vector of observations, $b$ is the vector of fixed effects whic
 
 <!-- your-solution-start
 ### Your Solution
+The package `pedigreemm` is used to get to the variance components.
+
+```{r}
+# The function pedigreemm::pedigree() is used to specify the pedigree.
+
+```
+
+Variance components are part of the results from function `pedigreemm()` of package `pedigreemm`. 
+
+```{r}
+# Variance components from `pedigreemm::pedigreemm()`
+
+```
 
 ---  your-solution-end -->
 
@@ -179,6 +213,26 @@ where $y$ is a vector of observations, $b$ is a vector of fixed effects found to
 
 <!-- your-solution-start
 ### Your Solution
+Start by reading the data. 
+
+```{r}
+# Read data using `readr::read_csv2()`
+
+```
+
+Use `pedigreemm::pedigree()` to specify the pedigree. 
+
+```{r}
+# pedigree ...
+
+```
+
+Variance components are obtained from function `pedigreemm()`
+
+```{r}
+# Variance components ...
+```
+
 
 ---  your-solution-end -->
 
