@@ -1,3 +1,7 @@
+# gelasmss2021 0.11.1
+
+* Exercise gel_ex03
+
 # gelasmss2021 0.11.0
 
 * Chapter 5 of course notes
