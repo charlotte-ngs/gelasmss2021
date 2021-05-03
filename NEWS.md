@@ -1,3 +1,7 @@
+# gelasmss2021 0.11.3
+
+* Video and slides with notes
+
 # gelasmss2021 0.11.2
 
 * Links to solutions and exercises of gel_ex03
