@@ -9,14 +9,14 @@
 # load all functions in current project
 devtools::load_all()
 # create empty exercise skeleton
-create_exercise(ps_ex_name        = "gel_ex02",
+create_exercise(ps_ex_name        = "gel_ex04",
                 ps_course_name    = "Genetic Evaluation",
-                pn_exercise_count = 2,
+                pn_exercise_count = 4,
                 ps_author         = "Peter von Rohr",
-                pn_nr_problem     = 1)
+                pn_nr_problem     = 3)
 
 # deploy
-devtools::load_all();deploy_uni_src(ps_ex_name = 'gel_ex02')
+devtools::load_all();deploy_uni_src(ps_ex_name = 'gel_ex04')
 
 # rexpf
 s_proj_dir <- here::here()
