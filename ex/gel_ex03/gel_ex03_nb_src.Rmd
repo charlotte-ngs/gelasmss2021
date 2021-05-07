@@ -1,0 +1,138 @@
+---
+title: Genetic Evaluation - Notebook 3
+author: Peter von Rohr
+date: 2021-04-30
+output: html_notebook
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Problem 1 Analysis of Variance
+Estimate the variance component for the sire effect using an analysis of variance. The data is available from `https://charlotte-ngs.github.io/gelasmss2021/data/gel_sire_w10.csv`. Because the data contains just female animals, the fixed effect of the sex can no longer be estimated. 
+
+
+### Hint
+* Use the functions `aov()` to do the analysis of variance and the function `summary()` on the ANOVA result to get the relevant parts of the variance components.
+
+
+### Your Solution
+Start by reading the data. 
+
+```{r}
+# read data using readr::read_csv2()
+
+```
+
+Compute the anova
+
+```{r}
+# use aov() to get anova result
+
+```
+
+Compute variance components using the Mean Sq.
+
+```{r}
+# Mean Sq from aov results to get variance components
+
+```
+
+
+
+
+
+
+## Problem 2: Variance Components Estimation Using REML
+Use the same data set as for Problem 1 and a sire model to estimate the same sire variance $\sigma_s^2$. The sire model is the linear mixed effects model that contains sire effects as random component. The model can be specified as 
+
+$$y = Xb + Zs + e$$
+
+where $y$ is the vector of observations, $b$ is the vector of fixed effects which are the same as in Problem 1, $s$ is the vector of random sire effects and $e$ is the vector of random error terms. 
+
+### Hint 
+* Use the package `pedigreemm` to get a REML estimate for the sire variance component $\sigma_s^2$. 
+* We assume that the sires are not related. Hence variance-covariance matrix $var(s)$ of the sire components are $var(s) = I * \sigma_s^2$. 
+
+
+
+### Your Solution
+The package `pedigreemm` is used to get to the variance components.
+
+```{r}
+# The function pedigreemm::pedigree() is used to specify the pedigree.
+
+```
+
+Variance components are part of the results from function `pedigreemm()` of package `pedigreemm`. 
+
+```{r}
+# Variance components from `pedigreemm::pedigreemm()`
+
+```
+
+
+
+
+
+## Problem 3: Variance Components Estimation Using an Animal Model
+We are given the dataset with the response variable `carcass weight` (CW) and the predictor variables that resulted from the model selection process from Exercise 1. These consisted of
+
+* sex (`sex`)
+* slaughterhouse (`slh`)
+* herd (`hrd`)
+* age at slaughter (`age`)
+
+The data is available from `https://charlotte-ngs.github.io/gelasmss2021/data/gel_bp_w10.csv`. 
+
+We use a mixed linear effects model to estimate the variance components for the random effects in the model.
+
+\begin{equation}
+y = Xb + Za + e
+\end{equation}
+
+where $y$ is a vector of observations, $b$ is a vector of fixed effects found to be relevant in Exercise 1, $a$ is a vector of random breeding values and $e$ is a vector of random errors. 
+
+
+### Hint
+* Use the package `pedigreemm` to get an estimate of the variance components
+
+
+### Your Task
+* Estimate the variance components $\sigma_a^2$ and $\sigma_e^2$ for the two random component $a$ and $e$, respectively.
+
+
+### Your Solution
+Start by reading the data. 
+
+```{r}
+# Read data using `readr::read_csv2()`
+
+```
+
+Use `pedigreemm::pedigree()` to specify the pedigree. 
+
+```{r}
+# pedigree ...
+
+```
+
+Variance components are obtained from function `pedigreemm()`
+
+```{r}
+# Variance components ...
+```
+
+
+
+
+ 
+
+
+```{r, echo=FALSE, results='asis'}
+cat('\n---\n\n _Latest Changes: ', format(Sys.time(), '%Y-%m-%d %H:%M:%S'), ' (', Sys.info()['user'], ')_\n', sep = '')
+```
+ 
