@@ -142,7 +142,7 @@ ggsave('dnorm-plot.pdf', plot = p1)
 ```
 
 
-```{r gel-pb-cond-density-plot, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.pos="!H", fig.cap="Conditional Density with Confidence Interval"}
+```{r gel-pb-cond-density-plot, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.pos="H", fig.cap="Conditional Density with Confidence Interval"}
 ##rmdhelp::use_odg_graphic(ps_path = 'odg/gel-pb-cond-density-plot.odg')
 knitr::include_graphics(path = "odg/gel-pb-cond-density-plot.png")
 ```
