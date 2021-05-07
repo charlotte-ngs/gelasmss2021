@@ -1,3 +1,7 @@
+# gelasmss2021 0.12.0
+
+* Chapter 6 of gel course notes
+
 # gelasmss2021 0.11.3
 
 * Video and slides with notes
