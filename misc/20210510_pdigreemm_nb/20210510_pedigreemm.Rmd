@@ -45,3 +45,13 @@ fm1 <- pedigreemm(y ~ (1|ID) , pedigree = list(ID = p1))
 summary(fm1)
 ```
 
+## Paper Vazquez2010
+
+```{r, eval=FALSE}
+milk <- within(milk, sdMilk <- milk / sd(milk))
+fm1 <- pedigreemm(sdMilk ~ lact + log(dim) + (1|id) + (1|herd), data = milk, pedigree = list(id = pedCowsR))
+summary(fm1)
+```
+
+
+

@@ -54,7 +54,8 @@ tbl_sl_gel <- tibble::tibble(Week    = c(8, 9, 10, 11, 12),
                                   "| [with notes](", s_sl_url, "gel-w09-v03-bp_with_notes.pdf)", collapse = ""),
                            paste0("[original](", s_sl_url, "gel-w10-v04-vce.pdf)", 
                                   " | [with notes](", s_sl_url, "gel-w10-v04-vce_with_notes.pdf)", collapse = ""),
-                           paste0("[original](", s_sl_url, "gel-w11-v05-pbv.pdf)", collapse = "")
+                           paste0("[original](", s_sl_url, "gel-w11-v05-pbv.pdf)",
+                                  " | [with notes](", s_sl_url, "gel-w11-v05-pbv_with_notes.pdf)", collapse = "")
                          ))
 knitr::kable(tbl_sl_gel)
 
@@ -63,15 +64,17 @@ knitr::kable(tbl_sl_gel)
 ## Videos
 
 ```{r, echo=FALSE}
-tbl_video_gel <- tibble::tibble(Week = c(8, 9, 10, 11),
+tbl_video_gel <- tibble::tibble(Week = c(8, 9, 10, 11, 12),
                                 Date = c("2021-04-12",
                                          "2021-04-19",
                                          "2021-04-26",
-                                         "2021-05-03"),
+                                         "2021-05-03",
+                                         "2021-05-10"),
                                 Topic = c("[Introduction To Genetic Evaluation](https://youtu.be/7dBS2H1uydk)",
                                           "[Implementation of a Breeding Program](https://youtu.be/TqVPKJ97qko)",
                                           "[Model Selection](https://youtu.be/V2TUndbIJ4I)",
-                                          "[Variance Components Estimation](https://youtu.be/9Tasa3qQcMs)"
+                                          "[Variance Components Estimation](https://youtu.be/9Tasa3qQcMs)",
+                                          "[Prediction of Breeding Values](https://youtu.be/Wt90vXGq1cQ)"
                                           ))
 knitr::kable(tbl_video_gel)
 ```
