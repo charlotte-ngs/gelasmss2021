@@ -1,3 +1,7 @@
+# gelasmss2021 0.12.3
+
+* Link to slides with notes and to video
+
 # gelasmss2021 0.12.2
 
 * Slides for lecture 5
