@@ -1,0 +1,14 @@
+---
+title: "Derivations"
+author: "Peter von Rohr"
+date: "5/4/2020"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Derivation of Solution II
+
+$$cov(y_i, u_i) = ... = \sigma_u^2$$

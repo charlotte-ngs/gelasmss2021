@@ -1,0 +1,47 @@
+---
+title: "Example with pedigreemm"
+output: html_notebook
+---
+
+
+# Disclaimer
+The following shows an example for using the package `pedigreemm`.
+
+
+# Examples
+## Help File
+The following is taken from the helpfile.
+
+Start by defining the pedigree
+```{r}
+require(pedigreemm)
+nr_ani <- 6
+p1 <- pedigree(sire = as.integer(c(NA,NA,1, 1,4,5)),
+               dam  = as.integer(c(NA,NA,2,NA,3,2)),
+               label = as.character(1:nr_ani))
+```
+
+Numerator relationship matrix $A$ and its cholesky factor
+```{r}
+A <- getA(p1)
+cholA <- chol(A)
+```
+
+Simulate some data
+```{r}
+varU<-0.4; varE<-0.6; rep<-20
+n<-rep*nr_ani
+set.seed(108)
+bStar <- rnorm(nr_ani, sd=sqrt(varU))
+b<-crossprod(as.matrix(cholA),bStar)
+ID <- rep(1:nr_ani, each=rep)
+e0<-rnorm(n, sd=sqrt(varE))
+y<-b[ID]+e0
+```
+
+Analysis
+```{r}
+fm1 <- pedigreemm(y ~ (1|ID) , pedigree = list(ID = p1))
+summary(fm1)
+```
+

@@ -32,16 +32,18 @@ knitr::kable(tbl_nb_gel)
 
 ```{r, echo=FALSE}
 s_sl_url <- 'https://charlotte-ngs.github.io/gelasmss2021/sl/'
-tbl_sl_gel <- tibble::tibble(Week    = c(8, 9, 10, 11),
+tbl_sl_gel <- tibble::tibble(Week    = c(8, 9, 10, 11, 12),
                          Date    = c("2021-04-12",
                                      "2021-04-19",
                                      "2021-04-26",
-                                     "2021-05-03"),
+                                     "2021-05-03",
+                                     "2021-05-10"),
                          Topic   = c(
                            "Introduction to Genetic Evaluation",
                            "Breeding Programs",
                            "Model Selection",
-                           "Variance Components Estimation"
+                           "Variance Components Estimation",
+                           "Prediction of Breeding Values"
                          ),
                          Link    = c(
                            paste0("[original](", s_sl_url, "gel-w08-v01-intro.pdf)", 
@@ -51,7 +53,8 @@ tbl_sl_gel <- tibble::tibble(Week    = c(8, 9, 10, 11),
                            paste0("[original](", s_sl_url, "gel-w09-v03-bp.pdf)",
                                   "| [with notes](", s_sl_url, "gel-w09-v03-bp_with_notes.pdf)", collapse = ""),
                            paste0("[original](", s_sl_url, "gel-w10-v04-vce.pdf)", 
-                                  " | [with notes](", s_sl_url, "gel-w10-v04-vce_with_notes.pdf)", collapse = "")
+                                  " | [with notes](", s_sl_url, "gel-w10-v04-vce_with_notes.pdf)", collapse = ""),
+                           paste0("[original](", s_sl_url, "gel-w11-v05-pbv.pdf)", collapse = "")
                          ))
 knitr::kable(tbl_sl_gel)
 
