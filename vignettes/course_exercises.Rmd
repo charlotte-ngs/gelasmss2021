@@ -21,16 +21,18 @@ This page contains links to exercises in pdf-format and as Rmarkdown notebooks.
 ```{r, echo=FALSE}
 s_ex_url <- 'https://charlotte-ngs.github.io/gelasmss2021/ex/'
 s_nb_url <- 'https://charlotte-ngs.github.io/gelasmss2021/nb/'
-tbl_asm_gel <- tibble::tibble(Week = c(9, 10, 11, 12),
+tbl_asm_gel <- tibble::tibble(Week = c(9, 10, 11, 12, 13),
                               Date = c("2021-04-19",
                                        "2021-04-26",
                                        "2021-05-03",
-                                       "2021-05-10"),
+                                       "2021-05-10",
+                                       "2021-05-17"),
                               Topic = c(
                                 paste0("Breeding Program [pdf](", s_ex_url, "gel_ex01.pdf) | [nb](", s_nb_url, "gel_ex01_nb_src.nb.html)", collapse = ""),
                                 paste0("Model Selection [pdf](", s_ex_url, "gel_ex02.pdf) | [nb](", s_nb_url, "gel_ex02_nb_src.nb.html)", collapse = ""),
                                 paste0("Variance Components Estimation [pdf](", s_ex_url, "gel_ex03.pdf) | [nb](", s_nb_url, "gel_ex03_nb_src.nb.html)", collapse = ""),
-                                paste0("Prediction of Breeding Values [pdf](", s_ex_url, "gel_ex04.pdf) | [nb](", s_nb_url, "gel_ex04_nb_src.nb.html)", collapse = "")
+                                paste0("Prediction of Breeding Values [pdf](", s_ex_url, "gel_ex04.pdf) | [nb](", s_nb_url, "gel_ex04_nb_src.nb.html)", collapse = ""),
+                                paste0("Test Exam [pdf](", s_ex_url, "gelss2020_exam_tsk_test.pdf)", collapse = "")
                               ))
 knitr::kable(tbl_asm_gel)
 ```
@@ -41,20 +43,22 @@ knitr::kable(tbl_asm_gel)
 ```{r, echo=FALSE}
 s_ex_url <- 'https://charlotte-ngs.github.io/gelasmss2021/ex/'
 s_nb_url <- 'https://charlotte-ngs.github.io/gelasmss2021/nb/'
-tbl_asm_ex <- tibble::tibble(Week = c(2, 3, 4, 5, 6, 8),
+tbl_asm_ex <- tibble::tibble(Week = c(2, 3, 4, 5, 6, 8, 13),
                              Date = c("2021-03-01",
                                       "2021-03-08",
                                       "2021-03-15",
                                       "2021-03-22",
                                       "2021-03-29",
-                                      "2021-04-12"),
+                                      "2021-04-12",
+                                      "2021-05-17"),
                              Topic = c(
                                paste0("Fixed Linear Effects Models [pdf](", s_ex_url, "asm-w02-ex01.pdf) | [nb](", s_ex_url, "asm-w02-ex01_nb.nb.html)", collapse = ''),
                                paste0("Regression Models [pdf](", s_ex_url, "asm_ex02.pdf) | [nb](", s_nb_url, "asm_ex02_nb.nb.html)", collapse = ''),
                                paste0("Marker Effects [pdf](", s_ex_url, "asm_ex03.pdf) | [nb](", s_nb_url, "asm_ex03_nb.nb.html)", collapse = ''),
                                paste0("Genomic Breeding Values [pdf](", s_ex_url, "asm_ex04.pdf) | [nb](", s_nb_url, "asm_ex04_nb.nb.html)", collapse = ''),
                                paste0("How GBLUP works [pdf](", s_ex_url, "asm_ex05.pdf) | [nb](", s_nb_url, "asm_ex05_nb.nb.html)", collapse = ''),
-                               paste0("LASSO and Bayes [pdf](", s_ex_url, "asm_ex06.pdf) | [nb](", s_nb_url, "asm_ex06_nb_src.nb.html)", collapse = "")
+                               paste0("LASSO and Bayes [pdf](", s_ex_url, "asm_ex06.pdf) | [nb](", s_nb_url, "asm_ex06_nb_src.nb.html)", collapse = ""),
+                               paste0("Test Exam [pdf](", s_ex_url, "asmss2020_exam_tsk_test.pdf)", collapse = "")
                                ))
 
 # show the table
