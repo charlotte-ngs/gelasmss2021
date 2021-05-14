@@ -20,16 +20,18 @@ This page contains links to solutions of exercises in pdf-format.
 
 ```{r, echo=FALSE}
 s_sol_gel_url <- 'https://charlotte-ngs.github.io/gelasmss2021/sol/'
-tbl_gel_sol <- tibble::tibble(Week = c(9, 10, 11, 12),
+tbl_gel_sol <- tibble::tibble(Week = c(9, 10, 11, 12, 13),
                               Date = c("2021-04-19",
                                        "2021-04-26",
                                        "2021-05-03",
-                                       "2021-05-10"),
+                                       "2021-05-10",
+                                       "2021-05-17"),
                               Topic = c(
                                 paste0("[Breeding Program](", s_sol_gel_url, "gel_ex01_sol.pdf)", collapse = ""),
                                 paste0("[Model Selection](", s_sol_gel_url, "gel_ex02_sol.pdf)", collapse = ""),
                                 paste0("[Variance Components Estimation](", s_sol_gel_url, "gel_ex03_sol.pdf)", collapse = ""),
-                                paste0("[Prediction of Breeding Values](", s_sol_gel_url, "gel_ex04_sol.pdf)", collapse = "")
+                                paste0("[Prediction of Breeding Values](", s_sol_gel_url, "gel_ex04_sol.pdf)", collapse = ""),
+                                paste0("[Test Exam](", s_sol_gel_url, "gelss2020_exam_sol_test.pdf)", collapse = "")
                               ))
 knitr::kable(tbl_gel_sol)
 ```
@@ -39,20 +41,22 @@ knitr::kable(tbl_gel_sol)
 
 ```{r, echo=FALSE}
 s_sol_url <- 'https://charlotte-ngs.github.io/gelasmss2021/sol/'
-tbl_asm_sol <- tibble::tibble(Week = c(2, 3, 4, 5, 6, 8),
+tbl_asm_sol <- tibble::tibble(Week = c(2, 3, 4, 5, 6, 8, 13),
                              Date = c("2021-03-01",
                                       "2021-03-08",
                                       "2021-03-15",
                                       "2021-03-22",
                                       "2021-03-29",
-                                      "2021-04-12"),
+                                      "2021-04-12",
+                                      "2021-05-17"),
                              Topic = c(
                                paste0("[Fixed Linear Effects Models](", s_sol_url, "asm-w02-sol01.pdf)", collapse = ''),
                                paste0("[Regression Models](", s_sol_url, "asm_ex02_sol.pdf)", collapse = ''),
                                paste0("[Marker Effects](", s_sol_url, "asm_ex03_sol.pdf)", collapse = ''),
                                paste0("[Genomic Breeding Values](", s_sol_url, "asm_ex04_sol.pdf)", collapse = ''),
                                paste0("[How GBLUP works](", s_sol_url, "asm_ex05_sol.pdf)", collapse = ''),
-                               paste0("[LASSO and Bayes](", s_sol_url, "asm_ex06_sol.pdf)", collapse = "")
+                               paste0("[LASSO and Bayes](", s_sol_url, "asm_ex06_sol.pdf)", collapse = ""),
+                               paste0("[Test Exam](", s_sol_url, "asmss2020_exam_sol_test.pdf)", collapse = "")
                                ))
 # show the table
 knitr::kable(tbl_asm_sol)                             
