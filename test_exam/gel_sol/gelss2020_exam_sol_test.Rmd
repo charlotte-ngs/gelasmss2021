@@ -1,0 +1,610 @@
+---
+output:
+  pdf_document:
+    includes:
+      in_header: tex/header.tex
+    fig_caption: false
+output_file: gelss2020_exam_sol_test.pdf
+params:
+  seed: 1234
+  name: Name
+  firstname: Firstname
+  leginr: LegiNr
+  alias: test
+--- 
+<!-- %\usepackage{fancyhdr} -->
+
+\newcommand{\points}[1]
+{\begin{flushright}\textbf{#1}\end{flushright}}
+
+<!-- %\begin{document} -->
+<!-- %\SweaveOpts{concordance=TRUE} -->
+```{r ChunkOptions, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'hide')
+#knitr::opts_chunk$set(concordance=TRUE)
+knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
+# write the parameters to file
+b_params_to_file <- FALSE
+# check whether seed is set and output it to a file
+s_this_rmd_file = basename(ifelse(rstudioapi::isAvailable(), 
+                         rstudioapi::getSourceEditorContext()$path, 
+                         whereami::thisfile()))
+if (is.null(params$seed)){
+  stop(" ** Error parameter seed has not been set.")
+} else {
+  set.seed(params$seed)
+  s_params_file <- paste0(format(Sys.time(), '%Y%m%d%H%M%S'), "_params_", s_this_rmd_file, ".txt", collapse = "")
+  if (b_params_to_file) dput(params, file = s_params_file)
+}
+```
+
+<!-- <<PointsQ1, echo=FALSE>>= -->
+```{r PointsQ1, echo=FALSE}
+# Assign Points for Q1
+lPointsQ1 <- list(TaskA = 6,
+                  TaskB = 4,
+                  TaskC = 14,
+                  TaskD = 0)
+nPointQ1Total <- sum(unlist(lPointsQ1))
+```
+<!-- @ -->
+<!-- <<PointsQ2, echo=FALSE>>= -->
+```{r PointsQ2, echo=FALSE}
+# Assign Points for Q2
+lPointsQ2 <- list(TaskA = 2,
+                  TaskB = 3,
+                  TaskC = 0,
+                  TaskD = 0)
+nPointQ2Total <- sum(unlist(lPointsQ2))
+```
+<!-- @ -->
+<!-- <<PointsQ3, echo=FALSE>>= -->
+```{r PointsQ3, echo=FALSE}
+# Assign Points for Q3
+lPointsQ3 <- list(TaskA = 10,
+                  TaskB = 4,
+                  TaskC = 2,
+                  TaskD = 0)
+nPointQ3Total <- sum(unlist(lPointsQ3))
+```
+<!-- @ -->
+<!-- <<PointsQ4, echo=FALSE>>= -->
+```{r PointsQ4, echo=FALSE}
+# Assign Points for Q4
+lPointsQ4 <- list(TaskA = 15,
+                  TaskB = 2,
+                  TaskC = 0,
+                  TaskD = 0)
+nPointQ4Total <- sum(unlist(lPointsQ4))
+```
+```{r PointsQ5, echo=FALSE}
+# Assign Points for Q5
+lPointsQ5 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0,
+                  TaskD = 0)
+nPointQ5Total <- sum(unlist(lPointsQ5))
+```
+<!-- @ -->
+<!-- <<PointsTotal, echo=FALSE>>= -->
+```{r PointsTotal, echo=FALSE}
+nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4Total + nPointQ5Total
+```
+<!-- @ -->
+
+
+\thispagestyle{empty}
+
+\fcolorbox{white}{white}{
+	\centering \parbox[t]{1.0\linewidth}{
+		\fontsize{12pt}{20pt}\selectfont % 
+		\vspace*{0.5cm} % 
+
+   	Peter von Rohr \\ Institute of Agricultural Sciences\\ D-USYS\\ ETH Zurich
+
+		\vspace*{0.5cm} 
+	}
+}
+
+\vspace*{2cm}
+
+\fcolorbox{white}{white}{
+	\parbox[t]{1.0\linewidth}{
+		\centering \fontsize{25pt}{40pt}\selectfont %
+		\vspace*{0.2cm}
+		 751-6212-00L V \\
+     Solutions to Exam    \\
+     Applied Genetic Evaluation\\
+     SS 2020
+
+		\vspace*{0.7cm} % Space between the end of the title and the bottom of the grey box
+	}
+}
+
+
+\vspace*{1cm}
+
+<!-- % Table with Name -->
+\begin{tabular}{p{3cm}p{6cm}}
+Date:     &  25th May 2020 \\
+          &  \\
+          &  \\          
+Name:     &  `r params$firstname` `r params$name` \\
+          &  \\
+          &  \\
+Legi-Nr:  & `r params$leginr`\\
+\end{tabular}
+
+<!-- % Table with Points -->
+
+\vspace{5ex}
+\begin{center}
+\begin{tabular}{|p{3cm}|c|c|}
+\hline
+Problem  &  Maximum Number of Points  &  Number of Points Reached\\
+\hline
+1        &  `r nPointQ1Total`  & \\
+\hline
+2        &  `r nPointQ2Total`  & \\
+\hline
+3        &  `r nPointQ3Total`  & \\
+\hline
+4        &  `r nPointQ4Total`  & \\
+\hline
+Total    &  `r nPointOverallTotal` & \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{1cm}
+
+\textit{Questions in German are in italics}
+
+\clearpage
+\pagebreak
+
+## Problem 1: Breeding Program
+
+\begin{enumerate}
+\item[a)] What are the constituent parts of a breeding program?
+
+\textit{Wie lauten die Bestandteile eines Zuchtprogramms?}
+\end{enumerate}
+\points{`r lPointsQ1$TaskA`}
+
+### Solution
+
+1. Breeding goal
+2. Performance Tests
+3. Prediction of Breeding Values
+4. Reproduction Technologies
+5. Selection and Mating
+6. Selection Response
+
+
+\clearpage
+\pagebreak
+
+
+\begin{enumerate}
+\item[b)] The following table lists the characteristic variables of two breeding programs. Which quantity do you use to compare the success of two breeding programs? Which of the two breeding programs shown below is better according to the quantity of comparison?
+
+\textit{Die nachfolgende Tabelle zeigt die charakteristischen Kennzahlen von zwei Zuchtprogrammen. Welche Grösse wird verwendet um den Erfolg von Zuchtprogrammen zu vergleichen? Welches der beiden unten beschriebenen Zuchtprogramme ist erfolgreicher gemessen an der verwendeten Vergleichsgrösse?}
+\end{enumerate}
+
+\points{`r lPointsQ1$TaskB`}
+
+```{r problem-1b-breed-program-table, echo=FALSE, results='asis'}
+sel_int <- round(runif(1, min = 1.6, max = 1.9), digits = 2)
+acc_bv1 <- round(runif(1, min = 0.8, max = 0.95), digits = 2)
+acc_bv2 <- round(runif(1, min = 0.5, max = 0.65), digits = 2)
+gen_sd <- round(runif(1, min = 200, max = 300), digits = 0)
+gen_int1 <- round(runif(1, min = 7.5, max = 10), digits = 0)
+gen_int2 <- round(runif(1, min = 1.5, max = 3), digits = 0)
+# define tibble for table
+tbl_breed_prog <- tibble::tibble(Variable = c("Selection intensity",
+                                              "Accuracy of predicted breeding values",
+                                              "Genetic standard deviation",
+                                              "Generationinterval (in years)"),
+                                 `Breeding Program 1` = c(sel_int,
+                                                          acc_bv1,
+                                                          gen_sd,
+                                                          gen_int1),
+                                 `Breeding Program 2` = c(sel_int,
+                                                          acc_bv2,
+                                                          gen_sd,
+                                                          gen_int2))
+knitr::kable(tbl_breed_prog,
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+
+### Solution 
+
+The comparison is done based on `selection response` per year $R$ which is defined as 
+
+$$R = \frac{i * r_{u,\hat{u}} * \sigma_g}{L} $$
+
+* Breeding Program 1: 
+
+```{r echo=TRUE, results='markup'}
+sel_r1 <- sel_int * acc_bv1 * gen_sd / gen_int1
+cat(" * Selection response for breeding program 1: ", sel_r1, "\n")
+```
+
+
+*Breeding Program 2: 
+
+```{r, echo=TRUE, results='markup'}
+sel_r2 <- sel_int * acc_bv2 * gen_sd / gen_int2
+cat(" * Selection response for breeding program 2: ", sel_r2, "\n")
+```
+
+* Comparison
+
+```{r, results='markup'}
+if (sel_r1 > sel_r2){
+  cat(" * Breeding program 1 is better than breeding program 2. \n")
+} else if (sel_r2 > sel_r1){
+  cat(" * Breeding program 2 is better than breeding program 1. \n")
+} else {
+  cat(" * Both breeding programs are equal. \n")
+}
+```
+
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] There are two basic schemes of a breeding program. These schemes are shown below. Please complete the diagrams shown below. In which species are the two schemes implemented?
+
+\textit{Es gibt zwei grundsätzliche Schemas eines Zuchtprogramms. Diese Schemas sind unten gezeigt. Bitte vervollständigen Sie die nachfolgenden Darstellungen. In welchen Tierarten werden die beiden Schemas umgesetzt?}
+\end{enumerate}
+
+\points{`r lPointsQ1$TaskC`}
+
+```{r breed-schema, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="15cm", results='asis'}
+##rmdhelp::use_odg_graphic(ps_path = "odg/breed-schema.odg")
+knitr::include_graphics(path = "odg/breed-schema.png")
+```
+
+
+### Solution 
+
+The solution 
+
+```{r breed-schema-sol, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="15cm", results='asis'}
+knitr::include_graphics(path = "odg/breed-schema-sol.png")
+```
+
+* Left: hierarchical and right: monolithic
+* Left: pigs and right: cattle / sheep / goats / horse
+
+
+\clearpage
+\pagebreak
+
+## Problem 2: Economic Value
+
+In a pig production farm that operates as a multiplier and has its own fatting operation, the revenus and the costs for producing a slaughter pig are listed below.
+
+\textit{In einem Schweineproduktionsbetrieb mit Ferkelvermehrung und eigener Ausmast, die Erlöse und die Kosten für die Produktion eines Schlachtschweins sind unten aufgelistet.}
+
+```{r, echo=FALSE, results='asis'}
+slaughter_weight <- 80
+sow_cost <- round(runif(1, min = 1.0, max = 1.6), digits = 2) 
+sow_revenu <- round(runif(1, min = 0.02, max = 0.1), digits = 3)
+offspring_cost <- round(runif(1, min = 2.2, max = 2.8), digits = 2)
+net_cost <- sow_cost - sow_revenu + offspring_cost
+slaughter_price <- 4.90
+slaughter_revenu <- slaughter_price * slaughter_weight
+
+tbl_slaughter_pig <- tibble::tibble(Variable = c("Revenu per kg slaughter weight",
+                                                 "Net cost per kg slaughter weight"),
+                                    `Amount in Swiss Francs` = c(slaughter_price,
+                                                                 net_cost))
+knitr::kable(tbl_slaughter_pig,
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+
+\begin{enumerate}
+\item[a)] Compute the profit per slaughter pig based on the information given in the above table. We assume that the slaughter weight per pig is $`r slaughter_weight` kg$ per slaughter pig.
+
+\textit{Berechnen Sie den Gewinn pro Mastschwein basierend auf den oben angegebenen Informationen. Dabei betrage das Schlachtgewicht $`r slaughter_weight` kg$ pro Schlachtschwein.}
+\end{enumerate}
+\points{`r lPointsQ2$TaskA`}
+
+
+### Solution
+
+The profit per slaughter pig is computed as
+
+```{r, echo=TRUE, results='markup'}
+sl_pig_profit <- slaughter_weight * (slaughter_price - net_cost)
+cat(" * Profit per slaughter pig: ", round(sl_pig_profit, digits = 2), "\n")
+```
+
+
+\clearpage
+\pagebreak
+
+```{r problem-2b-setup}
+n_incr_npa <- 0.1
+```
+
+\begin{enumerate}
+\item[b)] The number of piglets born alive is an important economic trait for the pig producing farm. Using the trait `number of piglets born alive` in the breeding program allowed the farm to increase the average of trait by `r n_incr_npa` piglets. This changed the costs as shown in the table below. Compute the economic value for the trait `number of piglets born alive` using the profit computed in Problem 2a as base situation and the profit in the new situation with the incremented level of the trait `number of piglets born alive`. 
+
+\textit{Die Anzahl lebend geborener Ferkel ist ein wirtschaftlich wichtiges Merkmal in der Schweineproduktion. Dieses Merkmal wird deshalb im Zuchtprogramm verwendet und hat dem Produktionsbetrieb erlaubt die mittlere Anzahl an lebend geborenen Ferkeln um `r n_incr_npa` Ferkel zu erhöhen. Dadurch verändern sich die Kosten, wie in der unten gezeigten Tabelle aufgeführt. Berechnen Sie das wirtschaftliche Gewicht für das Merkmal Anzahl lebend geborener Ferkel. Verwenden Sie den Gewinn, den Sie in der Aufgabe 2a) berechnet haben als Basissituation. Der Gewinn in der Situation mit dem erhöhten Mittelwert des Merkmals Anzahl lebend geborener Ferkel kann aus den Zahlen aus der nachfolgenden Tabelle berechnet werden.}
+\end{enumerate}
+\points{`r lPointsQ2$TaskB`}
+
+```{r, echo=FALSE, results='asis'}
+net_cost_incr <- net_cost - 0.014
+
+tbl_slaughter_pig_incr <- tibble::tibble(Variable = c("Revenu per kg slaughter weight",
+                                                 "Net cost per kg slaughter weight"),
+                                    `Amount in Swiss Francs` = c(slaughter_price,
+                                                                 net_cost_incr))
+knitr::kable(tbl_slaughter_pig_incr,
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+### Solution
+The profit per slaughter pig with increased level of number of piglets born 
+
+```{r, echo=TRUE, results='markup'}
+sl_pig_profit_incr <- slaughter_weight * (slaughter_price - net_cost_incr)
+cat(" * Profit per slaughter pig: ", round(sl_pig_profit_incr, digits = 2), "\n")
+```
+
+The economic value
+
+```{r, echo=TRUE, results='markup'}
+ec_val <- (sl_pig_profit_incr - sl_pig_profit) / n_incr_npa
+cat (" * Economic value per piglet: ", round(ec_val, digits = 2), "\n")
+```
+
+
+\clearpage
+\pagebreak
+
+<!--
+\begin{enumerate}
+\item[c)] 
+
+\textit{}
+\end{enumerate}
+\points{`r lPointsQ2$TaskC`}
+
+
+### Solution 
+
+
+\clearpage
+\pagebreak
+
+-->
+
+## Problem 3: Model Selection
+
+```{r problem-3-setup}
+tbl_breed_kb <- tibble::tibble(Variable = c("Mean Blood Serum BHB, mmol/L",
+                                            "Standard deviation Blood Serum BHB, mmol/L",
+                                            "Mean Acetone, mmol/L",
+                                            "Standard deviation Acetone, mmol/L",
+                                            "Intercept",
+                                            "Regression Coefficient"),
+                               Holstein = c(0.80,
+                                            0.03,
+                                            0.101,
+                                            0.01,
+                                            -2.38,
+                                            1.22),
+                               Jersey   = c(0.92,
+                                            0.03, 
+                                            0.159,
+                                            0.01,
+                                            1.47,
+                                            0.85))
+
+# Jersey
+n_nr_point <- 12
+# generate milk bhb using random numbers with the mean of bBHB decreased by a small number
+milk_bhb_mean <- tbl_breed_kb$Jersey[1] - tbl_breed_kb$Jersey[2] * runif(1)
+vec_milk_bhb_jer <- round(rnorm(n_nr_point, mean = milk_bhb_mean, sd = tbl_breed_kb$Jersey[2]), digits = 3)
+vec_milk_ace_jer <- round(rnorm(n_nr_point, mean = tbl_breed_kb$Jersey[3], sd = tbl_breed_kb$Jersey[4]), digits = 3)
+vec_blood_bhb_jer <- round(tbl_breed_kb$Jersey[5] + 
+  vec_milk_ace_jer * tbl_breed_kb$Jersey[6] + 
+  rnorm(n_nr_point, mean = 0, sd = tbl_breed_kb$Jersey[2]), digits = 3)
+tbl_jer_reg <- tibble::tibble(`Milk Aceton` = vec_milk_ace_jer,
+                              `Milk BHB` = vec_milk_bhb_jer,
+                              `Blood Serum BHB` = vec_blood_bhb_jer)
+```
+
+In the search of a diagnostic tool to prevent Hyperketonemia (HYK), keton bodies in the milk (aceton and BHB) are measured as predictor variables. These predictor variables are to be used to quantify changes in the response variable which is `Blood Serum BHB`. The following table shows the measurements of `r n_nr_point` cows. 
+
+\textit{Auf der Suche nach einem Diagnosewerkzeug zur Verhinderung von Hyperketonemia (HYK) wurden Ketonkörper (Aceton und BHB) in der Milch als unabhängige Variablen gemessen. Diese sollen verwendet werden um die Variation in der Zielgrösse BHB im Blut zu quantifizieren. Die folgende Tabelle zeigt die Messwerte von `r n_nr_point` Kühen.}
+
+```{r, results='asis'}
+knitr::kable(tbl_jer_reg,
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+
+\begin{enumerate}
+\item[a)] Specify the multiple linear regression model with `Blood Serum BHB` as response variable. Quantify the effects of the two predictor variables `Milk Aceton` and `Milk BHB` on the response variable. What is the expected change of `Blood Serum BHB` when the response variables `Milk Aceton` and `Milk BHB` change by one unit?
+
+\textit{Stellen Sie das multiple lineare Regressionsmodell mit Blut-BHB als Zielgrösse auf. Quantifizieren Sie die Effekte der unabhängigen Variablen Milch-Aceton und Milch-BHB auf die Zielgrösse. Welche Änderung erwarten Sie im Blut-BHB-Wert, wenn die unabhängigen Variablen Milch-Aceton und Milch-BHB um eine Einheit ändern?}
+\end{enumerate}
+\points{`r lPointsQ3$TaskA`}
+
+
+### Solution
+
+The multiple linear regression model for `Blood Serum BHB` on `Milk Aceton` and `Milk BHB` can be specified as 
+
+$$y = X * b + e$$
+where $y$ is the vector of `Blood Serum BHB`, $b$ is the vector consisting of the intercept and the effects of `Milk Aceton` and `Milk BHB`, $e$ is the vector of random residuals. The design matrix $X$ has dimension $`r n_nr_point` \times 3$ and consists of a column of ones. The second and the third column are the measurement values of `Milk Aceton` and `Milk BHB`. 
+
+The effects are quantified by the output of the following
+
+```{r, echo=TRUE, results='markup'}
+lm_bbhb <- lm(`Blood Serum BHB` ~ `Milk BHB` + `Milk Aceton`, data = tbl_jer_reg)
+summary(lm_bbhb)
+```
+
+```{r}
+coef_milk_bhb <- coefficients(lm_bbhb)[["`Milk BHB`"]]
+coef_milk_aceton <- coefficients(lm_bbhb)[["`Milk Aceton`"]]
+```
+
+
+When `Milk BHB` changes by one unit, `Blood Serum BHB` is expected to change by `r coef_milk_bhb` units. When `Milk Aceton` changes by one unit, then `Blood Serum BHB` is expected to change by `r coef_milk_aceton` units.
+
+\clearpage
+\pagebreak
+
+
+\begin{enumerate}
+\item[b)] The full model where the response variable is described by all the predictor variables is not necessarily the best model. Please specify two model selection techniques to find the best model. Give a short description of the listed model selection techniques.
+
+\textit{Das volle Modell in welchem alle unabhängigen Variablen verwendet werden um die Zielgrösse zu beschreiben ist nicht in allen Fällen das beste Modell. Nennen Sie zwei Modellselektionsstrategien und beschreiben sie diese kurz.}
+\end{enumerate}
+
+\points{`r lPointsQ3$TaskB`}
+
+
+### Solution
+
+1. Forward selection: Start with an empty model. Include those predictors that decrease the resiudal sums of squares the most. Do this until there are not predictor variables available. From the sequence of models take that with the smallest $C_p$ value as the best model.
+
+2. Backwards elimination: Start with the full model. Remove the predictor that increases the residual sum of squares the least. Do this until there are no predictor variables to be excluded. From the sequence of models take that with the smallest $C_p$ value as the best model.
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] Use one of the model selection strategies and determine the best model for the `Blood-BHB` data.
+
+\textit{Verwenden Sie eine Modellselektionsstrategie und bestimmen Sie das beste Modell für den Blut-BHB Datensatz.}
+\end{enumerate}
+\points{`r lPointsQ3$TaskC`}
+
+
+### Solution
+
+Using `olsrr` to do the model selection.
+
+```{r, echo=TRUE, results='markup'}
+tbl_jer_reg_ms <- tibble::tibble(MilkAceton = vec_milk_ace_jer,
+                                 MilkBHB = vec_milk_bhb_jer,
+                                 BloodSerumBHB = vec_blood_bhb_jer)
+
+lm_bhb_full <- lm(BloodSerumBHB ~ MilkBHB + MilkAceton, data = tbl_jer_reg_ms)
+olsrr::ols_step_best_subset(lm_bhb_full)
+```
+
+\clearpage
+\pagebreak
+
+
+## Problem 4: Genetic Evaluation
+
+```{r}
+n_nr_founder <- 2
+n_nr_ani <- 4
+vec_sel_ani <- sample.int(n_nr_point, size = n_nr_ani)
+tbl_gen <- tbl_jer_reg[vec_sel_ani,]
+tbl_gen <- dplyr::bind_cols(tibble::tibble(Animal = c(1:n_nr_ani)+n_nr_founder), 
+                            tibble::tibble(Sire = c(1,1,3,3)),
+                            tibble::tibble(Dam  = c(2,NA,4,5)),
+                            tbl_gen)
+
+```
+
+The trait `Blood Serum BHB` is used to do a genetic analysis. From the dataset in Problem 3, we selected `r n_nr_ani` animals. For those animals pedigree information was added. The new dataset is shown below.
+
+\textit{Für das Merkmal Blut-BHB soll eine genetische Analyse durchgeführt werden. Vom Datensatz in Aufgabe 3 wurden `r n_nr_ani` Tiere ausgewählt. Für diese Tiere wurden die Abstammungsdaten zum Datensatz hinzugefügt. Der resultierende Datensatz ist in der nachfolgenden Tabelle gezeigt.}
+
+```{r, results='asis'}
+knitr::kable(tbl_gen,
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+
+\begin{enumerate}
+\item[a)] Use a BLUP animal model to predict breeding values for all the animals given in the dataset shown above. Specify all model components, insert all numeric information into the model components, and write down expected values and variance-covariance matrices for all random effects. As fixed effects you can take the components from the best model found in Problem 3c. If you did not solve Problem 3c, just use all covariables given in the dataset as fixed effects.
+
+\textit{Verwenden Sie ein BLUP-Tiermodell zur Schätzung der Zuchtwerte aller Tiere, welche im oben gezeigten Datensatz gegeben sind. Spezifizieren Sie alle Modellkomponenten, setzen Sie die numerischen Informationen vom Datensatz in die Modellkomponenten ein und notieren Sie die Erwartungswerte und Varianz-Kovarianzmatrizen für alle zufälligen Effekte im Modell. Als fixe Effekte können Sie die Komponenten des besten Modells aus Aufgabe 3c übernehmen. Falls Sie Aufgabe 3c nicht gelöst haben, dann verwenden Sie alle Kovariablen im Datensatz als fixe Effekte.}
+\end{enumerate}
+\points{`r lPointsQ4$TaskA`}
+
+
+### Solution
+
+1. BLUP-animal model:
+
+$$y = Xb + Zu + e$$
+
+2. Model components
+
+$$y = $$
+
+$$b = $$
+
+$$X = $$
+
+$$u = $$
+
+$$Z = $$
+
+$$e = $$
+
+3. Expected values
+
+$$E \left[\begin{array}{c} y \\ u \\ e \end{array} \right] = \left[\begin{array}{c} Xb \\ 0 \\ 0 \end{array} \right]$$
+
+4. Variance-Covariance Matrices
+
+$$var \left[\begin{array}{c} y \\ u \\ e \end{array} \right] =  \left[\begin{array}{ccc}  ZGZ^T + R & ZG & 0 \\ GZ^T & G & 0 \\ 0 & 0 & R \end{array} \right]$$
+
+\clearpage
+\pagebreak
+
+
+\begin{enumerate}
+\item[b)] Animals 6 and 4 have two offspring which do not have any performance records yet. What type of information is required to determine which of the two fullsibs has the better genetic potential?
+
+\textit{Die Tiere 6 und 4 haben zwei Nachkommen, welche noch keine Leistungen haben. Welche Informationen sind notwendig, damit wir bestimmen können, welches der beiden Vollgeschwister das bessere genetische Potential hat?}
+\end{enumerate}
+\points{`r lPointsQ4$TaskB`}
+
+
+### Solution
+
+Animals with records and the two fullsibs must be genotyped and based on this, genomic breeding values can be predicted. Because fullsibs do not have the same genotypes, their genomic breeding value is different and can be used to find the animal with the better genetic potential.
+
+<!--
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] 
+
+\textit{}
+\end{enumerate}
+\points{`r lPointsQ4$TaskC`}
+
+
+### Solution
+  
+-->

@@ -1,0 +1,874 @@
+---
+output:
+  pdf_document:
+    includes:
+      in_header: tex/header.tex
+    fig_caption: false
+output_file: asmss2020_exam_sol_test.pdf
+params:
+  seed: 1234
+  name: Name
+  firstname: Firstname
+  leginr: LegiNr
+  alias: test
+--- 
+<!-- %\usepackage{fancyhdr} -->
+
+\newcommand{\points}[1]
+{\begin{flushright}\textbf{#1}\end{flushright}}
+
+<!-- %\begin{document} -->
+<!-- %\SweaveOpts{concordance=TRUE} -->
+```{r ChunkOptions, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'hide')
+#knitr::opts_chunk$set(concordance=TRUE)
+knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
+# write the parameters to file
+b_params_to_file <- FALSE
+# check whether seed is set and output it to a file
+s_this_rmd_file = basename(ifelse(rstudioapi::isAvailable(), 
+                         rstudioapi::getSourceEditorContext()$path, 
+                         whereami::thisfile()))
+if (is.null(params$seed)){
+  stop(" ** Error parameter seed has not been set.")
+} else {
+  set.seed(params$seed)
+  s_params_file <- paste0(format(Sys.time(), '%Y%m%d%H%M%S'), "_params_", s_this_rmd_file, ".txt", collapse = "")
+  if (b_params_to_file) dput(params, file = s_params_file)
+}
+```
+
+<!-- <<PointsQ1, echo=FALSE>>= -->
+```{r PointsQ1, echo=FALSE}
+# Assign Points for Q1
+lPointsQ1 <- list(TaskA = 6,
+                  TaskB = 4,
+                  TaskC = 4,
+                  TaskD = 0)
+nPointQ1Total <- sum(unlist(lPointsQ1))
+```
+<!-- @ -->
+<!-- <<PointsQ2, echo=FALSE>>= -->
+```{r PointsQ2, echo=FALSE}
+# Assign Points for Q2
+lPointsQ2 <- list(TaskA = 9,
+                  TaskB = 4,
+                  TaskC = 2,
+                  TaskD = 0)
+nPointQ2Total <- sum(unlist(lPointsQ2))
+```
+<!-- @ -->
+<!-- <<PointsQ3, echo=FALSE>>= -->
+```{r PointsQ3, echo=FALSE}
+# Assign Points for Q3
+lPointsQ3 <- list(TaskA = 8,
+                  TaskB = 12,
+                  TaskC = 12,
+                  TaskD = 0)
+nPointQ3Total <- sum(unlist(lPointsQ3))
+```
+<!-- @ -->
+<!-- <<PointsQ4, echo=FALSE>>= -->
+```{r PointsQ4, echo=FALSE}
+# Assign Points for Q4
+lPointsQ4 <- list(TaskA = 13,
+                  TaskB = 3,
+                  TaskC = 3,
+                  TaskD = 0)
+nPointQ4Total <- sum(unlist(lPointsQ4))
+```
+<!-- @ -->
+<!-- <<PointsTotal, echo=FALSE>>= -->
+```{r PointsTotal, echo=FALSE}
+nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4Total
+```
+<!-- @ -->
+
+
+\thispagestyle{empty}
+
+\fcolorbox{white}{white}{
+	\centering \parbox[t]{1.0\linewidth}{
+		\fontsize{12pt}{20pt}\selectfont % 
+		\vspace*{0.5cm} % 
+
+   	Peter von Rohr \\ Institute of Agricultural Sciences\\ D-USYS\\ ETH Zurich
+
+		\vspace*{0.5cm} 
+	}
+}
+
+\vspace*{2cm}
+
+\fcolorbox{white}{white}{
+	\parbox[t]{1.0\linewidth}{
+		\centering \fontsize{25pt}{40pt}\selectfont %
+		\vspace*{0.2cm}
+		 751-7602-00 V \\
+     Solutions for Exam    \\
+     Applied Statistical Methods \\
+     in Animal Sciences \\
+     SS 2020
+
+		\vspace*{0.7cm} % Space between the end of the title and the bottom of the grey box
+	}
+}
+
+
+\vspace*{1cm}
+
+<!-- % Table with Name -->
+\begin{tabular}{p{3cm}p{6cm}}
+Date:     &  25th May 2020 \\
+          &  \\
+          &  \\
+Name:     &  `r params$firstname` `r params$name` \\
+          &  \\
+          &  \\
+Legi-Nr:  & `r params$leginr` \\
+\end{tabular}
+
+<!-- % Table with Points -->
+
+\vspace{5ex}
+\begin{center}
+\begin{tabular}{|p{3cm}|c|c|}
+\hline
+Problem  &  Maximum Number of Points  &  Number of Points Reached\\
+\hline
+1        &  `r nPointQ1Total`  & \\
+\hline
+2        &  `r nPointQ2Total`  & \\
+\hline
+3        &  `r nPointQ3Total`  & \\
+\hline
+4        &  `r nPointQ4Total`  & \\
+\hline
+Total    &  `r nPointOverallTotal` & \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.5cm}
+
+\textit{Questions in German are in italics}
+
+\clearpage
+\pagebreak
+
+
+## Problem 1: Traditional Breeding versus Genomic Selection
+
+In Livestock breeding three different sources of information are available
+
+1. Performance data
+2. Pedigree information
+3. Genomic Marker Data
+
+\textit{In der Tierzucht stehen uns drei verschiedene Informationsquellen zur Auswahl}
+
+1. \textit{Leistungsdaten}
+2. \textit{Pedigreeinformationen}
+3. \textit{Genomische Markerdaten}
+
+\begin{enumerate}
+\item[a)] Complete the following table indicating which source of information is used in either traditional breeding or in genomic selection.
+
+\textit{Vervollständigen Sie die folgende Tabelle und geben Sie an, welche Informationsquelle in der traditionellen Tierzucht oder der genomischen Selektion verwendet werden.}
+\end{enumerate}
+\points{`r lPointsQ1$TaskA`}
+
+\begin{center}
+\begin{tabular}{|p{4cm}|p{4cm}|p{3cm}|}
+\hline
+Source of Information  &  Traditional Breeding  &  Genomic Selection \\
+\hline
+                       &     &  \\
+Performance data       &     &  \\
+&     &  \\
+\hline
+&     &  \\
+Pedigree information   &     &  \\
+&     &  \\
+\hline
+&     &  \\
+Genomic Marker Data    &     &  \\
+&     &  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+### Solution
+
+\begin{center}
+\begin{tabular}{|p{4cm}|p{4cm}|p{3cm}|}
+\hline
+Source of Information  &  Traditional Breeding  &  Genomic Selection \\
+\hline
+Performance data       &  yes   &  yes \\
+\hline
+Pedigree information   &  yes   &  yes\\
+\hline
+Genomic Marker Data    &  no   &   yes\\
+\hline
+\end{tabular}
+\end{center}
+
+\clearpage
+\pagebreak
+
+```{r problem-1b-setup, echo=FALSE}
+n_pop_size <- round(runif(1,min = 10000, max = 15000), digits = 0)
+n_mean_rel <- round(runif(1,min = 35, max = 45), digits = 0)
+n_sd_rel <- round(runif(1, min = 9, max = 12), digits = 0)
+n_req_rel <- round(runif(1,min = 50, max = 65), digits = 0)
+```
+
+\begin{enumerate}
+\item[b)] In the two step approach of genomic selection the reference population is used to estimated marker effects. Animals with high reliabilities ($B\%$) are included in the reference population. Let us assume that we have a population with `r as.integer(n_pop_size)` breeding animals. What is the expected number of animals in the reference population, if we require a reliability of at least $`r n_req_rel`\%$ for animals to be included into the reference population. We assume the reliabilities on the percentage scale to follow a normal distribution with mean $`r n_mean_rel`\%$ and standard deviation of  $`r n_sd_rel`\%$
+
+\textit{Im Zwei-Schritt Verfahren der genomischen Selektion werden die Markereffekte anhand einer Referenzpopulation geschätzt. Tiere mit einem hohen Bestimmtheitsmass ($B\%$) werden in die Referenzpopulation aufgenommen. Wir nehmen an, dass wir eine Poplation von einer totalen Grösse von `r as.integer(n_pop_size)` Tiere haben. Was ist die erwartete Anzahl Tiere in der Referenzpopulation, wenn wir ein Bestimmtheitsmass von mindestens $`r n_req_rel`\%$ für Tiere in der Referenzpopulation verlangen. Wir nehmen an, dass das Bestimmtheitsmass auf der Prozentskala einer Normalverteilung mit Mittelwert $`r n_mean_rel`\%$ und Standardabweichung $`r n_sd_rel`\%$ folgt.}
+\end{enumerate}
+\points{`r lPointsQ1$TaskB`}
+
+
+### Solution 
+
+The size of the reference population can be determined by the proportion of the normal density that is above the threshold of $`r n_req_rel`\%$. The mean and the standard deviation are given in the problem description. Hence the proportion is given as
+
+```{r, echo=TRUE, results='markup'}
+prop_ref <- 1- pnorm(n_req_rel, mean = n_mean_rel, sd = n_sd_rel)
+cat(" * Proportion of animals in reference population: ", prop_ref, "\n")
+```
+The number of animals is the proportion times the total number of animals in the population.
+
+```{r, echo=TRUE, results='markup'}
+n_nr_ref <- prop_ref * n_pop_size
+cat(" * The number of animals in the reference population is: ", floor(n_nr_ref), "\n")
+```
+
+
+\clearpage
+\pagebreak
+
+```{r problem-1c-setup, echo=FALSE}
+n_min_ref_size <- 1000
+```
+
+\begin{enumerate}
+\item[c)] To be able to obtain good estimates of marker effects, the minimum size of the reference population is set to `r n_min_ref_size` animals. What is the minimum reliability ($B\%$) to get to a reference population of `r n_min_ref_size` animals using the same distributional assumptions for the reliabilities as under 1b).
+
+\textit{Damit wir zuverlässige Markereffektschätzungen erhalten müssen wir eine Referenzpopulation von mindestens `r n_min_ref_size` Tiere haben. Wie muss die untere Grnze für das Bestimmtheitsmass ($B\%$) festgelegt werden, damit wir eine Referenzpopulation von `r n_min_ref_size` Tieren erhalten. Die Annahmen betreffend der Verteilung der Bestimmtheitsmasse können Sie aus der Aufgabe 1b) übernehmen.}
+\end{enumerate}
+\points{`r lPointsQ1$TaskC`}
+
+
+### Solution 
+
+Given that we want to have a reference population of at least `r n_min_ref_size`, we can fix the proportion of the reference animals compared to the total population. 
+
+```{r, echo=TRUE, results='markup'}
+n_prop_ref <- n_min_ref_size/n_pop_size
+cat(" * Proportion of reference animals: ", round(n_prop_ref, digits = 3), "\n")
+```
+
+With the proportion, we determine the quantile
+
+```{r, echo=TRUE, results='markup'}
+quant_rel <- qnorm(n_prop_ref, mean = n_mean_rel, sd = n_sd_rel, lower.tail = FALSE)
+cat(" * Minimum reliability: ", floor(quant_rel), "\n")
+```
+
+
+\clearpage
+\pagebreak
+
+## Problem 2: Fixed Linear Effect Model
+Hyperketonemia (HYK) is a metabolic disorder in cattle characterized by elevated levels of blood ketone bodies. The disorder affects early lactating cows. Ketone bodies such as beta-hydroxy-butyrate (BHB) and acetone (ACE) can be diagnosed in blood, milk and urine. For diagnostic reasons it is interesting to be able to predict ketone bodies such as BHB in the blood based on measurements of BHB and ACE in the milk. In a publication by Chandler et al. (2018) the following regression coefficients were found for cows which were not diagnosed of HYK. In that regression model BHB in blood serum (bBHB) was the response variable and a number of predictors either measured in a milk sample or observed from the cows performance record were used. These predictors are listed in the column entitled by the term `Variable` in the table below.
+
+\textit{Hyperketonemia (HYK) ist eine Stoffwechselstörung beim Rind, welche sich durch erhöhte Werte von Ketonkörpern im Blut manifestiert. Die Störung betrifft vor allem Milchrinder zu Beginn der Laktation. Ketonkörper wie Beta-Hydroxy-Butyrat (BHB) und Aceton (ACE) können im Blut, in der Milch und im Urin diganostiziert werden. Aus Gründen der Diagnostik ist es interessant Ketonkörper, wie z.B. BHB im Blut über Messungen von BHB und ACE in der Milch schätzen zu können. In einer Publikation von Chandler et al. (2018) wurden die folgenden Regressionskoeffizienten für Kühe, welche keine HYK-Diagnose erhielten, gefunden. In diesem Regressionsmodell wurde BHB im Blut (bBHB) als Zielgrösse festgelegt. Verschiedene Milchinhaltsstoffe oder Leistungsparameter der untersuchten Kühe dienten als unabhängige Variablen verwendet.}
+
+```{r problem-2-regression-table, echo=FALSE, results='asis'}
+tbl_bhb_reg <- tibble::tibble(Variable = c("Intercept",
+                                           "Milk acetone, mmol/L",
+                                           "Milk protein, %",
+                                           "Fat-to-protein ratio",
+                                           "Production on test day, kg",
+                                           "Gestation length, d"),
+                              `Regression Coefficients (Non-HYK)` = c(-2.38,
+                                                                      1.22,
+                                                                      -0.10,
+                                                                      0.24,
+                                                                      -0.003,
+                                                                      0.01))
+knitr::kable(tbl_bhb_reg,
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+
+
+\begin{enumerate}
+\item[a)] Compute the predicted value of `bBHB` for the three cows which are described in the following table.
+
+\textit{Schätzen Sie die `bBHB`-Werte der drei Kühe, welche in der nachfolgenden Tabelle beschrieben sind.}
+\end{enumerate}
+\points{`r lPointsQ2$TaskA`}
+
+```{r problem-2a-cow-table, echo=FALSE, results='asis'}
+n_nr_cows <- 3
+# mean and sd from the paper
+l_population_value <- list(mace  = list(mean = 0.08, sd = 0.033),
+                           mprot = list(mean = 3.36, sd = 0.07),
+                           mfat  = list(mean = 4.37, sd = 0.15),
+                           mprod = list(mean = 23.9, sd = 1.7),
+                           mgest = list(mean = 275,  sd = 1.2))
+# vector of trait values
+vec_mace     <- round(rnorm(n_nr_cows, mean = l_population_value$mace$mean, sd = l_population_value$mace$sd), digits = 3)
+vec_mprot    <- round(rnorm(n_nr_cows, mean = l_population_value$mprot$mean, sd = l_population_value$mprot$sd), digits = 2)
+vec_mfat     <- round(rnorm(n_nr_cows, mean = l_population_value$mfat$mean, sd = l_population_value$mfat$sd), digits = 2)
+vec_mprod    <- round(rnorm(n_nr_cows, mean = l_population_value$mprod$mean, sd = l_population_value$mprod$sd), digits = 1)
+vec_gest_len <- round(rnorm(n_nr_cows, mean = l_population_value$mgest$mean, sd = l_population_value$mgest$sd), digits = 0)
+
+# put table together
+tbl_bhb_cow <- tibble::tibble(Variable = c("Milk acetone, mmol/L",
+                                           "Milk protein, %",
+                                           "Milk fat, %",
+                                           "Production on test day, kg",
+                                           "Gestation length, d"),
+                              `Observed Values of Cow A` = c(vec_mace[1],vec_mprot[1], vec_mfat[1], vec_mprod[1], vec_gest_len[1]),
+                              `Observed Values of Cow B` = c(vec_mace[2],vec_mprot[2], vec_mfat[2], vec_mprod[2], vec_gest_len[2]),
+                              `Observed Values of Cow C` = c(vec_mace[3],vec_mprot[3], vec_mfat[3], vec_mprod[3], vec_gest_len[3]))
+knitr::kable(tbl_bhb_cow,
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+\clearpage
+\pagebreak
+
+### Solution
+
+The predicted value ($\hat{y}$) for `bBHB` can be computed using the formula for the linear regression. So for cow $i$ this means
+
+$$\hat{y}_i = \hat{b}_0 + x_i^T \cdot \hat{b}$$
+where $\hat{b}_0$ is the estimate for the intercept, $\hat{b}$ is the vector of estimated regression coefficients and $x_i$ corresponds to the vector of observed predictor values for cow $i$. 
+
+```{r echo=TRUE, results='asis'}
+vec_cow_A <- c(1,vec_mace[1],vec_mprot[1], vec_mfat[1]/vec_mprot[1], vec_mprod[1], vec_gest_len[1])
+vec_cow_B <- c(1,vec_mace[2],vec_mprot[2], vec_mfat[2]/vec_mprot[2], vec_mprod[2], vec_gest_len[2])
+vec_cow_C <- c(1,vec_mace[3],vec_mprot[3], vec_mfat[3]/vec_mprot[3], vec_mprod[3], vec_gest_len[3])
+
+bBHB_cow_A <- crossprod(vec_cow_A, tbl_bhb_reg$`Regression Coefficients (Non-HYK)`)
+bBHB_cow_B <- crossprod(vec_cow_B, tbl_bhb_reg$`Regression Coefficients (Non-HYK)`)
+bBHB_cow_C <- crossprod(vec_cow_C, tbl_bhb_reg$`Regression Coefficients (Non-HYK)`)
+
+tbl_bhb_blood <- tibble::tibble(Cow = c("A","B","C"),
+                                `Blood BHB` = c(bBHB_cow_A,bBHB_cow_B,bBHB_cow_C))
+knitr::kable(tbl_bhb_blood,
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)] According to the publication by Chandler et al. (2018), the mean levels of BHB and Aceton found in the blood serum and in the milk are higher for cows with a diagnosed HYK compared to cows which are HYK-free. The different levels are listed in the table below. Is it possible to use the regression coefficients listed in Problem 2a) to predict the levels of blood BHB for cows that have HYK? Please reason about your answer.  
+
+\textit{Gemäss der Publikation von Chandler et al. (2018) liegen die mittleren Werte für BHB und Aceton im Blut und in der Milch höher bei den Kühen, bei welchen eine HYK diagnostiziert wurde im Vergleich zu den HYK-freien Kühe. Die Werte sind in der nachfolgenden Tabelle angegeben. Ist es möglich den Blut-BHB-Wert einer auf HYK diagnostizierten Kuh anhand der unter Aufgabe 2a aufgelisteten Regressionskoeffizienten zu schäten? Bitte begründen Sie Ihre Antwort.}
+\end{enumerate}
+\points{`r lPointsQ2$TaskB`}
+
+```{r problem-2b-mean-bhb, results='asis'}
+tbl_mean_kb <- tibble::tibble(Variable = c("Blood Serum BHB, mmol/L",
+                                           "Milk BHB, mmol/L",
+                                           "Milk Acetone, mmol/L",
+                                           "Fat, %",
+                                           "Protein, %",
+                                           "Production on test-day, kg",
+                                           "Gestation length, d"),
+                              `Non-HYK Cows` = c(0.6,
+                                                 0.07,
+                                                 0.08,
+                                                 4.37,
+                                                 3.36,
+                                                 23.9,
+                                                 275),
+                              `HYK Cows` = c(2.3,
+                                             0.15,
+                                             0.69,
+                                             5.10,
+                                             2.97,
+                                             22.2,
+                                             282))
+knitr::kable(tbl_mean_kb,
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+
+### Solution
+
+Predictions cannot be done for HYK-cows based on regression coefficients that were estimated only on HYK-free cows. This would correspond to a case of "extra-polation" which is not suitable here due to the differences in the shown average values.
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] As shown in the table below, there are also breed differences in the levels of keton bodies in blood serum and in the milk. The following tables contains levels of blood-BHB and aceton in the milk for cows of the breeds Holstein and Jersey. When looking only at the intercept of the complete model and at the regression coefficient of milk-aceton for the two breeds the following two plots can be drawn. Please indicate which plot (A and B) belong to which breed.
+
+\textit{Gemäss der folgenden Tabelle gibt es auch Rassenunterschiede bei den Werten der Ketonkörper im Blut und in der Milch. Die folgende Tabelle zeigt Blut-BHB und Milch Aceton für Kühe der Rassen Holstein und Jersey. Schaut man sich nur den Achsenabschnitt und den Regressionskoeffizienten von Milch-Aceton für die zwei Rassen an, dann entstehen die unten gezeigten Plots für die beiden Rassen. Bitte geben Sie an, welches Diagramm (A oder B) zu welcher Rasse gehört.}
+\end{enumerate}
+\points{`r lPointsQ2$TaskC`}
+
+```{r problem-2c-breed, results='asis'}
+tbl_breed_kb <- tibble::tibble(Variable = c("Mean Blood Serum BHB, mmol/L",
+                                            "Standard deviation Blood Serum BHB, mmol/L",
+                                            "Mean Acetone, mmol/L",
+                                            "Standard deviation Acetone, mmol/L",
+                                            "Intercept",
+                                            "Regression Coefficient"),
+                               Holstein = c(0.80,
+                                            0.03,
+                                            0.101,
+                                            0.01,
+                                            -2.38,
+                                            1.22),
+                               Jersey   = c(0.92,
+                                            0.03, 
+                                            0.159,
+                                            0.01,
+                                            1.47,
+                                            0.85))
+knitr::kable(tbl_breed_kb,
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+**Plot A**
+
+```{r problem-2c-plot-jersey-reg, results='asis'}
+# Jersey
+n_nr_point <- 10
+vec_milk_ace_jer <- rnorm(n_nr_point, mean = tbl_breed_kb$Jersey[3], sd = tbl_breed_kb$Jersey[4])
+vec_blood_bhb_jer <- tbl_breed_kb$Jersey[5] + 
+  vec_milk_ace_jer * tbl_breed_kb$Jersey[6] + 
+  rnorm(n_nr_point, mean = 0, sd = tbl_breed_kb$Jersey[2])
+tbl_jer_reg <- tibble::tibble(`Milk Aceton` = vec_milk_ace_jer,
+                              `Blood Serum BHB` = vec_blood_bhb_jer)
+library(ggplot2)
+plot_jersey_reg <- ggplot(data = tbl_jer_reg, aes(x=`Milk Aceton`, y = `Blood Serum BHB`)) + 
+  geom_point() + 
+  geom_abline(slope = tbl_breed_kb$Jersey[6], intercept = tbl_breed_kb$Jersey[5], color = 'red')
+print(plot_jersey_reg)
+```
+
+**Plot B**
+
+```{r problem-2c-plot-holstein-reg, results='asis'}
+# Holstein
+n_nr_point <- 10
+vec_milk_ace_hol <- rnorm(n_nr_point, mean = tbl_breed_kb$Holstein[3], sd = tbl_breed_kb$Holstein[4])
+vec_blood_bhb_hol <- tbl_breed_kb$Holstein[5] + 
+  vec_milk_ace_hol * tbl_breed_kb$Holstein[6] + 
+  rnorm(n_nr_point, mean = 0, sd = tbl_breed_kb$Holstein[2])
+tbl_hol_reg <- tibble::tibble(`Milk Aceton` = vec_milk_ace_hol,
+                              `Blood Serum BHB` = vec_blood_bhb_hol)
+library(ggplot2)
+plot_holstein_reg <- ggplot(data = tbl_hol_reg, aes(x=`Milk Aceton`, y = `Blood Serum BHB`)) + 
+  geom_point() + 
+  geom_abline(slope = tbl_breed_kb$Holstein[6], intercept = tbl_breed_kb$Holstein[5], color = 'red')
+print(plot_holstein_reg)
+```
+
+
+### Solution 
+
+Plot A is based on Jersey and Plot B is based on Holstein.
+
+\clearpage
+\pagebreak
+
+
+```{r problem-3-dataset-prepare}
+n_nr_snp <- 5
+n_anz_snp_tiere <- 4
+bBHB <- round(vec_blood_bhb_jer[1:n_anz_snp_tiere], digits = 3)
+SNP1 <- c(-1,1,-1,1)
+SNP2 <- c(0,1,0,1)
+SNP3 <- c(1,0,-1,-1)
+SNP4 <- c(1,1,1,1)
+SNP5 <- c(1,0,-1,0)
+farm <- c("1", "2","1","1")
+tbl_herd_bhb_gen_data <- tibble::tibble(Tier = 1:n_anz_snp_tiere, 
+                                     bBHB = bBHB,
+                                     Herd = farm,
+                                     SNP1 = SNP1,
+                                     SNP2 = SNP2,
+                                     SNP3 = SNP3,
+                                     SNP4 = SNP4,
+                                     SNP5 = SNP5)
+```
+
+## Problem 3: Genomic BLUP
+
+The dataset shown below on blood-BHB is used to quantify the influence of `r n_nr_snp` SNP-loci. The only fixed effect in this model is the herd. 
+
+\textit{Der unten gezeigte Datensatz zu BHB im Blut soll verwendet werden um den Einfluss von `r n_nr_snp` SNP-Loci zu quantifizieren. Der Betrieb wird als fixer Effekt berücksichtigt.}
+
+
+
+```{r problem-3-dataset-show, echo=FALSE, results='asis'}
+knitr::kable(tbl_herd_bhb_gen_data)
+```
+
+\begin{enumerate}
+\item[a)] GBLUP models can either be specified as marker-effect models or as breeding-value models. Please complete the following diagram which illustrates the difference between the two types of models. Enter the SNP-genotypes for all animals at each SNP-position. Use $G_1$ as the allele with the positive effect. 
+
+\textit{GBLUP Modelle können entweder als Marker-Effekt-Modelle oder als Zuchtwertmodelle angegeben werden. Bitte vervollständigen Sie das folgende Diagramm, welches den Unterschied zwischen den beien Modelltypen erklärt. Bitte notieren Sie die SNP-Genotypen der Tiere an allen SNP-Positionen. Verwenden Sie $G_1$ als das Allele mit der positiven Wirkung.}
+\end{enumerate}
+\points{`r lPointsQ3$TaskA`}
+
+```{r mem-vs-bvm, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", results='markup', out.width="15cm"}
+#rmdhelp::use_odg_graphic(ps_path = "odg/mem-vs-bvm.odg")
+knitr::include_graphics(path = "odg/mem-vs-bvm.png")
+```
+
+
+### Solution
+
+```{r mem-vs-bvm-sol, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", results='markup', out.width="15cm"}
+#rmdhelp::use_odg_graphic(ps_path = "odg/mem-vs-bvm-sol.odg")
+knitr::include_graphics(path = "odg/mem-vs-bvm-sol.png")
+```
+
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)] Use a marker-effect model for the above given dataset. Specify all model components and enter the numbers from the dataset into the model. Setup the mixed model equations to solve for the parameters to be estimated. You can assume a ratio of $1$ between the genetic and the residual variance components. 
+
+\textit{Verwenden Sie ein Marker-Effekt Modell für den oben gegebenen Datensatz. Geben Sie alle Modellkomponenten an und verwenden Sie die Zahlen des Datensatzes als Information im Modell. Stellen Sie die Mischmodellgleichungen auf für die Lösung nach den zu schätenden Parameter. Sie können ein Verhältnis von $1$ annehmen zwischen der genetischen Varianz und der Varianz der Resteffekte.}
+\end{enumerate}
+\points{`r lPointsQ3$TaskB`}
+
+
+### Solution
+
+1. Model
+
+$$y = Xb + Wq + e$$
+where 
+
+* $y$ is the vector of observations.
+
+$$y = \begin{bmatrix} 1.651 \\1.585 \\1.586 \\1.696\end{bmatrix}$$
+
+* $b$ is the vector of fixed effect levels for the two farms
+
+$$b = \begin{bmatrix} b_{1} \\b_{2}\end{bmatrix}$$
+
+* $X$ is the design matrix for the fixed effects
+
+$$X = \begin{bmatrix} 1 & 0 \\0 & 1 \\1 & 0 \\1 & 0\end{bmatrix}$$ 
+
+* $q$ is the vector of marker effects for the five SNP-markers
+
+$$q = \begin{bmatrix} q_{1} \\q_{2} \\q_{3} \\q_{4} \\q_{5}\end{bmatrix}$$
+
+* $W$ is the indicator matrix for the SNP-effects
+
+$$W = \begin{bmatrix} -1 & 0 & 1 & 1 & 1 \\1 & 1 & 0 & 1 & 0 \\-1 & 0 & -1 & 1 & -1 \\1 & 1 & -1 & 1 & 0\end{bmatrix}$$
+
+* $e$ is the vector of random error terms
+
+$$e = \begin{bmatrix} e_{1} \\e_{2} \\e_{3} \\e_{4}\end{bmatrix}$$
+
+2. Expected values and Variance-Covariance Matrix
+
+3. Mixed Model equations
+
+
+\clearpage
+\pagebreak
+
+
+\begin{enumerate}
+\item[c)] Use a breeding-value model for the above given dataset. Specify all model components and enter the numbers from the dataset into the model. Setup the mixed model equations to solve for the parameters to be estimated. You can assume a ratio of $1$ between the genetic and the residual variance components. 
+
+\textit{Verwenden Sie ein Zuchtwertmodell für den oben gegebenen Datensatz. Geben Sie alle Modellkomponenten an und verwenden Sie die Zahlen des Datensatzes als Information im Modell. Stellen Sie die Mischmodellgleichungen auf für die Lösung nach den zu schätenden Parameter. Sie können ein Verhältnis von $1$ annehmen zwischen der genetischen Varianz und der Varianz der Resteffekte.}
+\end{enumerate}
+\points{`r lPointsQ3$TaskC`}
+
+
+### Solution
+
+1. Model
+
+$$y = Xb + Zg + e$$
+
+where $y$, $X$, $b$ and $e$ are the same as under 3b)
+
+* $g$: vector of random genomic breeding values
+
+$$g = \begin{bmatrix} g_{1} \\g_{2} \\g_{3} \\g_{4}\end{bmatrix}$$
+
+
+* $Z$: Indidence matrix linking genomic breeding values to observations.
+
+$$Z = \begin{bmatrix} 1 & 0 & 0 & 0 \\0 & 1 & 0 & 0 \\0 & 0 & 1 & 0 \\0 & 0 & 0 & 1\end{bmatrix}$$
+
+
+
+
+2. Expected values and Variance-Covariance Matrix
+
+3. Mixed Model equations
+
+
+\clearpage
+\pagebreak
+
+
+## Problem 4: Bayes
+
+
+\begin{enumerate}
+\item[a)] In a Bayesian data analysis, we differentiate between known and unknown quantities. Please, separate the relevant quantities for the dataset and the model shown below into known and unknown quantities.
+
+\textit{In einer Bayes'schen Datenanalyse wird zwischen bekannten und unbekannten Grössen unterschieden. Machen Sie die Einteilung für den unten gezeigten Datensatz und das angegebene Modell.}
+\end{enumerate}
+\points{`r lPointsQ4$TaskA`}
+
+```{r problem-4a-dataset, echo=FALSE, results='asis'}
+n_anz_snp_tiere <- 4
+bBHB <- round(vec_blood_bhb_jer[1:n_anz_snp_tiere], digits = 3)
+SNP1 <- c(-1,1,-1,1)
+SNP2 <- c(0,1,0,1)
+SNP3 <- c(1,0,-1,-1)
+SNP4 <- c(1,1,1,1)
+SNP5 <- c(1,0,-1,0)
+farm <- c("1", "2","1","1")
+tbl_herd_bhb_gen_data <- tibble::tibble(Tier = 1:n_anz_snp_tiere, 
+                                     bBHB = bBHB,
+                                     Herd = farm,
+                                     SNP1 = SNP1,
+                                     SNP2 = SNP2,
+                                     SNP3 = SNP3,
+                                     SNP4 = SNP4,
+                                     SNP5 = SNP5)
+knitr::kable(tbl_herd_bhb_gen_data)
+```
+
+For the above shown dataset, we assume the following model
+
+\textit{Für den Datensatz nehmen wir das folgende Modell an}
+
+$$y = Xb + Zq + e$$
+where: Herd is modelled as a fixed effect ($b$) and SNP-effects ($q$) are taken as random effects.
+
+\begin{center}
+{\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{p{3cm}p{4cm}p{4cm}}
+\hline
+Grösse  &  bekannt  &  unbekannt \\
+\hline\hline
+$y_1$   &  &  \\
+\hline
+$y_2$   &  &  \\
+\hline
+$y_3$   &  &  \\
+\hline
+$y_4$   &  &  \\
+\hline
+$b_{H1}$  &  &  \\
+\hline
+$b_{H2}$   &   &  \\
+\hline
+$X$     &    &  \\
+\hline
+$q_1$   &   &  \\
+\hline
+$q_2$   &  &  \\
+\hline
+$q_3$   &  &  \\
+\hline
+$q_4$   &  &  \\
+\hline
+$q_5$   &  &  \\
+\hline
+$Z$     &   &  \\
+\hline\hline
+\end{tabular}}
+\end{center}
+
+
+### Solution
+
+
+{\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{p{3cm}p{4cm}p{4cm}}
+\hline
+Grösse  &  bekannt  &  unbekannt \\
+\hline\hline
+$y_1$   & y &  \\
+\hline
+$y_2$   & y &  \\
+\hline
+$y_3$   & y &  \\
+\hline
+$y_4$   & y &  \\
+\hline
+$b_{H1}$  & n &  \\
+\hline
+$b_{H2}$   &  n &  \\
+\hline
+$X$     &   y &  \\
+\hline
+$q_1$   &  n &  \\
+\hline
+$q_2$   & n &  \\
+\hline
+$q_3$   & n &  \\
+\hline
+$q_4$   & n &  \\
+\hline
+$q_5$   & n &  \\
+\hline
+$Z$     &  y &  \\
+\hline\hline
+\end{tabular}}
+
+\clearpage
+\pagebreak
+
+```{r problem-4b-prepare}
+ff <- bBHB ~ 0 + Herd
+mf <- model.frame(ff, tbl_herd_bhb_gen_data)
+mm <- model.matrix(ff, mf)
+dimnames(mm) <- NULL
+model_matrix_bhb <- mm[1:nrow(mm),1:ncol(mm)]
+model_matrix_bhb
+```
+
+\begin{enumerate}
+\item[b)] In a first step of the Bayesian analysis, the influence of the `herd` on the response variable `bBHB` is to be quantified. This is done by the following junk of R-code. Compute the Bayesian estimate for the intercept and the effects of the two herds, based on the output shown below.   
+
+\textit{In einem ersten Schritt der Bayes'schen Analyse soll der Einfluss des Betriebs (`herd`) auf die Zielgrösse `bBHB` abgeschätzt werden. Dies wird mit dem folgenden R-programm gemacht. Berechnen Sie die Bayes'sche Schätzung für den Achsenabschnitt und die Effekte der beiden Betriebe aufgrund des unten gezeigten Outputs.}
+\end{enumerate}
+\points{`r lPointsQ4$TaskB`}
+
+```{r problem-4b-bayes-code, echo=TRUE, results='markup'}
+### # Matrix X as incidence matrix for beta0 and beta1
+X <- cbind(1,model_matrix_bhb)
+### # y as vector of observations
+y <- tbl_herd_bhb_gen_data$bBHB
+### # starting values
+beta = c(0, 0, 0)
+# loop for Gibbs sampler
+niter = 10 # number of samples
+for (iter in 1:niter) {
+# sampling intercept
+w = y - X[, 2] * beta[2] - X[, 3] * beta[3]
+x = X[, 1]
+xpxi = 1/(t(x) %*% x)
+betaHat = t(x) %*% w * xpxi
+beta[1] = rnorm(1, betaHat, sqrt(xpxi)) # using residual var = 1
+# sampling herd 1
+w = y - X[, 1] * beta[1] - X[, 3] * beta[3]
+x = X[, 2]
+xpxi = 1/(t(x) %*% x)
+betaHat = t(x) %*% w * xpxi
+beta[2] = rnorm(1, betaHat, sqrt(xpxi)) # using residual var = 1
+# sampling herd 2
+w = y - - X[, 1] * beta[1] - X[, 2] * beta[2]
+x = X[, 3]
+xpxi = 1/(t(x) %*% x)
+betaHat = t(x) %*% w * xpxi
+beta[3] = rnorm(1, betaHat, sqrt(xpxi)) # using residual var = 1
+
+# output current sample
+cat("iteration: ", iter, 
+    " -- intercept: ", beta[1], 
+    " -- herd1: ", beta[2], 
+    " -- herd2: ", beta[3], "\n")
+}
+```
+
+
+### Solution
+
+The solution is to compute the average of the samples which then corresponds to the estimates.
+
+```{r r problem-4b-bayes-sol, echo=TRUE, results='markup'}
+### # Matrix X as incidence matrix for beta0 and beta1
+X <- cbind(1,model_matrix_bhb)
+### # y as vector of observations
+y <- tbl_herd_bhb_gen_data$bBHB
+### # starting values
+beta = c(0, 0, 0)
+### # vector for to store mean
+mean_beta = c(0, 0, 0)
+# loop for Gibbs sampler
+niter = 10 # number of samples
+for (iter in 1:niter) {
+# sampling intercept
+w = y - X[, 2] * beta[2] - X[, 3] * beta[3]
+x = X[, 1]
+xpxi = 1/(t(x) %*% x)
+betaHat = t(x) %*% w * xpxi
+beta[1] = rnorm(1, betaHat, sqrt(xpxi)) # using residual var = 1
+# sampling herd 1
+w = y - X[, 1] * beta[1] - X[, 3] * beta[3]
+x = X[, 2]
+xpxi = 1/(t(x) %*% x)
+betaHat = t(x) %*% w * xpxi
+beta[2] = rnorm(1, betaHat, sqrt(xpxi)) # using residual var = 1
+# sampling herd 2
+w = y - - X[, 1] * beta[1] - X[, 2] * beta[2]
+x = X[, 3]
+xpxi = 1/(t(x) %*% x)
+betaHat = t(x) %*% w * xpxi
+beta[3] = rnorm(1, betaHat, sqrt(xpxi)) # using residual var = 1
+
+# update the average
+mean_beta <- mean_beta + beta / niter
+# output current sample
+cat("iteration: ", iter, 
+    " -- intercept: ", beta[1], 
+    " -- herd1: ", beta[2], 
+    " -- herd2: ", beta[3], "\n")
+}
+
+cat("\n")
+cat(" * Estimates: intercept: ", mean_beta[1], 
+    " -- herd1: ", mean_beta[2], 
+    " -- herd2: ", mean_beta[3], "\n")
+```
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] How can the effect of the herds be quantified using the least squares method instead of a Bayesian approach? Please specify the command in R that you would use to get to the least squares estimates of the herd-effects. The data to be analysed is available in a dataframe called \texttt{tbl\_herd\_bhb\_gen\_data} with a column named `bBHB` for the response variable and a column `Herd` with the indicators of the herd.
+
+\textit{Wie können die Betriebseffekte mit der Methode der kleinsten Quadrate anstelle eines Bayes'schen Ansatztes geschätzt werden? Bitte geben sie den R-Befehl, welcher die Betriebseffekte schätzt. Die zu analysierenden Daten sind in einem Datenframe namens \texttt{tbl\_herd\_bhb\_gen\_data} abgelegt. Der Datenframe enthält eine Kolonne `bBHB` für die Zielgrösse und eine Kolonnen namens `Herd` für die Betriebsinformationen.}
+\end{enumerate}
+\points{`r lPointsQ4$TaskC`}
+
+
+### Solution 
+
+Least squares estimates of herd effects are obtained by `lm()`. 
+
+```{r problem-4c-sol, echo=TRUE, results='markup'}
+lm_bhb_herd <- lm(bBHB ~ Herd, data = tbl_herd_bhb_gen_data)
+summary(lm_bhb_herd)
+```
+  
