@@ -72,6 +72,7 @@ h2_p02 <- 0.25
 bull_age_p02 <- 12
 gest_len_p02 <- 9
 afc_p02 <- 27
+nr_cont_per_lact <- 10
 ```
 
 In a traditional dairy cattle breeding program, sires are selected based on the predicted breeding values based on the performance of their daughters. For a solid selection decision, we want that the reliability ($B$) to be greater than $`r b_p02`$. The reliability of a predicted breeding value can be approximated by the following formula. 
@@ -80,8 +81,8 @@ $$B = \frac{n}{n+k}$$
 where $n$ stands for the number of daughters and $k$ corresponds to the term $(4-h^2)/h^2$. The variable $h^2$ is the heritability of the trait under investigation. For our example we assume that $h^2 = `r h2_p02`$. 
 
 ### Your Task
-* Compute the number of daugthers $n$ that must be tested for a given sire such that $B$ is at least $0.5$. 
-* How long does it take from the birth of a given sire to the time point where the predicted breeding value of the bull with a reliability of $B$ of at least $0.5$ is available? Here we assume that the first semen can be harvested from the bull at an age of $`r bull_age_p02`$ months and the average age at first calving is $`r afc_p02`$ months.
+* Compute the number of daugthers $n$ that must be tested for a given sire such that $B$ is at least $`r b_p02`$. 
+* How long does it take from the birth of a given sire to the time point where the predicted breeding value of the bull with a reliability of $B$ of at least $`r b_p02`$ is available? Here we assume that the first semen can be harvested from the bull at an age of $`r bull_age_p02`$ months and the average age at first calving is $`r afc_p02`$ months. The number of monthly milk controls to get a first lactation is assumed to be $`r nr_cont_per_lact`$. 
 
 <!-- your-solution-start
 ### Your Solution
@@ -115,12 +116,13 @@ $$n = \frac{Bk}{(1-B)} = \frac{`r b_p02` * `r k_p02`}{1 - `r b_p02`} = `r n_p02`
 The time that it takes from the birth of a bull calf to the publication of the predicted breeding value based on daughter performance consists of the following time components.
 
 ```{r sol_p02_b}
-age_test_result <- bull_age_p02 + gest_len_p02 + afc_p02
+age_test_result <- bull_age_p02 + gest_len_p02 + afc_p02 + nr_cont_per_lact
 ```
 
-* Age of the bull at first harvest of semen: $12$ months
-* Gestation length: $9$ months
-* Age at first calfing: $30$ months
+* Age of the bull at first harvest of semen: $`r bull_age_p02`$ months
+* Gestation length: $`r gest_len_p02`$ months
+* Age at first calfing: $`r afc_p02`$ months
+* Number of monthly milk controls until lactation is completed: $`r nr_cont_per_lact`$
 
 In total this makes `r age_test_result` months. It must be noted that this is the minimum time requirement. It can only be achieved, if the semen from the young test bull can be used all at the same time. This can only happen, if there are enough farmers willing to inseminate the cows with the test bull. 
 
