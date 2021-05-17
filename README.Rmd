@@ -29,6 +29,14 @@ Topics for Master Theses at Qualitas AG together with ETH are shown [here](https
 ### Exercise Platform
 The exercise platform is available under: `http://2-htz.quagzws.com:<PORT>` where `<PORT>` must be replaced by the number that you received by E-Mail. The username is 'rstudio' and the password is also in the E-Mail.
 
+### Exam
+- The exam will be online
+- Questions will be sent as a pdf-document via e-mail
+- Please either 
+    + print the question on paper and write down your solutions on the paper, take pictures from your solutions and send them to me via e-mail or
+    + write down your solutions and R-scripts in a document and send this document to me via e-mail.
+- It is important to write down the complete solution path not just the final results. 
+
 
 ## Description
 The following descriptions are taken from the course catalog

@@ -560,6 +560,15 @@ knitr::include_graphics(path = "odg/mem-vs-bvm-sol.png")
 
 ### Solution
 
+```{r, echo=FALSE}
+vec_y <- c(1.651, 1.585, 1.586, 1.696)
+n_nr_obs <- length(vec_y)
+mat_X <- matrix(data = c(1, 0, 0, 1, 1, 0, 1, 0), nrow = n_nr_obs, byrow = TRUE) 
+mat_W <- matrix(data = c(-1, 0, 1, 1, 1, 1, 1, 0, 1, 0, -1, 0, -1, 1, -1, 1, 1, -1, 1, 0), nrow = n_nr_obs, byrow = TRUE)
+lambda <- 1
+```
+
+
 1. Model
 
 $$y = Xb + Wq + e$$
@@ -567,7 +576,10 @@ where
 
 * $y$ is the vector of observations.
 
-$$y = \begin{bmatrix} 1.651 \\1.585 \\1.586 \\1.696\end{bmatrix}$$
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_y, ps_name = "y", ps_env = "$$")))
+```
+
 
 * $b$ is the vector of fixed effect levels for the two farms
 
@@ -575,7 +587,10 @@ $$b = \begin{bmatrix} b_{1} \\b_{2}\end{bmatrix}$$
 
 * $X$ is the design matrix for the fixed effects
 
-$$X = \begin{bmatrix} 1 & 0 \\0 & 1 \\1 & 0 \\1 & 0\end{bmatrix}$$ 
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bmatrix(pmat = mat_X, ps_name = "X", ps_env = "$$")))
+```
+
 
 * $q$ is the vector of marker effects for the five SNP-markers
 
@@ -583,7 +598,10 @@ $$q = \begin{bmatrix} q_{1} \\q_{2} \\q_{3} \\q_{4} \\q_{5}\end{bmatrix}$$
 
 * $W$ is the indicator matrix for the SNP-effects
 
-$$W = \begin{bmatrix} -1 & 0 & 1 & 1 & 1 \\1 & 1 & 0 & 1 & 0 \\-1 & 0 & -1 & 1 & -1 \\1 & 1 & -1 & 1 & 0\end{bmatrix}$$
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bmatrix(pmat = mat_W, ps_name = "W", ps_env = "$$")))
+```
+
 
 * $e$ is the vector of random error terms
 
@@ -591,7 +609,91 @@ $$e = \begin{bmatrix} e_{1} \\e_{2} \\e_{3} \\e_{4}\end{bmatrix}$$
 
 2. Expected values and Variance-Covariance Matrix
 
+* Expected values of all random components
+
+$$E\left[\begin{array}{c} e \\ q \\ y \end{array} \right] = \left[\begin{array}{c} 0 \\ 0 \\ Xb \end{array} \right]$$
+
+* Variance-Covariance Matrix
+
+$$
+var\left[\begin{array}{c} e \\ q \\ y \end{array} \right] 
+=  \left[\begin{array}{ccc} 
+  R & 0 & R \\
+  0 & Q & QW^T  \\
+  R & WQ  & V
+\end{array} \right]
+$$
+
+where $R = I\sigma_e^2$, $Q = I\sigma_q^2$ and $V = WQW^T + R$. The quantities $\sigma_e^2$ and $\sigma_q^2$ correspond to the residual variance component and the variance component attributed to SNPs. 
+
+
 3. Mixed Model equations
+
+The mixed model equations are give by
+
+$$
+\left[ 
+\begin{array}{cc}
+X^TX  & X^TW \\
+W^TX  & W^TW + I*\lambda
+\end{array}
+\right]
+\left[ 
+\begin{array}{c}
+\hat{b} \\
+\hat{q}
+\end{array}
+\right]
+=
+\left[ 
+\begin{array}{c}
+X^Ty \\
+W^Ty
+\end{array}
+\right]
+$$
+with $\lambda = \sigma_e^2 / \sigma_q^2$
+
+The solution
+
+```{r, echo=TRUE, results='markup'}
+mat_XTX <- crossprod(mat_X)
+mat_XTW <- crossprod(mat_X, mat_W)
+mat_WTX <- crossprod(mat_W, mat_X)
+mat_WTWIlambda <- crossprod(mat_W) + diag(1,nrow = n_nr_snp) * lambda
+mat_coef <- rbind(cbind(mat_XTX, mat_XTW), cbind(mat_WTX, mat_WTWIlambda))
+mat_rhs <- rbind(crossprod(mat_X, vec_y), crossprod(mat_W, vec_y))
+mat_sol <- solve(mat_coef, mat_rhs)
+vec_sol_farm <- mat_sol[1:2,]
+vec_sol_snp <- mat_sol[(3:nrow(mat_sol)),]
+mat_sol_g <- crossprod(t(mat_W), vec_sol_snp)
+```
+
+The solution vector $\hat{s}$ for the herd effects and the marker effects is
+
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bmatrix(pmat = round(mat_sol, digits = 4), ps_name = "\\hat{s}", ps_env = "$$")))
+```
+
+The solution for the farm effects $\hat{b}$ are the first two components of $\hat{s}$
+
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(vec_sol_farm, digits = 4), ps_name = "\\hat{b}", ps_env = "$$")))
+```
+
+The solutions for the marker effects $\hat{q}$ are
+
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(vec_sol_snp, digits = 4), ps_name = "\\hat{q}", ps_env = "$$")))
+```
+
+The direct genomic breeding values $\hat{g}$ are obtained by multiplying the matrix $W$ by the predicted marker effects $\hat{q}$. Hence, 
+
+$$\hat{g} = W\cdot \hat{q}$$
+
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bmatrix(pmat = round(mat_sol_g, digits = 4), ps_name = "\\hat{g}", ps_env = "$$")))
+```
 
 
 \clearpage
@@ -608,6 +710,11 @@ $$e = \begin{bmatrix} e_{1} \\e_{2} \\e_{3} \\e_{4}\end{bmatrix}$$
 
 ### Solution
 
+```{r, echo=FALSE}
+mat_Z <- diag(1, nrow = n_anz_snp_tiere)
+```
+
+
 1. Model
 
 $$y = Xb + Zg + e$$
@@ -621,14 +728,118 @@ $$g = \begin{bmatrix} g_{1} \\g_{2} \\g_{3} \\g_{4}\end{bmatrix}$$
 
 * $Z$: Indidence matrix linking genomic breeding values to observations.
 
-$$Z = \begin{bmatrix} 1 & 0 & 0 & 0 \\0 & 1 & 0 & 0 \\0 & 0 & 1 & 0 \\0 & 0 & 0 & 1\end{bmatrix}$$
-
-
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bmatrix(pmat = mat_Z, ps_name = "Z", ps_env = "$$")))
+```
 
 
 2. Expected values and Variance-Covariance Matrix
 
+* Expected values for the random components
+
+$$
+E\left[\begin{array}{c}e \\ g \\ y \end{array} \right] 
+= \left[\begin{array}{c}0 \\ 0 \\ Xb \end{array} \right]
+$$
+
+* Variance-covariance matrix
+
+$$
+var\left[\begin{array}{c}e \\ g \\ y \end{array} \right] 
+= 
+\left[
+  \begin{array}{ccc} 
+  R & 0 & R \\
+  0 & G & GZ^T \\
+  R & ZG & V
+  \end{array} \right]
+$$
+
+with $R = I*\sigma_e^2$ ($\sigma_e^2$ residual variance component), $G = H * \sigma_g^2$ ($\sigma_g^2$ the genetic variance component) and $V = ZGZ^T + R$.
+
+
 3. Mixed Model equations
+
+The mixed model equations are 
+
+$$
+\left[
+  \begin{array}{cc}
+  X^TX  &  X^TZ \\
+  Z^TX  &  Z^TZ + H^{-1} * \lambda
+  \end{array}
+\right]
+\left[
+  \begin{array}{c}
+  \hat{b} \\
+  \hat{g}
+  \end{array}
+\right]
+=
+\left[
+  \begin{array}{c}
+  X^Ty \\
+  Z^Ty
+  \end{array}
+\right]
+$$
+
+with $\lambda = \sigma_e^2 / \sigma_g^2$ and $H$ corresponding to the genomic relationship matrix.
+
+The genomic relationship matrix $H$ can be computed with the following function. 
+
+```{r, echo=TRUE, results='markup'}
+computeMatGrm <- function(pmatData) {
+  matData <- pmatData
+  # check the coding, if matData is -1, 0, 1 coded, then add 1 to get to 0, 1, 2 coding
+  if (min(matData) < 0) matData <- matData + 1
+  # Allele frequencies, column vector of P and sum of frequency products
+  freq <- apply(matData, 2, mean) / 2
+  P <- 2 * (freq - 0.5)
+  sumpq <- sum(freq*(1-freq))
+  # Changing the coding from (0,1,2) to (-1,0,1) and subtract matrix P
+  Z <- matData - 1 - matrix(P, nrow = nrow(matData), 
+                             ncol = ncol(matData), 
+                             byrow = TRUE)
+  # Z%*%Zt is replaced by tcrossprod(Z)
+  return(tcrossprod(Z)/(2*sumpq))
+}
+mat_H <- computeMatGrm(pmatData = mat_W)
+n_cfact <- 0.05
+mat_Hstar <- mat_H + n_cfact * diag(1, nrow = n_anz_snp_tiere)
+```
+
+The computed matrix $H$ is computationally singular. This can be corrected by adding a small fraction of the numerator relationship matrix to $H$. Because, we do not have any information about the pedigree of the animals in the dataset, we replace the numerator relationship matrix by the identity matrix $I$ which is the same as assuming that the animals are unrelated. Therefore we get a new genomic relationship matrix $H^*$ by the following formula
+
+$$H^* = H + `r n_cfact` * I$$
+
+From now on the matrix $H^*$ is used as the genomic relationship matrix.
+
+The solution of the mixed model equations can be obtained, as follows.
+
+```{r, echo=TRUE, results='markup'}
+mat_XTX <- crossprod(mat_X)
+mat_XTZ <- crossprod(mat_X, mat_Z)
+mat_ZTX <- crossprod(mat_Z, mat_X)
+mat_ZTZHinvlambda <- crossprod(mat_Z) + solve(mat_Hstar) * lambda
+mat_coef <- rbind(cbind(mat_XTX, mat_XTZ), cbind(mat_ZTX, mat_ZTZHinvlambda))
+mat_rhs <- rbind(crossprod(mat_X, vec_y), crossprod(mat_Z, vec_y))
+mat_sol <- solve(mat_coef, mat_rhs)
+vec_sol_farm <- mat_sol[1:2,]
+vec_sol_g <- mat_sol[(3:nrow(mat_sol)),]
+```
+
+The solutions for the herds are 
+
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(vec_sol_farm, digits = 4), ps_name = "\\hat{b}", ps_env = "$$")))
+```
+
+The solutions for the genomic breeding values break
+
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(vec_sol_g, digits = 4), ps_name = "\\hat{g}", ps_env = "$$")))
+```
 
 
 \clearpage
