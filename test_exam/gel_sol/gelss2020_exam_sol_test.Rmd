@@ -557,17 +557,44 @@ $$y = Xb + Zu + e$$
 
 2. Model components
 
-$$y = $$
+```{r, echo=FALSE}
+vec_y <- tbl_gen$`Blood Serum BHB`
+n_nr_obs <- length(vec_y)
+mat_X <- matrix(c(rep(1, n_nr_obs), tbl_gen$`Milk Aceton`), ncol = 2)
+mat_Z <- cbind(matrix(c(rep(0, n_nr_founder*n_nr_obs)), ncol = n_nr_founder), diag(1, nrow = n_nr_obs))
+```
 
-$$b = $$
+* Vector $y$ of observations
 
-$$X = $$
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_y, ps_name = "y", ps_env = "$$")))
+```
 
-$$u = $$
+* Vector $b$ of fixed effects
 
-$$Z = $$
+$$b = \left[\begin{array}{c}b_0 \\ b_{ACE} \end{array}  \right]$$
+with $b_0$ corresponding to the intercept and $b_{ACE}$ to the effect of `Milk Aceton`. 
 
-$$e = $$
+* Design matrix $X$
+
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bmatrix(pmat = mat_X, ps_name = "X", ps_env = "$$")))
+```
+
+* The random vector $u$ of breeding values
+
+$$u = \left[\begin{array}{c}u_1 \\ u_2 \\ u_3 \\ u_4 \\ u_5 \\ u_6\end{array}  \right]$$
+
+* The design matrix $Z$ 
+
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bmatrix(pmat = mat_Z, ps_name = "Z", ps_env = "$$")))
+```
+
+
+* The vector $e$ of random residuals
+
+$$e = \left[\begin{array}{c}e_1 \\ e_2 \\ e_3 \\ e_4 \end{array}  \right]$$
 
 3. Expected values
 
