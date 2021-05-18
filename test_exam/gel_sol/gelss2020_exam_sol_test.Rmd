@@ -562,6 +562,7 @@ vec_y <- tbl_gen$`Blood Serum BHB`
 n_nr_obs <- length(vec_y)
 mat_X <- matrix(c(rep(1, n_nr_obs), tbl_gen$`Milk Aceton`), ncol = 2)
 mat_Z <- cbind(matrix(c(rep(0, n_nr_founder*n_nr_obs)), ncol = n_nr_founder), diag(1, nrow = n_nr_obs))
+lambda <- 1
 ```
 
 * Vector $y$ of observations
@@ -602,7 +603,72 @@ $$E \left[\begin{array}{c} y \\ u \\ e \end{array} \right] = \left[\begin{array}
 
 4. Variance-Covariance Matrices
 
-$$var \left[\begin{array}{c} y \\ u \\ e \end{array} \right] =  \left[\begin{array}{ccc}  ZGZ^T + R & ZG & 0 \\ GZ^T & G & 0 \\ 0 & 0 & R \end{array} \right]$$
+$$var \left[\begin{array}{c} y \\ u \\ e \end{array} \right] =  \left[\begin{array}{ccc}  ZGZ^T + R & ZG & R \\ GZ^T & G & 0 \\ R & 0 & R \end{array} \right]$$
+with $R = I*\sigma_e^2$, $G = A*\sigma_u^2$, $\sigma_e^2$ corresponding to the residual variance component and $\sigma_u^2$ is the genetic-additive variance. 
+
+
+5. Mixed Model Equations
+The following mixed model equations are used to solve for the unknown estimated fixed effects ($\hat{b}$) and the unknown predicted breeding values ($\hat{u}$). 
+
+$$
+\left[
+  \begin{array}{cc}
+  X^TX  &  X^TZ \\
+  Z^TX  &  Z^TZ + A^{-1} * \lambda
+  \end{array}
+\right]
+\left[
+  \begin{array}{c}
+  \hat{b} \\
+  \hat{u}
+  \end{array}
+\right]
+=
+\left[
+  \begin{array}{c}
+  X^Ty \\
+  Z^Ty
+  \end{array}
+\right]
+$$
+with $\lambda = \sigma_e^2 / \sigma_u^2$. Because the variance components are not specified, we assume $\lambda$ to be equal to $`r lambda`$. The matrix $A$ corresponds to the numerator relationship matrix. We start by computing its inverse using the package `pedigreemm`.
+
+```{r, echo=TRUE, results='markup'}
+n_nr_ani_ped <- n_nr_founder+n_nr_ani
+ped <- pedigreemm::pedigree(sire = c(rep(NA, n_nr_founder), tbl_gen$Sire), 
+                            dam = c(rep(NA, n_nr_founder), tbl_gen$Dam), 
+                            label = as.character(1:n_nr_ani_ped))
+mat_Ainv <- as.matrix(pedigreemm::getAInv(ped = ped))
+```
+
+With that, the mixed model equations can be constructed and solved for the estimated fixed effects ($\hat{b}$) and the predicted breeding values ($\hat{u}$).
+
+```{r, echo=TRUE, results='markup'}
+mat_XTX <- crossprod(mat_X)
+mat_XTZ <- crossprod(mat_X, mat_Z)
+mat_ZTX <- crossprod(mat_Z, mat_X)
+mat_ZTZAinvlambda <- crossprod(mat_Z) + mat_Ainv * lambda
+mat_coef <- rbind(cbind(mat_XTX, mat_XTZ), cbind(mat_ZTX, mat_ZTZAinvlambda))
+mat_rhs <- rbind(crossprod(mat_X, vec_y), crossprod(mat_Z, vec_y))
+mat_sol <- solve(mat_coef, mat_rhs)
+```
+
+The solutions for the estimated fixed effects are
+
+```{r, echo=FALSE, results='asis'}
+n_nr_fixed_effects <- nrow(mat_sol)-n_nr_ani_ped
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(mat_sol[1:n_nr_fixed_effects,], digits = 4), 
+                                   ps_name = "\\hat{b}", ps_env = "$$")))
+```
+
+The solutions for the predicted breeding values are
+
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(mat_sol[(n_nr_fixed_effects+1):nrow(mat_sol), ], digits = 4), 
+                                   ps_name = "\\hat{u}", ps_env = "$$")))
+```
+
+
 
 \clearpage
 \pagebreak
