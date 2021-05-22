@@ -4,6 +4,7 @@ output:
     includes:
       in_header: tex/header.tex
     fig_caption: false
+    keep_tex: true
 output_file: asmss2021_exam_sol_test.pdf
 params:
   seed: 1234
@@ -171,7 +172,7 @@ y = X %*% betaTrue + rnorm(n, 0, 2)
 dfSimData <- data.frame(X1 = x[,1], y = y)
 ```
 
-
+The same dataset is analysed with two different regression models. The R-Output of both analyses is given by Output A and Output B. 
 
 \textit{Wir haben den gleichen Datensatz mit zwei unterschiedlichen linearen Regressionsmodellen analysiert. Der R-Output dieser beiden Analysen ist nachfolgend als Output A und Output B gegeben. }
 
@@ -189,8 +190,8 @@ summary(snp_regB <- lm(y ~ -1 + X1, data = dfSimData))
 \pagebreak
 
 \begin{enumerate}
-\item[a)] 
-\textit{Geben Sie die Formeln der beiden statistischen Modelle an, welche zu Output A und Output B geführt haben. Wo liegt der hauptsächliche Unterschied zwischen den beiden Modellen}
+\item[a)] Give the formulas of both statistical models which belong to Output A and Output B. Where is the main difference between both models?
+\textit{Geben Sie die Formeln der beiden statistischen Modelle an, welche zu Output A und Output B geführt haben. Wo liegt der hauptsächliche Unterschied zwischen den beiden Modellen?}
 \end{enumerate}
 \points{`r lPointsQ1$TaskA`}
 
@@ -205,7 +206,7 @@ summary(snp_regB <- lm(y ~ -1 + X1, data = dfSimData))
 \pagebreak
 
 \begin{enumerate}
-\item[b)] 
+\item[b)] For both analyses a plot was produced. Assign Plots 1 and 2 to Outputs A and B. 
 
 \textit{ Für die zwei Analysen wurden auch zwei Plots gemacht. Ordnen Sie die Plots 1 und 2 den Outputs A und B zu.}
 \end{enumerate}
@@ -235,7 +236,7 @@ abline(snp_regA, col = "red")
 \pagebreak
 
 \begin{enumerate}
-\item[c)] 
+\item[c)] Enter the parameter estimates from Outputs A and B in Plots 1 and 2 by marking their lengths in the plots.
 
 \textit{Zeichnen Sie die geschätzten Parameter (Estimate) aus den Outputs A und B in die Plots 1 und 2 ein}
 \end{enumerate}
@@ -258,6 +259,23 @@ abline(snp_regA, col = "red")
 
 
 ### Solution 
+
+### Plot 1
+The following plot shows parameters from Output B
+
+```{r p01-plot1, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
+#rmdhelp::use_odg_graphic(ps_path = "odg/p01-plot1.odg")
+knitr::include_graphics(path = "odg/p01-plot1.png")
+```
+
+### Plot 2
+The following plot shows parameters from Output A
+
+```{r p01-plot2, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
+#rmdhelp::use_odg_graphic(ps_path = "odg/p01-plot2.odg")
+knitr::include_graphics(path = "odg/p01-plot2.png")
+```
+
 
 
 \clearpage
@@ -394,4 +412,4 @@ abline(snp_regA, col = "red")
 
 
 ### Solution 
-
+  
