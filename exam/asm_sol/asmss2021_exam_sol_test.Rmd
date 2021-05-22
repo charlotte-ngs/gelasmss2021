@@ -41,9 +41,9 @@ if (is.null(params$seed)){
 <!-- <<PointsQ1, echo=FALSE>>= -->
 ```{r PointsQ1, echo=FALSE}
 # Assign Points for Q1
-lPointsQ1 <- list(TaskA = 0,
-                  TaskB = 0,
-                  TaskC = 0,
+lPointsQ1 <- list(TaskA = 8,
+                  TaskB = 2,
+                  TaskC = 6,
                   TaskD = 0)
 nPointQ1Total <- sum(unlist(lPointsQ1))
 ```
@@ -157,20 +157,49 @@ Total    &  `r nPointOverallTotal` & \\
 \pagebreak
 
 
-## Problem 1: 
+## Problem 1: Linear Regression
+
+```{r DataSim, echo=FALSE, results='hide'}
+set.seed(1566)
+n = 30
+k = 1
+#x = matrix(sample(c(0, 1), n * k, replace = T), nrow = n, ncol = k)
+x = matrix(rnorm(n*k, mean = 3, sd = 0.5), nrow = n, ncol = k)
+X = cbind(1, x)
+betaTrue = c(1.07, 3.32)
+y = X %*% betaTrue + rnorm(n, 0, 2)
+dfSimData <- data.frame(X1 = x[,1], y = y)
+```
 
 
-\textit{}
 
+\textit{Wir haben den gleichen Datensatz mit zwei unterschiedlichen linearen Regressionsmodellen analysiert. Der R-Output dieser beiden Analysen ist nachfolgend als Output A und Output B gegeben. }
+
+### Output A
+```{r SnpRegOutputA, echo=FALSE, results='markup'}
+summary(snp_regA <- lm(y ~ X1, data = dfSimData))
+```
+
+### Output B
+```{r SnpRegOutputB, echo=FALSE, results='markup'}
+summary(snp_regB <- lm(y ~ -1 + X1, data = dfSimData))
+```
+
+\clearpage
+\pagebreak
 
 \begin{enumerate}
 \item[a)] 
-\textit{}
+\textit{Geben Sie die Formeln der beiden statistischen Modelle an, welche zu Output A und Output B geführt haben. Wo liegt der hauptsächliche Unterschied zwischen den beiden Modellen}
 \end{enumerate}
 \points{`r lPointsQ1$TaskA`}
 
 
 ### Solution
+
+- Modell für Output A: $y_i = \beta_0 + \beta_1 X_{1i} + \epsilon_i$
+- Modell für Output B: $y_i = \beta_1 X_{1i} + \epsilon_i$
+- Der Hauptunterschied liegt darin, dass im Modell von Output A ein Achsenabschnitt $\beta_0$ angepasst wird und im Modell von Output B nicht.
 
 \clearpage
 \pagebreak
@@ -178,12 +207,29 @@ Total    &  `r nPointOverallTotal` & \\
 \begin{enumerate}
 \item[b)] 
 
-\textit{}
+\textit{ Für die zwei Analysen wurden auch zwei Plots gemacht. Ordnen Sie die Plots 1 und 2 den Outputs A und B zu.}
 \end{enumerate}
 \points{`r lPointsQ1$TaskB`}
 
+### Plot 1
+```{r PlotAbline1, echo=FALSE}
+plot(dfSimData$X1, dfSimData$y, type = "p", xlab = "X1", ylab = "y", 
+     xlim = c(0,max(dfSimData$X1)+0.2), ylim = c(-1,max(dfSimData$y)+1) )
+abline(snp_regB, col = "red")
+```
+
+
+### Plot 2
+```{r PlotAbline2, echo=FALSE}
+plot(dfSimData$X1, dfSimData$y, type = "p", xlab = "X1", ylab = "y", 
+     xlim = c(0,max(dfSimData$X1)+0.2), ylim = c(-1,max(dfSimData$y)+1))
+abline(snp_regA, col = "red")
+```
+
 
 ### Solution 
+- Plot 1 gehört zu Output B
+- Plot 2 gehört zu Output A
 
 \clearpage
 \pagebreak
@@ -191,9 +237,24 @@ Total    &  `r nPointOverallTotal` & \\
 \begin{enumerate}
 \item[c)] 
 
-\textit{}
+\textit{Zeichnen Sie die geschätzten Parameter (Estimate) aus den Outputs A und B in die Plots 1 und 2 ein}
 \end{enumerate}
 \points{`r lPointsQ1$TaskC`}
+
+### Plot 1
+```{r PlotAblineC1, echo=FALSE}
+plot(dfSimData$X1, dfSimData$y, type = "p", xlab = "X1", ylab = "y", 
+     xlim = c(0,max(dfSimData$X1)+0.2), ylim = c(-1,max(dfSimData$y)+1) )
+abline(snp_regB, col = "red")
+```
+
+
+### Plot 2
+```{r PlotAblineC2, echo=FALSE}
+plot(dfSimData$X1, dfSimData$y, type = "p", xlab = "X1", ylab = "y", 
+     xlim = c(0,max(dfSimData$X1)+0.2), ylim = c(-1,max(dfSimData$y)+1))
+abline(snp_regA, col = "red")
+```
 
 
 ### Solution 
