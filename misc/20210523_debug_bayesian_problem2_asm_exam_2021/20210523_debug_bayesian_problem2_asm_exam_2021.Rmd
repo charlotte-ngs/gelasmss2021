@@ -1,0 +1,80 @@
+---
+title: "Debug Bayesian Problem 2 of ASM Exam 2021"
+output: html_notebook
+---
+
+The following code junk is used to do Bayesian Estimation for a regression model.
+
+```{r}
+rm(list = ls())
+# set seed 
+set.seed(7821)
+
+# read the data
+s_data_p02_path <- "https://charlotte-ngs.github.io/gelasmss2021/data/asm_exam_p02.csv"
+tbl_reg_sw_bw <- readr::read_csv2(file = s_data_p02_path)
+tbl_reg_sw_bw
+# take number of observations from tbl_reg_sw_bw
+(n_nr_obs <- nrow(tbl_reg_sw_bw))
+
+# define Matrix X
+X <- matrix(c(rep(1,n_nr_obs), tbl_reg_sw_bw$BodyWeight), ncol = 2);X
+# observations as vector y
+y <- tbl_reg_sw_bw$SlaughterWeight;y
+# fix constants
+nuRes <- 4
+varResidual <- 1
+scaleRes <- varResidual * (nuRes - 2)/nuRes
+(mu <- mean(y))
+ycorr <- y - mu
+ycorr
+# intialise estimates
+beta <- c(0,0)
+meanBeta <- c(0, 0)
+sigma <- 1
+meanSigma <- 0
+# loop over iterations of the Gibbs Sampler
+niter <- 1000
+for (iter in 1:niter){
+  iter <- 2
+  # sampling intercept
+  w = y - X[, 2] * beta[2];w
+  x = X[, 1];x
+  xpxi = 1/(t(x) %*% x);xpxi
+  # compute mean of conditional distribution
+  betaHat = t(x) %*% w * xpxi;betaHat
+  # draw sample of intercept from normal distribution
+  beta[1] = rnorm(1, betaHat, sqrt(xpxi * sigma));beta
+  # sampling slope
+  w = y - X[, 1] * beta[1];w
+  x = X[, 2];x
+  xpxi = 1/(t(x) %*% x);xpxi
+  # compute mean of conditional distribution
+  betaHat = t(x) %*% w * xpxi;betaHat
+  # draw sample for slope from normal distribution
+  beta[2] = rnorm(1, betaHat, sqrt(xpxi * sigma)) ;beta
+  # sample residual variance
+  sigma <- (crossprod(ycorr) + nuRes * scaleRes) / rchisq(1, n_nr_obs + nuRes);sigma
+  # save current sample of beta to meanBeta and sigma to meanSigma 
+  # add beta samples
+  meanBeta <- meanBeta + beta;meanBeta
+  # add sample for sigma
+  meanSigma <- meanSigma + sigma;meanSigma
+  
+  # if (iter %% 100 == 0){
+    cat(" * Iteration:         ", iter, "\n")
+    cat(" * Intercept:         ", beta[1], "\n")
+    cat(" * Slope:             ", beta[2], "\n")
+    cat(" * Residual Variance: ", sigma, "\n")
+  # }
+}
+
+# output estimates
+cat(" * Bayes Estimates\n")
+cat(" * Intercept:         ", meanBeta[1]/niter, "\n")
+cat(" * Slope:             ", meanBeta[2]/niter, "\n")
+cat(" * Residual Variance: ", meanSigma/niter, "\n")
+
+```
+
+

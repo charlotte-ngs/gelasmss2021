@@ -23,7 +23,7 @@ params:
 <!-- %\begin{document} -->
 <!-- %\SweaveOpts{concordance=TRUE} -->
 ```{r ChunkOptions, echo=FALSE}
-knitr::opts_chunk$set(echo = FALSE, results = 'hide')
+# knitr::opts_chunk$set(echo = FALSE, results = 'hide')
 #knitr::opts_chunk$set(concordance=TRUE)
 knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
 # write the parameters to file
@@ -54,9 +54,9 @@ nPointQ1Total <- sum(unlist(lPointsQ1))
 <!-- <<PointsQ2, echo=FALSE>>= -->
 ```{r PointsQ2, echo=FALSE}
 # Assign Points for Q2
-lPointsQ2 <- list(TaskA = 0,
-                  TaskB = 0,
-                  TaskC = 0,
+lPointsQ2 <- list(TaskA = 7,
+                  TaskB = 15,
+                  TaskC = 6,
                   TaskD = 0)
 nPointQ2Total <- sum(unlist(lPointsQ2))
 ```
@@ -64,8 +64,8 @@ nPointQ2Total <- sum(unlist(lPointsQ2))
 <!-- <<PointsQ3, echo=FALSE>>= -->
 ```{r PointsQ3, echo=FALSE}
 # Assign Points for Q3
-lPointsQ3 <- list(TaskA = 0,
-                  TaskB = 0,
+lPointsQ3 <- list(TaskA = 4,
+                  TaskB = 5,
                   TaskC = 0,
                   TaskD = 0)
 nPointQ3Total <- sum(unlist(lPointsQ3))
@@ -303,6 +303,11 @@ vec_sw <- round(n_intercept + n_reg_coef_sw_bw * vec_bw + rnorm(n_nr_animal, mea
 tbl_sw_bw <- tibble::tibble( Animal = c(1:n_nr_animal),
                              BodyWeight = vec_bw,
                              SlaughterWeight = vec_sw )
+# write file, if it does not exist
+s_data_p02_file <- "asm_exam_p02.csv"
+s_local_data_p02_path <- file.path(here::here(), "docs", "data", s_data_p02_file)
+if (!file.exists(s_local_data_p02_path))
+  readr::write_csv2(tbl_sw_bw, file = s_local_data_p02_path)
 ```
 
 The following table contains body weight and slaughter weight for `r n_nr_animal` animals. Before the farmer sells the animal to the slaughter house, it is weighed on the farm. The slaughter weight is determined by the slaughter house.
@@ -324,6 +329,22 @@ knitr::kable(tbl_sw_bw)
 
 ### Solution
 
+* Regression Model: 
+
+
+* Table of knowns and unknowns
+
+```{r, echo=FALSE, results='asis'}
+tbl_known_unknown <- tibble::tibble(Quantity = c("", "", "", "", ""),
+                                    `Known/Unknown`    = c("", "", "", "", ""))
+knitr::kable(tbl_known_unknown)
+```
+
+\clearpage
+\pagebreak
+
+### Master Solution
+
 * Regression Model: For a given animal $i$, the slaughterweight $y_i$ can be written as
 
 $$y_i = b_0 + b_1 * x_{i} + e_i$$
@@ -336,8 +357,8 @@ with $y$ being the vector of slaughterweights, $b$ the vector with the intercept
 * Table of knowns and unknowns
 
 ```{r, echo=FALSE, results='asis'}
-tbl_known_unknown <- tibble::tibble(Quantity = c("$y$", "$X$", "$b$", "$e"),
-                                    `Known/Unknown`    = c("known", "known", "unknown", "unknown"))
+tbl_known_unknown <- tibble::tibble(Quantity = c("$y$", "$X$", "$b$", "$e$", "$\\sigma_e^2$"),
+                                    `Known/Unknown`    = c("known", "known", "unknown", "unknown", "unknown"))
 knitr::kable(tbl_known_unknown)
 ```
 
@@ -345,44 +366,232 @@ knitr::kable(tbl_known_unknown)
 \pagebreak
 
 \begin{enumerate}
-\item[b)]
+\item[b)] The following programming code in R does a Bayesian estimation of the unknowns of the regression model. Please complete the code where indicated (lines after comment starting with "TODO") such that estimates of unknowns are obtained. 
 
-\textit{}
+\textit{Der nachfolgende Programmcode in R ergibt eine Bayes'sche Schätzung der unbekannten im Regressionsmodell. Bitte vervollständigen Sie den nachfolgenden Programmcode so, dass die Schätzungen der Unbekannten Grössen im Regressionsmodell resultieren. Die zu ergänzenden Stellen sind mit einem Kommentar, welcher mit dem Wort "TODO" beginnt, markiert.}
 \end{enumerate}
 \points{`r lPointsQ2$TaskB`}
 
 
+### Hint
+```{r, echo=FALSE}
+s_data_p02_path <- file.path("https://charlotte-ngs.github.io/gelasmss2021/data", s_data_p02_file)
+```
+
+* The dataset is available at: `r s_data_p02_path`. 
+
 ### Solution
+
+```{r, eval=FALSE, results='markup'}
+01 # read the data
+02 s_data_p02_path <- "https://charlotte-ngs.github.io/gelasmss2021/data/asm_exam_p02.csv"
+03 tbl_reg_sw_bw <- readr::read_csv2(file = s_data_p02_path)
+04
+05 # take number of observations from tbl_reg_sw_bw
+06 n_nr_obs <- nrow(tbl_reg_sw_bw)
+07
+08 # define Matrix X
+09 X <- matrix(c(rep(1,n_nr_obs), tbl_reg_sw_bw$BodyWeight), ncol = 2)
+10 # observations as vector y
+11 y <- tbl_reg_sw_bw$SlaughterWeight
+12 # fix constants
+13 nuRes <- 4
+14 varResidual <- 1
+15 scaleRes <- varResidual * (nuRes - 2)/nuRes
+16 mu <- mean(y)
+17 ycorr <- y - mu
+18 # intialise estimates for intercept, slope and residual variance
+19 beta <- c(0,0)
+20 meanBeta <- c(0, 0)
+21 sigma <- 1
+22 meanSigma <- 0
+23 # loop over iterations of the Gibbs Sampler
+24 niter <- 1000
+25 for (iter in 1:niter){
+26   # sampling intercept
+27   w  <-  y - X[, 2] * beta[2]
+28   x <- X[, 1]
+29   xpxi <- 1/(t(x) %*% x)
+30   # TODO: compute mean of conditional distribution
+31   betaHat <- 
+32   # TODO: draw sample of intercept from normal distribution
+33   beta[1] <- 
+34   # sampling slope
+35   w <- y - X[, 1] * beta[1]
+36   x <- X[, 2]
+37   xpxi <- 1/(t(x) %*% x)
+38   # TODO: compute mean of conditional distribution
+39   betaHat <- 
+40   # TODO: draw sample for slope from normal distribution
+41   beta[2] <- 
+42   # sample residual variance
+43   sigma <- (crossprod(ycorr) + nuRes * scaleRes) / rchisq(1, n_nr_obs + nuRes)
+44  # TODO: save current sample of beta to meanBeta and sigma to meanSigma 
+45   meanBeta <- 
+46   meanSigma <- 
+47   # output every 200th sample
+48   if (iter %% 200 == 0){
+49     cat(" * Iteration:         ", iter, "\n")
+50     cat(" * Intercept:         ", beta[1], "\n")
+51     cat(" * Slope:             ", beta[2], "\n")
+52     cat(" * Residual Variance: ", sigma, "\n")
+53   }
+54 }
+55
+56 # output estimates
+57 cat(" * Bayes Estimates\n")
+58 cat(" * Intercept:         ", meanBeta[1]/niter, "\n")
+59 cat(" * Slope:             ", meanBeta[2]/niter, "\n")
+60 cat(" * Residual Variance: ", meanSigma/niter, "\n")
+```
 
 \clearpage
 \pagebreak
 
-\begin{enumerate}
-\item[c)] 
+### Master Solution
 
-\textit{}
+```{r}
+# set seed 
+set.seed(7821)
+
+# read the data
+s_data_p02_path <- "https://charlotte-ngs.github.io/gelasmss2021/data/asm_exam_p02.csv"
+tbl_reg_sw_bw <- readr::read_csv2(file = s_data_p02_path)
+
+# take number of observations from tbl_reg_sw_bw
+n_nr_obs <- nrow(tbl_reg_sw_bw)
+
+# define Matrix X
+X <- matrix(c(rep(1,n_nr_obs), tbl_reg_sw_bw$BodyWeight), ncol = 2)
+# observations as vector y
+y <- tbl_reg_sw_bw$SlaughterWeight
+# fix constants
+nuRes <- 4
+varResidual <- 1
+scaleRes <- varResidual * (nuRes - 2)/nuRes
+mu <- mean(y)
+ycorr <- y - mu
+# intialise estimates for intercept, slope and residual variance
+beta <- c(0,0)
+meanBeta <- c(0, 0)
+sigma <- 1
+meanSigma <- 0
+# loop over iterations of the Gibbs Sampler
+niter <- 1000
+for (iter in 1:niter){
+  # sampling intercept
+  w = y - X[, 2] * beta[2]
+  x = X[, 1]
+  xpxi = 1/(t(x) %*% x)
+  # compute mean of conditional distribution
+  betaHat = t(x) %*% w * xpxi
+  # draw sample of intercept from normal distribution
+  beta[1] = rnorm(1, betaHat, sqrt(xpxi * sigma))
+  # sampling slope
+  w = y - X[, 1] * beta[1]
+  x = X[, 2]
+  xpxi = 1/(t(x) %*% x)
+  # compute mean of conditional distribution
+  betaHat = t(x) %*% w * xpxi
+  # draw sample for slope from normal distribution
+  beta[2] = rnorm(1, betaHat, sqrt(xpxi * sigma))
+  # sample residual variance
+  sigma <- (crossprod(ycorr) + nuRes * scaleRes) / rchisq(1, n_nr_obs + nuRes)
+  # save current sample of beta to meanBeta and sigma to meanSigma 
+  # add beta samples
+  meanBeta <- meanBeta + beta
+  # add sample for sigma
+  meanSigma <- meanSigma + sigma
+  # output every 200th sample
+  if (iter %% 200 == 0){
+    cat(" * Iteration:         ", iter, "\n")
+    cat(" * Intercept:         ", beta[1], "\n")
+    cat(" * Slope:             ", beta[2], "\n")
+    cat(" * Residual Variance: ", sigma, "\n")
+  }
+}
+
+# output estimates
+cat(" * Bayes Estimates\n")
+cat(" * Intercept:         ", meanBeta[1]/niter, "\n")
+cat(" * Slope:             ", meanBeta[2]/niter, "\n")
+cat(" * Residual Variance: ", meanSigma/niter, "\n")
+```
+
+Validation with `lm()`
+
+```{r}
+fit_sw_bw <- lm(SlaughterWeight ~ BodyWeight, data = tbl_reg_sw_bw)
+summary(fit_sw_bw)
+```
+
+
+\clearpage
+\pagebreak
+
+```{r echo=FALSE}
+x_missing <- 513
+```
+
+\begin{enumerate}
+\item[c)] We assume that in addition to the `r n_nr_obs` animals shown above there is an additional animal with a body weight of `r x_missing` kg. In the slaughterhouse the slaughter weight could not be measured, hence it is missing. How are such missing observations handled in a Bayesian analysis? Please fill out the table with the knowns and unknowns once again taking into account the fact that the observation of the slaughterweight for animal `r n_nr_obs+1` is missing.  
+
+\textit{Wir nehmen an, dass zusätzlich zu den `r n_nr_obs` Tieren, welche in der Tabelle oben gezeigt wurden, noch ein zusätzliches Tier mit einem Lebendgewicht von `r x_missing` kg hinzukommt. Im Schlachthof konnte das Schlachtgewicht vom Tier `r n_nr_obs+1` nicht erfasst werden und fehlt somit. Wie wird diese fehlende Beobachtung in einer Bayes'schen Analyse behandelt? Bitte ergänzen Sie die Tabelle mit den bekannten und den unbekannten Grössen unter Berücksichtigung der fehlenden Beobachtung des Schlachtgewichts von Tier `r n_nr_obs+1`.}
 \end{enumerate}
 \points{`r lPointsQ2$TaskC`}
 
 
 ### Solution 
 
+Expanded Table with knowns and unknowns
+
+```{r, echo=FALSE, results='asis'}
+tbl_exp_known_unknown <- tibble::tibble(Quantity = c("", "", "", "", "", ""),
+                                    `Known/Unknown`    = c("", "", "", "", "", ""))
+knitr::kable(tbl_exp_known_unknown)
+```
+
+
+\clearpage
+\pagebreak
+
+### Master Solution 
+
+Expanded Table with knowns and unknowns
+
+```{r, echo=FALSE, results='asis'}
+tbl_exp_known_unknown <- tibble::tibble(Quantity = c("$y[1:12]$", "$y[13]$", "$X$", "$b$", "$e$", "$\\sigma_e^2$"),
+                                    `Known/Unknown`    = c("known", "unknown", "known", "unknown", "unknown", "unknown"))
+knitr::kable(tbl_exp_known_unknown)
+```
+
+
 \clearpage
 \pagebreak
 
 
-## Problem 3: 
-
-\textit{}
+## Problem 3: LASSO
 
 \begin{enumerate}
-\item[a)]
+\item[a)] LASSO is an alternative procedure to Least Squares to estimate parameters of a linear model. Which of the following equations belongs to least square and which belongs to LASSO.
 
-\textit{}
+
+\textit{LASSO ist ein alternatives Parameterschätzverfahren zu Least Squares. Ordnen Sie die nachfolgenden Gleichungen zu den beiden Verfahren Least Squares und LASSO zu.}
 \end{enumerate}
 \points{`r lPointsQ3$TaskA`}
 
 
+\begin{eqnarray}
+\hat{\beta}_1 & = & argmin_{\beta}  \left\{ ||y - X\beta||^2 + \lambda\sum_{j=1}^p|\beta_j|  \right\}\nonumber 
+\label{eq:LsEstimateBetaLASSO}
+\end{eqnarray}
+
+
+\begin{eqnarray}
+\hat{\beta}_2 & = & argmin_{\beta}||y - X\beta||^2 \nonumber
+\label{eq:LsEstimateBetaExpandRSS}
+\end{eqnarray}
+
 ### Solution
 
 
@@ -390,15 +599,95 @@ knitr::kable(tbl_known_unknown)
 \pagebreak
 
 \begin{enumerate}
-\item[b)]
+\item[b)] We analyse a genomic dataset with 25 animals which are genotyped at 100 SNP-locations. Only 5 SNPs have an effect on the observed trait. The SNP-effects are estimated with LASSO. The results of this analysis are shown in the two plots below. The second plot can be used to determine the penalty-term (Log Lambda), such that a minimum number of SNP-effects are considered and such that the mean-squared error is still as small as possible (right dotted). Which are the 5 SNPs (indicate the numbers) with the largest absolute effects, when the penalty-term is determined based on the second plot.
 
-\textit{}
+\textit{Wir analysieren einen genomischen Datensatz mit 25 Tieren, welche Daten an 100 SNP-Positionen aufweisen. Davon haben nur 5 SNP einen Effekt auf das gemessene Merkmal. Die SNP-Effekte werden mit LASSO geschätzt. Die Resultate sind in den nachfolgenden Plots gezeigt. Im zweiten Plot können wir den Strafterm (Log Lambda) so bestimmen, dass möglichst wenige SNPs berücksichtigt werden und dass gleichzeitig der mittlere quadrierte Fehler minimal bleibt (rechte gestrichelte Linie). Welches sind die 5 SNPs (bitte Nummern angeben) mit den grössten absoluten Effekten, wenn wir den Strafterm aufgrund des zweiten Plots bestimmen.}
 \end{enumerate}
 \points{`r lPointsQ3$TaskB`}
+
+\vspace{1cm}
+
+```{r DataSetupTask3b, echo=FALSE}
+# set the seed for reproducibility
+set.seed(1239)
+# generate the matrix at a given number of SNP-loci
+#  and for a given number of animals
+n_nr_snp <- 100
+n_nr_animals <- 25
+n_min_allele_freq <- 0.2
+# generate the matrix using sample()
+mat_snp <- matrix(data = sample(c(0,1,2), 
+                               n_nr_snp*n_nr_animals, 
+                               replace = T, 
+                               prob = c((1-n_min_allele_freq)^2,
+                                        2*(1-n_min_allele_freq)*n_min_allele_freq,
+                                        n_min_allele_freq^2)), 
+                 nrow = n_nr_animals, 
+                 ncol = n_nr_snp)
+# change the coding
+mat_snp <- mat_snp - 1
+# check dimensions
+# dim(mat_snp)
+
+# significant snp
+n_nr_sign_snp <- 5
+vec_snp_sd <- apply(mat_snp, 2, sd)
+vec_ord_sd <- order(vec_snp_sd, decreasing = TRUE)
+vec_sign_snp_idx <- vec_ord_sd[1:n_nr_sign_snp]
+
+# snp effects
+n_snp_a_min <- .5
+n_snp_a_max <- 13
+vec_snp_eff <- runif(n = n_nr_sign_snp, min = n_snp_a_min, max = n_snp_a_max)
+
+# observations
+n_true_inter <- -12.4
+n_true_sd <- 3.41
+vec_y <- crossprod(t(mat_snp[,vec_sign_snp_idx]), vec_snp_eff) + 
+  rnorm(n = n_nr_animals, mean = n_true_inter, sd = n_true_sd)
+
+mat_data_lasso <- cbind(vec_y, mat_snp)
+# dim(mat_data_lasso)
+
+# fit
+suppressPackageStartupMessages(require(glmnet))  
+fit_snp <- glmnet(x = mat_snp, y = vec_y)
+
+# plot showing fit
+plot(fit_snp, xvar = "lambda", label = TRUE)
+```
+
+\pagebreak
+
+Der Strafterm kann aufgrund der linken gestrichelten Linie bestimmt werden.
+
+\textit{The penalty-term can be determined based on the right dotted line.}
+
+\vspace{1cm}
+
+```{r, echo=FALSE, results='hide'}
+# Crossvalidation
+cvfitsnp <- cv.glmnet(x = mat_snp, y = vec_y, grouped = FALSE)
+plot(cvfitsnp)
+```
+
 
 
 ### Solution
 
+### Master Solution
+
+* According to the simulation, the following SNP were used
+
+```{r}
+vec_sign_snp_idx
+```
+
+* The fit
+
+```{r}
+summary(cvfitsnp)
+```
 
 
 \clearpage
@@ -419,7 +708,7 @@ knitr::kable(tbl_known_unknown)
 \pagebreak
 
 
-## Problem 4: Bayes
+## Problem 4: Genomic BLUP
 
 
 \begin{enumerate}
