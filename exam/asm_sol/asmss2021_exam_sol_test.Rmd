@@ -3,8 +3,10 @@ output:
   pdf_document:
     includes:
       in_header: tex/header.tex
-    fig_caption: false
-    keep_tex: true
+    fig_caption: no
+    keep_tex: no
+  html_document:
+    df_print: paged
 output_file: asmss2021_exam_sol_test.pdf
 params:
   seed: 1234
@@ -263,17 +265,21 @@ abline(snp_regA, col = "red")
 ### Plot 1
 The following plot shows parameters from Output B
 
-```{r p01-plot1, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
-#rmdhelp::use_odg_graphic(ps_path = "odg/p01-plot1.odg")
-knitr::include_graphics(path = "odg/p01-plot1.png")
+<!-- 
+TODO: For some reasons, the following plots are not included in html- or pdf-output 
+TODO: Check for a possible solution.
+-->
+```{r p01plot1, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
+#rmdhelp::use_odg_graphic(ps_path = "odg/p01plot1.odg")
+knitr::include_graphics(path = "odg/p01plot1.png")
 ```
 
 ### Plot 2
 The following plot shows parameters from Output A
 
-```{r p01-plot2, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
-#rmdhelp::use_odg_graphic(ps_path = "odg/p01-plot2.odg")
-knitr::include_graphics(path = "odg/p01-plot2.png")
+```{r p01plot2, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", out.width="11cm"}
+#rmdhelp::use_odg_graphic(ps_path = "odg/p01plot2.odg")
+knitr::include_graphics(path = "odg/p01plot2.png")
 ```
 
 
@@ -281,19 +287,59 @@ knitr::include_graphics(path = "odg/p01-plot2.png")
 \clearpage
 \pagebreak
 
-## Problem 2: 
+## Problem 2: Bayes
+```{r DataSetupP02, echo=FALSE, results='hide', message=FALSE}
+set.seed(1221)
+n_nr_animal <- 12
+n_mean_bw <- 531
+n_sd_bw <- 6.1
+n_min_bw <- n_mean_bw - 3 * n_sd_bw
+n_max_bw <- n_mean_bw + 3 * n_sd_bw
+vec_bw <- round(runif(n_nr_animal, min = n_min_bw, max = n_max_bw), digits = 0)
+n_reg_coef_sw_bw <- 0.451
+n_sd_sw <- 4.7
+n_intercept <- -31.73
+vec_sw <- round(n_intercept + n_reg_coef_sw_bw * vec_bw + rnorm(n_nr_animal, mean = 0, sd = n_sd_sw), digits = 0)
+tbl_sw_bw <- tibble::tibble( Animal = c(1:n_nr_animal),
+                             BodyWeight = vec_bw,
+                             SlaughterWeight = vec_sw )
+```
 
-\textit{}
+The following table contains body weight and slaughter weight for `r n_nr_animal` animals. Before the farmer sells the animal to the slaughter house, it is weighed on the farm. The slaughter weight is determined by the slaughter house.
+
+\textit{Die folgende Tabelle enthält Lebendgewicht (`BodyWeight`) und Schlachtgewicht (`SlaughterWeight`) für `r n_nr_animal` Tiere. Vor der Schlachtung wird das Tier auf dem Betrieb noch gewogen. Das Schlachtgewicht wird im Schlachthof bestimmt.}
+
+```{r DataTableP03, echo=FALSE, results='asis'}
+knitr::kable(tbl_sw_bw)
+```
+
 
 \begin{enumerate}
-\item[a)] 
+\item[a)] Please specify the equation that models `SlaughterWeight` (response variable) as a regression on `BodyWeight` (predictor variable). Based on the specified regression equation and based on the dataset, create a table with knowns and unknowns.
 
-\textit{}
+\textit{Bitte geben Sie eine Modellgleichung, welche `SlaughterWeight` (Zielgrösse) als Regression auf `BodyWeight` (Predictorvariable) modelliert. Basierend auf der spezifizierten Regressionsgleichung und basierend auf dem Datensatz, geben Sie in einer Tabelle an, welche Grössen bekannt und welche unbekannt sind.}
 \end{enumerate}
 \points{`r lPointsQ2$TaskA`}
 
 
 ### Solution
+
+* Regression Model: For a given animal $i$, the slaughterweight $y_i$ can be written as
+
+$$y_i = b_0 + b_1 * x_{i} + e_i$$
+where $b_0$ is the intercept, $b_1$ the regression slope, $e_i$ the random error and $x_i$ the bodyweight of animal $i$. Using matrix-vector notation, we get
+
+$$y = Xb + e$$
+with $y$ being the vector of slaughterweights, $b$ the vector with the intercept and the regression slope, $e$ the vector of random residuals and $X$ is the matrix having $n$ rows and two columns where the first column is all ones and the seond column contains the bodyweight of all animals.
+
+
+* Table of knowns and unknowns
+
+```{r, echo=FALSE, results='asis'}
+tbl_known_unknown <- tibble::tibble(Quantity = c("$y$", "$X$", "$b$", "$e"),
+                                    `Known/Unknown`    = c("known", "known", "unknown", "unknown"))
+knitr::kable(tbl_known_unknown)
+```
 
 \clearpage
 \pagebreak
