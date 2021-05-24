@@ -1,0 +1,684 @@
+---
+output:
+  pdf_document:
+    includes:
+      in_header: tex/header.tex
+    fig_caption: no
+    keep_tex: no
+  html_document:
+    df_print: paged
+output_file: asmss2021_exam_sol_test.pdf
+params:
+  seed: 1234
+  name: Name
+  firstname: Firstname
+  leginr: LegiNr
+  alias: test
+--- 
+<!-- %\usepackage{fancyhdr} -->
+
+\newcommand{\points}[1]
+{\begin{flushright}\textbf{#1}\end{flushright}}
+
+<!-- %\begin{document} -->
+<!-- %\SweaveOpts{concordance=TRUE} -->
+```{r ChunkOptions, echo=FALSE}
+# knitr::opts_chunk$set(echo = FALSE, results = 'hide')
+#knitr::opts_chunk$set(concordance=TRUE)
+knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
+# write the parameters to file
+b_params_to_file <- FALSE
+# check whether seed is set and output it to a file
+s_this_rmd_file = basename(ifelse(rstudioapi::isAvailable(), 
+                         rstudioapi::getSourceEditorContext()$path, 
+                         whereami::thisfile()))
+if (is.null(params$seed)){
+  stop(" ** Error parameter seed has not been set.")
+} else {
+  set.seed(params$seed)
+  s_params_file <- paste0(format(Sys.time(), '%Y%m%d%H%M%S'), "_params_", s_this_rmd_file, ".txt", collapse = "")
+  if (b_params_to_file) dput(params, file = s_params_file)
+}
+```
+
+<!-- <<PointsQ1, echo=FALSE>>= -->
+```{r PointsQ1, echo=FALSE}
+# Assign Points for Q1
+lPointsQ1 <- list(TaskA = 8,
+                  TaskB = 2,
+                  TaskC = 6,
+                  TaskD = 0)
+nPointQ1Total <- sum(unlist(lPointsQ1))
+```
+<!-- @ -->
+<!-- <<PointsQ2, echo=FALSE>>= -->
+```{r PointsQ2, echo=FALSE}
+# Assign Points for Q2
+lPointsQ2 <- list(TaskA = 7,
+                  TaskB = 15,
+                  TaskC = 6,
+                  TaskD = 0)
+nPointQ2Total <- sum(unlist(lPointsQ2))
+```
+<!-- @ -->
+<!-- <<PointsQ3, echo=FALSE>>= -->
+```{r PointsQ3, echo=FALSE}
+# Assign Points for Q3
+lPointsQ3 <- list(TaskA = 4,
+                  TaskB = 5,
+                  TaskC = 0,
+                  TaskD = 0)
+nPointQ3Total <- sum(unlist(lPointsQ3))
+```
+<!-- @ -->
+<!-- <<PointsQ4, echo=FALSE>>= -->
+```{r PointsQ4, echo=FALSE}
+# Assign Points for Q4
+lPointsQ4 <- list(TaskA = 8,
+                  TaskB = 15,
+                  TaskC = 15,
+                  TaskD = 0)
+nPointQ4Total <- sum(unlist(lPointsQ4))
+```
+<!-- @ -->
+<!-- <<PointsTotal, echo=FALSE>>= -->
+```{r PointsTotal, echo=FALSE}
+nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4Total
+```
+<!-- @ -->
+
+
+\thispagestyle{empty}
+
+\fcolorbox{white}{white}{
+	\centering \parbox[t]{1.0\linewidth}{
+		\fontsize{12pt}{20pt}\selectfont % 
+		\vspace*{0.5cm} % 
+
+   	Peter von Rohr \\ Institute of Agricultural Sciences\\ D-USYS\\ ETH Zurich
+
+		\vspace*{0.5cm} 
+	}
+}
+
+\vspace*{2cm}
+
+\fcolorbox{white}{white}{
+	\parbox[t]{1.0\linewidth}{
+		\centering \fontsize{25pt}{40pt}\selectfont %
+		\vspace*{0.2cm}
+		 751-7602-00 V \\
+     Exam in   \\
+     Applied Statistical Methods \\
+     in Animal Sciences \\
+     SS 2021
+
+		\vspace*{0.7cm} % Space between the end of the title and the bottom of the grey box
+	}
+}
+
+
+\vspace*{1cm}
+
+<!-- % Table with Name -->
+\begin{tabular}{p{3cm}p{6cm}}
+Date:     &  $31^{st}$ May 2021 \\
+          &  \\
+          &  \\
+Name:     &   \\
+          &  \\
+          &  \\
+Legi-Nr:  &  \\
+\end{tabular}
+
+<!-- % Table with Points -->
+
+\vspace{5ex}
+\begin{center}
+\begin{tabular}{|p{3cm}|c|c|}
+\hline
+Problem  &  Maximum Number of Points  &  Number of Points Reached\\
+\hline
+1        &  `r nPointQ1Total`  & \\
+\hline
+2        &  `r nPointQ2Total`  & \\
+\hline
+3        &  `r nPointQ3Total`  & \\
+\hline
+4        &  `r nPointQ4Total`  & \\
+\hline
+Total    &  `r nPointOverallTotal` & \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.5cm}
+
+\textit{Questions in German are in italics}
+
+\clearpage
+\pagebreak
+
+
+## Problem 1: Linear Regression
+
+```{r DataSim, echo=FALSE, results='hide'}
+set.seed(1566)
+n = 30
+k = 1
+#x = matrix(sample(c(0, 1), n * k, replace = T), nrow = n, ncol = k)
+x = matrix(rnorm(n*k, mean = 3, sd = 0.5), nrow = n, ncol = k)
+X = cbind(1, x)
+betaTrue = c(1.07, 3.32)
+y = X %*% betaTrue + rnorm(n, 0, 2)
+dfSimData <- data.frame(X1 = x[,1], y = y)
+```
+
+The same dataset is analysed with two different regression models. The R-Output of both analyses is given by Output A and Output B. 
+
+\textit{Wir haben den gleichen Datensatz mit zwei unterschiedlichen linearen Regressionsmodellen analysiert. Der R-Output dieser beiden Analysen ist nachfolgend als Output A und Output B gegeben. }
+
+### Output A
+```{r SnpRegOutputA, echo=FALSE, results='markup'}
+summary(snp_regA <- lm(y ~ X1, data = dfSimData))
+```
+
+### Output B
+```{r SnpRegOutputB, echo=FALSE, results='markup'}
+summary(snp_regB <- lm(y ~ -1 + X1, data = dfSimData))
+```
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[a)] Give the formulas of both statistical models which belong to Output A and Output B. Where is the main difference between both models?
+\textit{Geben Sie die Formeln der beiden statistischen Modelle an, welche zu Output A und Output B geführt haben. Wo liegt der hauptsächliche Unterschied zwischen den beiden Modellen?}
+\end{enumerate}
+\points{`r lPointsQ1$TaskA`}
+
+
+### Solution
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)] For both analyses a plot was produced. Assign Plots 1 and 2 to Outputs A and B. 
+
+\textit{ Für die zwei Analysen wurden auch zwei Plots gemacht. Ordnen Sie die Plots 1 und 2 den Outputs A und B zu.}
+\end{enumerate}
+\points{`r lPointsQ1$TaskB`}
+
+### Plot 1
+```{r PlotAbline1, echo=FALSE}
+plot(dfSimData$X1, dfSimData$y, type = "p", xlab = "X1", ylab = "y", 
+     xlim = c(0,max(dfSimData$X1)+0.2), ylim = c(-1,max(dfSimData$y)+1) )
+abline(snp_regB, col = "red")
+```
+
+
+### Plot 2
+```{r PlotAbline2, echo=FALSE}
+plot(dfSimData$X1, dfSimData$y, type = "p", xlab = "X1", ylab = "y", 
+     xlim = c(0,max(dfSimData$X1)+0.2), ylim = c(-1,max(dfSimData$y)+1))
+abline(snp_regA, col = "red")
+```
+
+
+### Solution 
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] Enter the parameter estimates from Outputs A and B in Plots 1 and 2 by marking their lengths in the plots.
+
+\textit{Zeichnen Sie die geschätzten Parameter (Estimate) aus den Outputs A und B in die Plots 1 und 2 ein}
+\end{enumerate}
+\points{`r lPointsQ1$TaskC`}
+
+### Plot 1
+```{r PlotAblineC1, echo=FALSE}
+plot(dfSimData$X1, dfSimData$y, type = "p", xlab = "X1", ylab = "y", 
+     xlim = c(0,max(dfSimData$X1)+0.2), ylim = c(-1,max(dfSimData$y)+1) )
+abline(snp_regB, col = "red")
+```
+
+
+### Plot 2
+```{r PlotAblineC2, echo=FALSE}
+plot(dfSimData$X1, dfSimData$y, type = "p", xlab = "X1", ylab = "y", 
+     xlim = c(0,max(dfSimData$X1)+0.2), ylim = c(-1,max(dfSimData$y)+1))
+abline(snp_regA, col = "red")
+```
+
+
+### Solution 
+
+
+\clearpage
+\pagebreak
+
+## Problem 2: Bayes
+```{r DataSetupP02, echo=FALSE, results='hide', message=FALSE}
+set.seed(1221)
+n_nr_animal <- 12
+n_mean_bw <- 531
+n_sd_bw <- 6.1
+n_min_bw <- n_mean_bw - 3 * n_sd_bw
+n_max_bw <- n_mean_bw + 3 * n_sd_bw
+vec_bw <- round(runif(n_nr_animal, min = n_min_bw, max = n_max_bw), digits = 0)
+n_reg_coef_sw_bw <- 0.451
+n_sd_sw <- 4.7
+n_intercept <- -31.73
+vec_sw <- round(n_intercept + n_reg_coef_sw_bw * vec_bw + rnorm(n_nr_animal, mean = 0, sd = n_sd_sw), digits = 0)
+tbl_sw_bw <- tibble::tibble( Animal = c(1:n_nr_animal),
+                             BodyWeight = vec_bw,
+                             SlaughterWeight = vec_sw )
+# write file, if it does not exist
+s_data_p02_file <- "asm_exam_p02.csv"
+s_local_data_p02_path <- file.path(here::here(), "docs", "data", s_data_p02_file)
+if (!file.exists(s_local_data_p02_path))
+  readr::write_csv2(tbl_sw_bw, file = s_local_data_p02_path)
+```
+
+The following table contains body weight and slaughter weight for `r n_nr_animal` animals. Before the farmer sells the animal to the slaughter house, it is weighed on the farm. The slaughter weight is determined by the slaughter house.
+
+\textit{Die folgende Tabelle enthält Lebendgewicht (`BodyWeight`) und Schlachtgewicht (`SlaughterWeight`) für `r n_nr_animal` Tiere. Vor der Schlachtung wird das Tier auf dem Betrieb noch gewogen. Das Schlachtgewicht wird im Schlachthof bestimmt.}
+
+```{r DataTableP03, echo=FALSE, results='asis'}
+knitr::kable(tbl_sw_bw)
+```
+
+
+\begin{enumerate}
+\item[a)] Please specify the equation that models `SlaughterWeight` (response variable) as a regression on `BodyWeight` (predictor variable). Based on the specified regression equation and based on the dataset, create a table with knowns and unknowns.
+
+\textit{Bitte geben Sie eine Modellgleichung, welche `SlaughterWeight` (Zielgrösse) als Regression auf `BodyWeight` (Predictorvariable) modelliert. Basierend auf der spezifizierten Regressionsgleichung und basierend auf dem Datensatz, geben Sie in einer Tabelle an, welche Grössen bekannt und welche unbekannt sind.}
+\end{enumerate}
+\points{`r lPointsQ2$TaskA`}
+
+
+### Solution
+
+* Regression Model: 
+
+
+* Table of knowns and unknowns
+
+```{r, echo=FALSE, results='asis'}
+tbl_known_unknown <- tibble::tibble(Quantity = c(" ", " ", " ", " ", " "),
+                                    `Known/Unknown`    = c(" ", " ", " ", " ", " "))
+# knitr::kable(tbl_known_unknown)
+```
+
+\clearpage
+\pagebreak
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)] The following programming code in R does a Bayesian estimation of the unknowns of the regression model. Please complete the code where indicated (lines after comment starting with "TODO") such that estimates of unknowns are obtained. 
+
+\textit{Der nachfolgende Programmcode in R ergibt eine Bayes'sche Schätzung der unbekannten im Regressionsmodell. Bitte vervollständigen Sie den nachfolgenden Programmcode so, dass die Schätzungen der Unbekannten Grössen im Regressionsmodell resultieren. Die zu ergänzenden Stellen sind mit einem Kommentar, welcher mit dem Wort "TODO" beginnt, markiert.}
+\end{enumerate}
+\points{`r lPointsQ2$TaskB`}
+
+
+### Hint
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+s_data_p02_path <- file.path("https://charlotte-ngs.github.io/gelasmss2021/data", s_data_p02_file)
+tbl_reg_sw_bw <- readr::read_csv2(file = s_data_p02_path)
+n_nr_obs <- nrow(tbl_reg_sw_bw)
+```
+
+* The dataset is available at: `r s_data_p02_path`. 
+
+### Solution
+
+```{r, eval=FALSE, results='markup'}
+01 # read the data
+02 s_data_p02_path <- "https://charlotte-ngs.github.io/gelasmss2021/data/asm_exam_p02.csv"
+03 tbl_reg_sw_bw <- readr::read_csv2(file = s_data_p02_path)
+04
+05 # take number of observations from tbl_reg_sw_bw
+06 n_nr_obs <- nrow(tbl_reg_sw_bw)
+07
+08 # define Matrix X
+09 X <- matrix(c(rep(1,n_nr_obs), tbl_reg_sw_bw$BodyWeight), ncol = 2)
+10 # observations as vector y
+11 y <- tbl_reg_sw_bw$SlaughterWeight
+12 # fix constants
+13 nuRes <- 4
+14 varResidual <- 1
+15 scaleRes <- varResidual * (nuRes - 2)/nuRes
+16 mu <- mean(y)
+17 ycorr <- y - mu
+18 # intialise estimates for intercept, slope and residual variance
+19 beta <- c(0,0)
+20 meanBeta <- c(0, 0)
+21 sigma <- 1
+22 meanSigma <- 0
+23 # loop over iterations of the Gibbs Sampler
+24 niter <- 1000
+25 for (iter in 1:niter){
+26   # sampling intercept
+27   w  <-  y - X[, 2] * beta[2]
+28   x <- X[, 1]
+29   xpxi <- 1/(t(x) %*% x)
+30   # TODO: compute mean of conditional distribution
+31   betaHat <- 
+32   # TODO: draw sample of intercept from normal distribution
+33   beta[1] <- 
+34   # sampling slope
+35   w <- y - X[, 1] * beta[1]
+36   x <- X[, 2]
+37   xpxi <- 1/(t(x) %*% x)
+38   # TODO: compute mean of conditional distribution
+39   betaHat <- 
+40   # TODO: draw sample for slope from normal distribution
+41   beta[2] <- 
+42   # sample residual variance
+43   sigma <- (crossprod(ycorr) + nuRes * scaleRes) / rchisq(1, n_nr_obs + nuRes)
+44  # TODO: save current sample of beta to meanBeta and sigma to meanSigma 
+45   meanBeta <- 
+46   meanSigma <- 
+47   # output every 200th sample
+48   if (iter %% 200 == 0){
+49     cat(" * Iteration:         ", iter, "\n")
+50     cat(" * Intercept:         ", beta[1], "\n")
+51     cat(" * Slope:             ", beta[2], "\n")
+52     cat(" * Residual Variance: ", sigma, "\n")
+53   }
+54 }
+55
+56 # output estimates
+57 cat(" * Bayes Estimates\n")
+58 cat(" * Intercept:         ", meanBeta[1]/niter, "\n")
+59 cat(" * Slope:             ", meanBeta[2]/niter, "\n")
+60 cat(" * Residual Variance: ", meanSigma/niter, "\n")
+```
+
+\clearpage
+\pagebreak
+
+
+```{r echo=FALSE}
+x_missing <- 513
+```
+
+\begin{enumerate}
+\item[c)] We assume that in addition to the `r n_nr_obs` animals shown above there is an additional animal with a body weight of `r x_missing` kg. In the slaughterhouse the slaughter weight could not be measured, hence it is missing. How are such missing observations handled in a Bayesian analysis? Please fill out the table with the knowns and unknowns once again taking into account the fact that the observation of the slaughterweight for animal `r n_nr_obs+1` is missing.  
+
+\textit{Wir nehmen an, dass zusätzlich zu den `r n_nr_obs` Tieren, welche in der Tabelle oben gezeigt wurden, noch ein zusätzliches Tier mit einem Lebendgewicht von `r x_missing` kg hinzukommt. Im Schlachthof konnte das Schlachtgewicht vom Tier `r n_nr_obs+1` nicht erfasst werden und fehlt somit. Wie wird diese fehlende Beobachtung in einer Bayes'schen Analyse behandelt? Bitte ergänzen Sie die Tabelle mit den bekannten und den unbekannten Grössen unter Berücksichtigung der fehlenden Beobachtung des Schlachtgewichts von Tier `r n_nr_obs+1`.}
+\end{enumerate}
+\points{`r lPointsQ2$TaskC`}
+
+
+### Solution 
+
+Expanded Table with knowns and unknowns
+
+```{r, echo=FALSE, results='asis'}
+tbl_exp_known_unknown <- tibble::tibble(Quantity = c(" ", " ", " ", " ", " ", " "),
+                                    `Known/Unknown`    = c(" ", " ", " ", " ", " ", " "))
+# knitr::kable(tbl_exp_known_unknown)
+```
+
+
+\clearpage
+\pagebreak
+
+
+## Problem 3: LASSO
+
+\begin{enumerate}
+\item[a)] LASSO is an alternative procedure to Least Squares to estimate parameters of a linear model. Which of the following equations belongs to least square and which belongs to LASSO.
+
+
+\textit{LASSO ist ein alternatives Parameterschätzverfahren zu Least Squares. Ordnen Sie die nachfolgenden Gleichungen zu den beiden Verfahren Least Squares und LASSO zu.}
+\end{enumerate}
+\points{`r lPointsQ3$TaskA`}
+
+
+\begin{eqnarray}
+\hat{\beta}_1 & = & argmin_{\beta}  \left\{ ||y - X\beta||^2 + \lambda\sum_{j=1}^p|\beta_j|  \right\}\nonumber 
+\label{eq:LsEstimateBetaLASSO}
+\end{eqnarray}
+
+
+\begin{eqnarray}
+\hat{\beta}_2 & = & argmin_{\beta}||y - X\beta||^2 \nonumber
+\label{eq:LsEstimateBetaExpandRSS}
+\end{eqnarray}
+
+### Solution
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)] We analyse a genomic dataset with 25 animals which are genotyped at 100 SNP-locations. Only 5 SNPs have an effect on the observed trait. The SNP-effects are estimated with LASSO. The results of this analysis are shown in the two plots below. The second plot can be used to determine the penalty-term (Log Lambda), such that a minimum number of SNP-effects are considered and such that the mean-squared error is still as small as possible (right dotted). Which are the 5 SNPs (indicate the numbers) with the largest absolute effects, when the penalty-term is determined based on the second plot.
+
+\textit{Wir analysieren einen genomischen Datensatz mit 25 Tieren, welche Daten an 100 SNP-Positionen aufweisen. Davon haben nur 5 SNP einen Effekt auf das gemessene Merkmal. Die SNP-Effekte werden mit LASSO geschätzt. Die Resultate sind in den nachfolgenden Plots gezeigt. Im zweiten Plot können wir den Strafterm (Log Lambda) so bestimmen, dass möglichst wenige SNPs berücksichtigt werden und dass gleichzeitig der mittlere quadrierte Fehler minimal bleibt (rechte gestrichelte Linie). Welches sind die 5 SNPs (bitte Nummern angeben) mit den grössten absoluten Effekten, wenn wir den Strafterm aufgrund des zweiten Plots bestimmen.}
+\end{enumerate}
+\points{`r lPointsQ3$TaskB`}
+
+\vspace{1cm}
+
+```{r DataSetupTask3b, echo=FALSE}
+# set the seed for reproducibility
+set.seed(1239)
+# generate the matrix at a given number of SNP-loci
+#  and for a given number of animals
+n_nr_snp <- 100
+n_nr_animals <- 25
+n_min_allele_freq <- 0.2
+# generate the matrix using sample()
+mat_snp <- matrix(data = sample(c(0,1,2), 
+                               n_nr_snp*n_nr_animals, 
+                               replace = T, 
+                               prob = c((1-n_min_allele_freq)^2,
+                                        2*(1-n_min_allele_freq)*n_min_allele_freq,
+                                        n_min_allele_freq^2)), 
+                 nrow = n_nr_animals, 
+                 ncol = n_nr_snp)
+# change the coding
+mat_snp <- mat_snp - 1
+# check dimensions
+# dim(mat_snp)
+
+# significant snp
+n_nr_sign_snp <- 5
+vec_snp_sd <- apply(mat_snp, 2, sd)
+vec_ord_sd <- order(vec_snp_sd, decreasing = TRUE)
+vec_sign_snp_idx <- vec_ord_sd[1:n_nr_sign_snp]
+
+# snp effects
+n_snp_a_min <- .5
+n_snp_a_max <- 13
+vec_snp_eff <- runif(n = n_nr_sign_snp, min = n_snp_a_min, max = n_snp_a_max)
+
+# observations
+n_true_inter <- -12.4
+n_true_sd <- 3.41
+vec_y <- crossprod(t(mat_snp[,vec_sign_snp_idx]), vec_snp_eff) + 
+  rnorm(n = n_nr_animals, mean = n_true_inter, sd = n_true_sd)
+
+mat_data_lasso <- cbind(vec_y, mat_snp)
+# dim(mat_data_lasso)
+
+# fit
+suppressPackageStartupMessages(require(glmnet))  
+fit_snp <- glmnet(x = mat_snp, y = vec_y)
+
+# plot showing fit
+plot(fit_snp, xvar = "lambda", label = TRUE)
+```
+
+\pagebreak
+
+Der Strafterm kann aufgrund der linken gestrichelten Linie bestimmt werden.
+
+\textit{The penalty-term can be determined based on the right dotted line.}
+
+\vspace{1cm}
+
+```{r, echo=FALSE, results='hide'}
+# Crossvalidation
+cvfitsnp <- cv.glmnet(x = mat_snp, y = vec_y, grouped = FALSE)
+plot(cvfitsnp)
+```
+
+
+
+### Solution
+
+
+\clearpage
+\pagebreak
+
+
+
+## Problem 4: Genomic BLUP
+
+```{r asm-ex-p04-data-setup, echo=FALSE, message=FALSE, warning=FALSE}
+s_data_p04_file <- "asm_exam_p04.csv"
+s_data_p04_local_path <- file.path(here::here(), "docs", "data", s_data_p04_file)
+s_data_p04_url_path <- file.path("https://charlotte-ngs.github.io/gelasmss2021/data", s_data_p04_file)
+n_nr_snp_cons <- 2
+
+# make the simulation reproducible
+set.seed(732)
+
+if (file.exists(s_data_p04_local_path)){
+  tbl_data_p04 <- readr::read_csv2(file = s_data_p04_local_path)
+} else {
+  # pedigree
+  n_nr_ani <- 10
+  n_nr_founder <- 4
+  n_nr_non_founder <- n_nr_ani - n_nr_founder
+  tbl_ped <- tibble::tibble(ID = c((n_nr_founder + 1):n_nr_ani),
+                            Sire = c(1, 1, 2, 2, 5, 5),
+                            Dam  = c(3, 4, 3, 3, 7, 8))
+  
+  # install (if necessary) andload the simulation package
+  pkg <- "sim1000G"
+  if (!is.element(pkg, installed.packages())) install.packages(pkg)
+  require(sim1000G)
+
+  # get the vcf file that comes with the package, TODO: adapt that vcf file
+  examples_dir = system.file("examples", package = "sim1000G")
+  vcf_file = file.path(examples_dir,"region.vcf.gz")
+  # read specified vcf file with parameters (currently as given in vignette)
+  vcf = readVCF( vcf_file, maxNumberOfVariants = 600 , min_maf = 0.01, max_maf = 1)
+  # start simulation
+  startSimulation(vcf, totalNumberOfIndividuals = n_nr_ani)
+  ids = generateUnrelatedIndividuals(n_nr_founder)
+  for (idx in 1:n_nr_non_founder){
+    ids[n_nr_founder + idx] <- SIM$mate(tbl_ped$Sire[idx],tbl_ped$Dam[idx])
+  }
+  
+  genotype = retrieveGenotypes(ids)
+  dim(genotype)
+  
+  # select one SNP where animal 2 has genotype 2
+  #which(genotype[1,] == 2)
+  #which(genotype[2,] == 2)
+  #which(genotype[3,] == 2)
+  # manually pick three snp
+  mat_sim_geno <- genotype[,c(1,156, 22)]
+  
+  # determine the number of SNP
+  n_nr_snp <- ncol(mat_sim_geno)
+  
+  # simulate observations
+  vec_snp_eff <- c(13.3, 4.7, 2.1)
+  vec_sex <- c("M" = 7.1, "F" = 3.3)
+  sd_res <- 11.9
+  n_intercept <- -5.3
+  
+  # augment pedigree with founders
+  tbl_ped_aug <- tibble::tibble(ID = c(1:n_nr_ani),
+                                Sire = c(rep(NA, n_nr_founder), tbl_ped$Sire),
+                                Dam  = c(rep(NA, n_nr_founder), tbl_ped$Dam),
+                                Sex = c("M", "M", "F", "F", "M", rep("F", 5)))
+  
+  # observations
+  vec_y <- n_intercept + vec_sex[tbl_ped_aug$Sex] + crossprod(t(mat_sim_geno), vec_snp_eff) + rnorm(1, mean = 0, sd = sd_res)
+  
+  # data set
+  tbl_data_p04 <- tibble::tibble(Animal = tbl_ped_aug$ID,
+                             Sire   = tbl_ped_aug$Sire, 
+                             Dam    = tbl_ped_aug$Dam,
+                             Sex    = tbl_ped_aug$Sex,
+                             Observation = round(vec_y[,1], digits = 2))
+  # add snp Info
+  # for (idx in 1:n_nr_snp_cons){
+  for (idx in 1:n_nr_snp){
+    tbl_data_p04 <- dplyr::bind_cols(tbl_data_p04, tibble::tibble(SNP = mat_sim_geno[,idx]-1))
+    names(tbl_data_p04)[ncol(tbl_data_p04)] <- paste0("SNP", idx)
+  }
+  
+  # write data to file
+  readr::write_csv2(tbl_data_p04, path = s_data_p04_local_path)
+}
+
+```
+
+The data shown in the following table is available to predict genomic breeding values using different methods. The data is available from the URL shown below: 
+
+\textit{Die Daten in der nachfolgenden Tabelle sollen für die Schätzung von genomischen Zuchtwerten mit verschiedenen Methoden verwendet werden. Die Daten können vom folgenden URL heruntergeladen werden: }
+
+`r s_data_p04_url_path`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(tbl_data_p04)
+```
+
+
+\begin{enumerate}
+\item[a)] Use the two-step approach to predict genomic breeding values. Because, the number of SNP is smaller than the number of animals, marker effects can be estimated using least squares. Please indicate the type of model and specify the all the model components used to estimated marker effects. Also, describe how the genomic breeding values are computed from the marker effects.
+
+\textit{Verwenden Sie die Zwei-Schritt Methode zur Schätzung der genomischen Zuchtwerte. Da die Anzahl SNP kleiner ist als die Anzahl Tiere im Datensatz können die Markereffekte mit Least Squares geschätzt werden. Bitte geben Sie den Modell-Typ an und spezifizieren Sie alle Komponenten des Modells, welches zur Schätzung der Markereffekte verwendet wird. Beschreiben Sie auch, wie Sie aus den Markereffekten die genomischen Zuchtwerte berechnen.}
+\end{enumerate}
+\points{`r lPointsQ4$TaskA`}
+
+
+### Solution
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)] Use a single-step marker-effect model to predict breeding values using the data shown above. Please specify the model type and all the components of the marker-effect model and describe how genomic breeding values are predicted.
+
+\textit{Verwenden Sie ein "Single-Step" Markereffektmodell für die Schätzung der genomischen Zuchtwerte. Bitte geben Sie den Modelltyp und alle Komponenten des Markereffektmodells and und beschreiben Sie, wie die genomischen Zuchtwerte berechnet werden.}
+\end{enumerate}
+\points{`r lPointsQ4$TaskB`}
+
+
+### Solution
+
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] Use a single-step Genomic BLUP (GBLUP) model to predict genomic breeding values. Please specify the type of model used and also list all the model components of the GBLUP model used. 
+
+\textit{Verwenden Sie ein "Ein-Schritt" genomisches BLUP (GBLUP) Modell zur Schätzung der genomischen Zuchtwerte. Bitte geben Sie den Modelltyp und alle Modellkomponenten an, welche im GBLUP-Modell vorkommen.}
+\end{enumerate}
+\points{`r lPointsQ4$TaskC`}
+
+
+### Solution 
+  

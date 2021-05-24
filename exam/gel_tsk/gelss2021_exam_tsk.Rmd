@@ -4,7 +4,7 @@ output:
     includes:
       in_header: tex/header.tex
     fig_caption: false
-output_file: gelss2021_exam_sol_test.pdf
+output_file: gelss2021_exam_tsk.pdf
 params:
   seed: 1234
   name: Name
@@ -114,7 +114,7 @@ nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4To
 		\centering \fontsize{25pt}{40pt}\selectfont %
 		\vspace*{0.2cm}
 		 751-6212-00L V \\
-     Solutions to Exam    \\
+     Exam in    \\
      Applied Genetic Evaluation\\
      SS 2021
 
@@ -130,10 +130,10 @@ nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4To
 Date:     &  $31^{st}$ May 2020 \\
           &  \\
           &  \\          
-Name:     &  `r params$firstname` `r params$name` \\
+Name:     &   \\
           &  \\
           &  \\
-Legi-Nr:  & `r params$leginr`\\
+Legi-Nr:  & \\
 \end{tabular}
 
 <!-- % Table with Points -->
@@ -207,27 +207,6 @@ knitr::kable(tbl_eco_result_p01)
 
 ### Solution
 
-### Master Solution
-The profit ($P$) per slaughter animal is given by the difference between revenue ($R$) and costs ($C$). The revenue corresponds to the sum of the price per slaughter animal plus the subsidices. The price per slaughter animal is the slaughter weight times the slaughter price.
-
-The costs are the sum from fixed costs and direct costs. The direct costs depend on the length of the fattening period which is the difference in slaughter weight minus weaning weight divided by the average daily gain.
-
-```{r, echo=TRUE, results='markup'}
-# revenue
-n_sl_price <- n_sla_weight * n_dress * n_carcass_price
-n_rev <- n_sl_price + n_sub
-# length of fattening period
-n_len_fat_period <- (n_sla_weight - n_wean_weight) / n_agd
-# direct costs
-n_tot_dir_cost <- n_len_fat_period * n_dir_cost
-# total costs
-n_tot_cost <- n_tot_dir_cost + n_fix_cost
-# profit
-n_profit <- n_rev - n_tot_cost
-```
-
-The profit per slaughter animal is: `r n_profit` SFr.
-
 
 \clearpage
 \pagebreak
@@ -252,73 +231,6 @@ tbl_price_red <- tibble::tibble(Parameter = c("Price Reduction for Fleshiness (_
 
 
 ### Solution 
-
-### Master Solution 
-```{r, echo=FALSE}
-n_agd_incr <- 0.001
-```
-
-Economic values for the three traits are computed as follows
-
-* ADG: Change of profit caused by an increase of ADG by `r n_agd_incr` kg/day
-
-```{r, echo=TRUE, results='markup'}
-n_agd_new <- n_agd + n_agd_incr
-# length of fattening period
-n_len_fat_period_new <- (n_sla_weight - n_wean_weight) / n_agd_new
-# direct costs
-n_tot_dir_cost_new <- n_len_fat_period_new * n_dir_cost
-# total costs
-n_tot_cost_new <- n_tot_dir_cost_new + n_fix_cost
-# profit
-n_profit_new <- n_rev - n_tot_cost_new
-# economic value for agd
-n_ev_agd <- n_profit_new - n_profit
-```
-
-* Fleshiness: The profit is only changed by the change in revue. The revenue is changed by the price deduction.
-
-```{r}
-# revenue
-n_sl_price_new <- n_sla_weight * n_dress * n_carcass_price * (1-n_price_red_flesh)
-n_rev_new <- n_sl_price_new + n_sub
-# length of fattening period
-n_len_fat_period <- (n_sla_weight - n_wean_weight) / n_agd
-# direct costs
-n_tot_dir_cost <- n_len_fat_period * n_dir_cost
-# total costs
-n_tot_cost <- n_tot_dir_cost + n_fix_cost
-# profit
-n_profit_new <- n_rev_new - n_tot_cost
-# economic value for fleshiness
-n_ev_fl <- n_profit - n_profit_new
-```
-
-* Fat coverage: the same as with fleshiness
-
-```{r}
-# revenue
-n_sl_price_new <- n_sla_weight * n_dress * n_carcass_price * (1-n_price_red_fat)
-n_rev_new <- n_sl_price_new + n_sub
-# length of fattening period
-n_len_fat_period <- (n_sla_weight - n_wean_weight) / n_agd
-# direct costs
-n_tot_dir_cost <- n_len_fat_period * n_dir_cost
-# total costs
-n_tot_cost <- n_tot_dir_cost + n_fix_cost
-# profit
-n_profit_new <- n_rev_new - n_tot_cost
-# economic value for fleshiness
-n_ev_fc <- n_profit - n_profit_new
-```
-* Result table
-
-```{r, echo=FALSE, results='asis'}
-vec_ev_result <- c(n_ev_agd, n_ev_fl, n_ev_fc)
-tbl_ev_result <- tibble::tibble(Trait = c("ADG", "Fleshiness", "Fat Coverage"),
-                                `Economic Value` = round(vec_ev_result, digits = 3))
-knitr::kable(tbl_ev_result)
-```
 
 
 \clearpage
@@ -345,30 +257,6 @@ knitr::kable(tbl_pbv)
 
 
 ### Solution 
-
-### Master Solution 
-
-* Bull 1: Index value
-
-```{r, echo=TRUE, results='markup'}
-(n_idx_val_bull1 <- crossprod(vec_bv_bull1, vec_ev_result))
-```
-
-* Bull 2: Index value
-
-```{r, echo=TRUE, results='markup'}
-(n_idx_val_bull2 <- crossprod(vec_bv_bull2, vec_ev_result))
-```
-
-```{r, echo=FALSE}
-if (n_idx_val_bull1 > n_idx_val_bull2){
-  s_decision <- "Bull 1 is better than Bull 2, hence we select Bull 1"
-} else {
-  s_decision <- "Bull 1 is not better than Bull 2, hence we select Bull s"
-}
-```
-
-* Decision: `r s_decision`
 
 
 \clearpage
@@ -408,22 +296,6 @@ knitr::kable(tbl_data_p02)
 
 ### Solution
 
-### Master Solution
-
-The predicted breeding value ($\hat{u_i}$) for animal $i$ using own-performance is computed as
-
-$$\hat{u_i} = h^2 (y_i - \mu)$$
-
-The population mean $\mu$ is taken as the mean of all observations. 
-
-```{r}
-n_mu <- mean(tbl_data_p02$Observation)
-n_hat_u <- n_h2_imf * (tbl_data_p02$Observation - n_mu)
-tbl_result_pbv_p02a <- tibble::tibble(Animal = tbl_data_p02$Animal,
-                                      Result = round(n_hat_u, digits = 3))
-knitr::kable(tbl_result_pbv_p02a)
-```
-
 
 \clearpage
 \pagebreak
@@ -438,7 +310,6 @@ knitr::kable(tbl_result_pbv_p02a)
 
 ### Solution
 
-### Master Solution
 
 \clearpage
 \pagebreak
@@ -454,7 +325,6 @@ knitr::kable(tbl_result_pbv_p02a)
 
 ### Solution 
 
-### Master Solution 
 
 \clearpage
 \pagebreak
@@ -503,36 +373,6 @@ Step  &  Forward   &  Backward  \\
 \end{tabular}
 
 
-
-### Master Solution
-
-\begin{tabular}{|l|p{6cm}|p{6cm}|}
-\hline
-  &  &  \\
-Step  &  Forward   &  Backward  \\
-  &  &  \\
-\hline
-  &  &  \\
-1  &  Start with smallest model $\mathcal{M}_0$ 
-   &  Start with full model $\mathcal{M}_0$ \\
-   &  &  \\
-\hline
-   &  &  \\
-2  &  Include predictor reducing RSS the most
-   &  Eliminate predictor increasing RSS the least \\
-   &  &  \\
-\hline
-   &  &  \\
-3  &  Continue step 2 until all predictors chosen
-   &  Continue step 2 until all predictors eliminated  \\
-   &  &  \\
-\hline
-   &  &  \\
-4  &  From sequence of submodels $\mathcal{M}_0 \subseteq \mathcal{M}_1 \subseteq \mathcal{M}_2 \subseteq \ldots$ choose model with smallest $C_p$
-   &  From sequence of submodels $\mathcal{M}_0 \supseteq \mathcal{M}_1 \supseteq \mathcal{M}_2 \supseteq \ldots$ choose model with smallest $C_p$ \\
-   &  &  \\
-\hline
-\end{tabular}
 
 
 \clearpage
@@ -585,20 +425,6 @@ lm_bw_bc <- lm(`BodyWeight` ~ `BreastCircumference`, data = tbl_data_p03)
 
 ### Solution
 
-### Master Solution
-
-Mit `olsrr` erhalten wir
-
-\tiny
-
-```{r SolP01b, echo=TRUE, results='markup'}
-olsrr::ols_step_best_subset(lm_bw_bc_sh)
-```
-
-\normalsize
-
-Das reduzierte Model erhält einen tieferen $C_p$-Wert und ist somit das bessere Modell.
-
 
 \clearpage
 \pagebreak
@@ -613,8 +439,6 @@ Das reduzierte Model erhält einen tieferen $C_p$-Wert und ist somit das bessere
 
 ### Solution
 
-### Master Solution
-The problem that makes model selection necessary is called Bias-Variance trade-off. The Bias is reduced, the more predictors we include. But on the other hand, the variance is increased. Hence we have to find the model that balances this trade-off. This is done with a criterion such as the Mallow $C_p$ statistic.
 
 \clearpage
 \pagebreak
@@ -653,8 +477,6 @@ The data set is available under:
 
 ### Solution
 
-### Master Solution
-One of the main livestock breeding tools is selection. Selection means that we choose from a given population the best individuals to be parents of the next generation. Hence selection can only happen, when a certain level of variation can be observed in a population. Because livestock breeding means improvement of a population at the genetic level, the genetic variance component or in our case the sire variance component is important.
 
 \clearpage
 \pagebreak
@@ -670,22 +492,6 @@ One of the main livestock breeding tools is selection. Selection means that we c
 
 ### Solution
 
-### Master Solution
-The model is
-
-$$y_{ij} = \mu + s_i + e_{ij}$$
-
-\begin{tabular}{lll}
-where  &  &  \\
-       & $y_{ij}$         &  measurement $j$ of animal $i$    \\
-       & $\mu$            &  expected value of $y$            \\
-       & $s_i$            &  deviation of $y_{ij}$ from $\mu$ attributed to bull $i$ \\
-       & $e_{ij}$  &  measurement error
-\end{tabular}
-
-The expected values are: $E\left[ s_i \right] = 0$, $E\left[ e_{ij} \right] = 0$, $E\left[ y_{ij} \right] = \mu$
-
-The variances: $var(s_i) = \sigma_s^2$, $var(e_{ij}) = \sigma_e^2$, $var(y_{ij}) = \sigma_s^2 + \sigma_e^2$
 
 \clearpage
 \pagebreak
@@ -699,29 +505,4 @@ The variances: $var(s_i) = \sigma_s^2$, $var(e_{ij}) = \sigma_e^2$, $var(y_{ij})
 
 
 ### Solution
-
-### Master Solution
-The sires are first converted into factors to prevent R to fit them as covariables.
-
-```{r PrepP03c, echo=TRUE, results='markup'}
-tbl_met$Bull <- as.factor(tbl_met$Bull)
-```
-
-Use `aov()` to get the ANOVA-table
-
-```{r AovP03c, echo=TRUE, results='markup'}
-aov_meth <- aov(Methane ~ Bull, data = tbl_met)
-(sy_aov_meth <- summary(aov_meth))
-```
-
-From this the estimate of the residual variance corresponds to
-
-```{r Sigmae2, echo=TRUE, results='markup'}
-(n_hat_sigma_e2 <- sy_aov_meth[[1]]$`Mean Sq`[2])
-```
-
-```{r Sigmas2, echo=TRUE, results='markup'}
-n_nr_dau <- 3
-(n_hat_sigma_s2 <- (sy_aov_meth[[1]]$`Mean Sq`[1] - sy_aov_meth[[1]]$`Mean Sq`[2]) / n_nr_dau)
-```
 
