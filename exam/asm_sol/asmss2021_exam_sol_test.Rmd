@@ -74,9 +74,9 @@ nPointQ3Total <- sum(unlist(lPointsQ3))
 <!-- <<PointsQ4, echo=FALSE>>= -->
 ```{r PointsQ4, echo=FALSE}
 # Assign Points for Q4
-lPointsQ4 <- list(TaskA = 0,
-                  TaskB = 0,
-                  TaskC = 0,
+lPointsQ4 <- list(TaskA = 8,
+                  TaskB = 15,
+                  TaskC = 15,
                   TaskD = 0)
 nPointQ4Total <- sum(unlist(lPointsQ4))
 ```
@@ -713,24 +713,28 @@ summary(cvfitsnp)
 ```{r asm-ex-p04-data-setup, echo=FALSE, message=FALSE, warning=FALSE}
 s_data_p04_file <- "asm_exam_p04.csv"
 s_data_p04_local_path <- file.path(here::here(), "docs", "data", s_data_p04_file)
+s_data_p04_url_path <- file.path("https://charlotte-ngs.github.io/gelasmss2021/data", s_data_p04_file)
+n_nr_snp_cons <- 2
+
+# make the simulation reproducible
+set.seed(732)
 
 if (file.exists(s_data_p04_local_path)){
-  tbl_data <- readr::read_csv2(file = s_data_p04_local_path)
+  tbl_data_p04 <- readr::read_csv2(file = s_data_p04_local_path)
 } else {
   # pedigree
-  n_nr_ani <- 5
-  n_nr_founder <- 3
+  n_nr_ani <- 10
+  n_nr_founder <- 4
   n_nr_non_founder <- n_nr_ani - n_nr_founder
-  tbl_ped <- tibble::tibble(ID = c((n_nr_ani - n_nr_founder + 2):n_nr_ani),
-                            Sire = c(1, 1),
-                            Dam  = c(2, 3))
+  tbl_ped <- tibble::tibble(ID = c((n_nr_founder + 1):n_nr_ani),
+                            Sire = c(1, 1, 2, 2, 5, 5),
+                            Dam  = c(3, 4, 3, 3, 7, 8))
   
   # install (if necessary) andload the simulation package
   pkg <- "sim1000G"
   if (!is.element(pkg, installed.packages())) install.packages(pkg)
   require(sim1000G)
-  # make the simulation reproducible
-  set.seed(732)
+
   # get the vcf file that comes with the package, TODO: adapt that vcf file
   examples_dir = system.file("examples", package = "sim1000G")
   vcf_file = file.path(examples_dir,"region.vcf.gz")
@@ -747,81 +751,139 @@ if (file.exists(s_data_p04_local_path)){
   dim(genotype)
   
   # select one SNP where animal 2 has genotype 2
+  #which(genotype[1,] == 2)
   #which(genotype[2,] == 2)
+  #which(genotype[3,] == 2)
   # manually pick three snp
-  mat_sim_geno <- genotype[,c(1,129,2)];mat_sim_geno
+  mat_sim_geno <- genotype[,c(1,156, 22)]
   
   # determine the number of SNP
   n_nr_snp <- ncol(mat_sim_geno)
   
   # simulate observations
-  vec_snp_eff <- c(13.3, 2.9, 1.7)
-  vec_sex <- c("M" = 7.1, "F" = 3.3);vec_sex
-  sd_res <- 1.9
+  vec_snp_eff <- c(13.3, 4.7, 2.1)
+  vec_sex <- c("M" = 7.1, "F" = 3.3)
+  sd_res <- 11.9
   n_intercept <- -5.3
   
   # augment pedigree with founders
   tbl_ped_aug <- tibble::tibble(ID = c(1:n_nr_ani),
                                 Sire = c(rep(NA, n_nr_founder), tbl_ped$Sire),
                                 Dam  = c(rep(NA, n_nr_founder), tbl_ped$Dam),
-                                Sex = c("M", rep("F", n_nr_ani -1)))
+                                Sex = c("M", "M", "F", "F", "M", rep("F", 5)))
   
   # observations
   vec_y <- n_intercept + vec_sex[tbl_ped_aug$Sex] + crossprod(t(mat_sim_geno), vec_snp_eff) + rnorm(1, mean = 0, sd = sd_res)
   
   # data set
-  tbl_data <- tibble::tibble(Animal = tbl_ped_aug$ID,
+  tbl_data_p04 <- tibble::tibble(Animal = tbl_ped_aug$ID,
                              Sire   = tbl_ped_aug$Sire, 
                              Dam    = tbl_ped_aug$Dam,
                              Sex    = tbl_ped_aug$Sex,
                              Observation = round(vec_y[,1], digits = 2))
   # add snp Info
+  # for (idx in 1:n_nr_snp_cons){
   for (idx in 1:n_nr_snp){
-    tbl_data <- dplyr::bind_cols(tbl_data, tibble::tibble(SNP = mat_sim_geno[,idx]-1))
-    names(tbl_data)[ncol(tbl_data)] <- paste0("SNP", idx)
+    tbl_data_p04 <- dplyr::bind_cols(tbl_data_p04, tibble::tibble(SNP = mat_sim_geno[,idx]-1))
+    names(tbl_data_p04)[ncol(tbl_data_p04)] <- paste0("SNP", idx)
   }
   
   # write data to file
-  readr::write_csv2(tbl_data, file = s_data_p04_local_path)
+  readr::write_csv2(tbl_data_p04, path = s_data_p04_local_path)
 }
 
 ```
 
+The data shown in the following table is available to predict genomic breeding values using different methods. The data is available from the URL shown below: 
+
+\textit{Die Daten in der nachfolgenden Tabelle sollen für die Schätzung von genomischen Zuchtwerten mit verschiedenen Methoden verwendet werden. Die Daten können vom folgenden URL heruntergeladen werden: }
+
+`r s_data_p04_url_path`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(tbl_data_p04)
+```
+
 
 \begin{enumerate}
-\item[a)] 
+\item[a)] Use the two-step approach to predict genomic breeding values. Because, the number of SNP is smaller than the number of animals, marker effects can be estimated using least squares. Please indicate the type of model and specify the all the model components used to estimated marker effects. Also, describe how the genomic breeding values are computed from the marker effects.
 
-\textit{}
+\textit{Verwenden Sie die Zwei-Schritt Methode zur Schätzung der genomischen Zuchtwerte. Da die Anzahl SNP kleiner ist als die Anzahl Tiere im Datensatz können die Markereffekte mit Least Squares geschätzt werden. Bitte geben Sie den Modell-Typ an und spezifizieren Sie alle Komponenten des Modells, welches zur Schätzung der Markereffekte verwendet wird. Beschreiben Sie auch, wie Sie aus den Markereffekten die genomischen Zuchtwerte berechnen.}
 \end{enumerate}
 \points{`r lPointsQ4$TaskA`}
 
 
 ### Solution
 
+### Master Solution
+The two steps in the two-step approach are
+
+1. Estimate Marker Effects
+2. Predict genomic breeding values
+
+
+#### Marker Effect
+Marker effects are estimated using a fixed linear effect model (model type). The observation $y_i$ of animal $i$ can be modelled as:
+
+$$y_i = b_0 + b_{sex,i} + \alpha_{SNP_1,i} + \alpha_{SNP_2,i}  + e_i 
+= b_0 + b_{sex,i} + \sum_{j=1}^2 \alpha_{SNP_j, i} + e_i$$
+
+with $b_0$: intercept, $b_{sex,i}$ effect of the sex of animal $i$, $\alpha_{SNP_j, i}$ the allele substitution effect according to the genotype of animal $i$ and SNP $j$, $e_i$ is the random residual with variance $\sigma_e^2$. 
+
+Because the number of SNP is smaller than the number of animals, the marker effects can be estimated using least squares. Hence, the function `lm()` is used.
+
+```{r, echo=TRUE, results='markup'}
+# read data
+tbl_data_p04 <- readr::read_csv2(file = s_data_p04_url_path)
+lm_mrk_eff <- lm(Observation ~ Sex + SNP1 + SNP2, data = tbl_data_p04)
+summary(lm_mrk_eff)
+```
+
+#### Prediction of Genomic Breeding Values
+The genomic breeding values are predicted by the matrix vector multiplication of the genotype matrix times the marker effects.
+
+```{r}
+mat_geno_snp <- matrix(c(tbl_data_p04$SNP1, tbl_data_p04$SNP2), ncol = 2)
+coef_mrk_eff <- effects(lm_mrk_eff)
+vec_mrk_eff <- c(coef_mrk_eff[["SNP1"]], coef_mrk_eff[["SNP2"]])
+mat_pred_gbv <- crossprod(t(mat_geno_snp), vec_mrk_eff)
+# table
+tbl_res_ts_gbv <- tibble::tibble(Animal = tbl_data_p04$Animal,
+                                 `Predicted Breeding Value` = round(mat_pred_gbv[,1], digits = 4))
+knitr::kable(tbl_res_ts_gbv)
+```
+
+
+
 \clearpage
 \pagebreak
 
 \begin{enumerate}
-\item[b)] 
+\item[b)] Use a single-step marker-effect model to predict breeding values using the data shown above. Please specify the model type and all the components of the marker-effect model and describe how genomic breeding values are predicted.
 
-\textit{}
+\textit{Verwenden Sie ein "Single-Step" Markereffektmodell für die Schätzung der genomischen Zuchtwerte. Bitte geben Sie den Modelltyp und alle Komponenten des Markereffektmodells and und beschreiben Sie, wie die genomischen Zuchtwerte berechnet werden.}
 \end{enumerate}
 \points{`r lPointsQ4$TaskB`}
 
 
 ### Solution
 
+### Master Solution
+In a single-step marker effect model a mixed linear effect model is used to predict marker effects. Marker effects are treated as random effects. Genomic breeding values are predicted by summing over the appropriate marker effects.
+
 
 \clearpage
 \pagebreak
 
 \begin{enumerate}
-\item[c)]
+\item[c)] Use a single-step Genomic BLUP (GBLUP) model to predict genomic breeding values. Please specify the type of model used and also list all the model components of the GBLUP model used. 
 
-\textit{}
+\textit{Verwenden Sie ein "Ein-Schritt" genomisches BLUP (GBLUP) Modell zur Schätzung der genomischen Zuchtwerte. Bitte geben Sie den Modelltyp und alle Modellkomponenten an, welche im GBLUP-Modell vorkommen.}
 \end{enumerate}
 \points{`r lPointsQ4$TaskC`}
 
 
 ### Solution 
   
+### Master Solution 
+The GBLUP model is a mixed linear effect model where genomic breeding values are treated as random effects. 
