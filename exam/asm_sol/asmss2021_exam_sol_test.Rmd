@@ -710,6 +710,83 @@ summary(cvfitsnp)
 
 ## Problem 4: Genomic BLUP
 
+```{r asm-ex-p04-data-setup, echo=FALSE, message=FALSE, warning=FALSE}
+s_data_p04_file <- "asm_exam_p04.csv"
+s_data_p04_local_path <- file.path(here::here(), "docs", "data", s_data_p04_file)
+
+if (file.exists(s_data_p04_local_path)){
+  tbl_data <- readr::read_csv2(file = s_data_p04_local_path)
+} else {
+  # pedigree
+  n_nr_ani <- 5
+  n_nr_founder <- 3
+  n_nr_non_founder <- n_nr_ani - n_nr_founder
+  tbl_ped <- tibble::tibble(ID = c((n_nr_ani - n_nr_founder + 2):n_nr_ani),
+                            Sire = c(1, 1),
+                            Dam  = c(2, 3))
+  
+  # install (if necessary) andload the simulation package
+  pkg <- "sim1000G"
+  if (!is.element(pkg, installed.packages())) install.packages(pkg)
+  require(sim1000G)
+  # make the simulation reproducible
+  set.seed(732)
+  # get the vcf file that comes with the package, TODO: adapt that vcf file
+  examples_dir = system.file("examples", package = "sim1000G")
+  vcf_file = file.path(examples_dir,"region.vcf.gz")
+  # read specified vcf file with parameters (currently as given in vignette)
+  vcf = readVCF( vcf_file, maxNumberOfVariants = 600 , min_maf = 0.01, max_maf = 1)
+  # start simulation
+  startSimulation(vcf, totalNumberOfIndividuals = n_nr_ani)
+  ids = generateUnrelatedIndividuals(n_nr_founder)
+  for (idx in 1:n_nr_non_founder){
+    ids[n_nr_founder + idx] <- SIM$mate(tbl_ped$Sire[idx],tbl_ped$Dam[idx])
+  }
+  
+  genotype = retrieveGenotypes(ids)
+  dim(genotype)
+  
+  # select one SNP where animal 2 has genotype 2
+  #which(genotype[2,] == 2)
+  # manually pick three snp
+  mat_sim_geno <- genotype[,c(1,129,2)];mat_sim_geno
+  
+  # determine the number of SNP
+  n_nr_snp <- ncol(mat_sim_geno)
+  
+  # simulate observations
+  vec_snp_eff <- c(13.3, 2.9, 1.7)
+  vec_sex <- c("M" = 7.1, "F" = 3.3);vec_sex
+  sd_res <- 1.9
+  n_intercept <- -5.3
+  
+  # augment pedigree with founders
+  tbl_ped_aug <- tibble::tibble(ID = c(1:n_nr_ani),
+                                Sire = c(rep(NA, n_nr_founder), tbl_ped$Sire),
+                                Dam  = c(rep(NA, n_nr_founder), tbl_ped$Dam),
+                                Sex = c("M", rep("F", n_nr_ani -1)))
+  
+  # observations
+  vec_y <- n_intercept + vec_sex[tbl_ped_aug$Sex] + crossprod(t(mat_sim_geno), vec_snp_eff) + rnorm(1, mean = 0, sd = sd_res)
+  
+  # data set
+  tbl_data <- tibble::tibble(Animal = tbl_ped_aug$ID,
+                             Sire   = tbl_ped_aug$Sire, 
+                             Dam    = tbl_ped_aug$Dam,
+                             Sex    = tbl_ped_aug$Sex,
+                             Observation = round(vec_y[,1], digits = 2))
+  # add snp Info
+  for (idx in 1:n_nr_snp){
+    tbl_data <- dplyr::bind_cols(tbl_data, tibble::tibble(SNP = mat_sim_geno[,idx]-1))
+    names(tbl_data)[ncol(tbl_data)] <- paste0("SNP", idx)
+  }
+  
+  # write data to file
+  readr::write_csv2(tbl_data, file = s_data_p04_local_path)
+}
+
+```
+
 
 \begin{enumerate}
 \item[a)] 
