@@ -658,9 +658,9 @@ knitr::kable(tbl_data_p04)
 \pagebreak
 
 \begin{enumerate}
-\item[b)] Use a single-step marker-effect model to predict breeding values using the data shown above. Please specify the model type and all the components of the marker-effect model and describe how genomic breeding values are predicted.
+\item[b)] Use a single-step marker-effect model to predict breeding values using the data shown above. Please specify the model type and all the components of the marker-effect model and describe how genomic breeding values are predicted. The ration ($\lambda$) between the residual variance ($\sigma_e^2$) and the QTL-variance ($\sigma_q^2$)  can assumed to be $1$. 
 
-\textit{Verwenden Sie ein "Single-Step" Markereffektmodell für die Schätzung der genomischen Zuchtwerte. Bitte geben Sie den Modelltyp und alle Komponenten des Markereffektmodells and und beschreiben Sie, wie die genomischen Zuchtwerte berechnet werden.}
+\textit{Verwenden Sie ein "Single-Step" Markereffektmodell für die Schätzung der genomischen Zuchtwerte. Bitte geben Sie den Modelltyp und alle Komponenten des Markereffektmodells and und beschreiben Sie, wie die genomischen Zuchtwerte berechnet werden. Das Verhältnis ($\lambda$) zwischen der Restvarianz ($\sigma_e^2$) und der QTL-Varianz ($\sigma_q^2$) kann als $1$ angenommen werden.}
 \end{enumerate}
 \points{`r lPointsQ4$TaskB`}
 
@@ -673,9 +673,9 @@ knitr::kable(tbl_data_p04)
 \pagebreak
 
 \begin{enumerate}
-\item[c)] Use a single-step Genomic BLUP (GBLUP) model to predict genomic breeding values. Please specify the type of model used and also list all the model components of the GBLUP model used. 
+\item[c)] Use a single-step Genomic BLUP (GBLUP) model to predict genomic breeding values. Please specify the type of model used and also list all the model components of the GBLUP model used. The ration ($\lambda$) between the residual variance ($\sigma_e^2$) and the genetic variance ($\sigma_g^2$)  can assumed to be $1$. 
 
-\textit{Verwenden Sie ein "Ein-Schritt" genomisches BLUP (GBLUP) Modell zur Schätzung der genomischen Zuchtwerte. Bitte geben Sie den Modelltyp und alle Modellkomponenten an, welche im GBLUP-Modell vorkommen.}
+\textit{Verwenden Sie ein "Ein-Schritt" genomisches BLUP (GBLUP) Modell zur Schätzung der genomischen Zuchtwerte. Bitte geben Sie den Modelltyp und alle Modellkomponenten an, welche im GBLUP-Modell vorkommen. Das Verhältnis ($\lambda$) zwischen der Restvarianz ($\sigma_e^2$) und der genetischen Varianz ($\sigma_g^2$) kann als $1$ angenommen werden.}
 \end{enumerate}
 \points{`r lPointsQ4$TaskC`}
 

@@ -859,7 +859,7 @@ knitr::kable(tbl_res_ts_gbv)
 \pagebreak
 
 \begin{enumerate}
-\item[b)] Use a single-step marker-effect model to predict breeding values using the data shown above. Please specify the model type and all the components of the marker-effect model and describe how genomic breeding values are predicted.
+\item[b)] Use a single-step marker-effect model to predict breeding values using the data shown above. Please specify the model type and all the components of the marker-effect model and describe how genomic breeding values are predicted. The ration ($\lambda$) between the residual variance ($\sigma_e^2$) and the QTL-variance ($\sigma_q^2$)  can assumed to be $1$. 
 
 \textit{Verwenden Sie ein "Single-Step" Markereffektmodell für die Schätzung der genomischen Zuchtwerte. Bitte geben Sie den Modelltyp und alle Komponenten des Markereffektmodells and und beschreiben Sie, wie die genomischen Zuchtwerte berechnet werden.}
 \end{enumerate}
@@ -876,7 +876,7 @@ In a single-step marker effect model a mixed linear effect model is used to pred
 \pagebreak
 
 \begin{enumerate}
-\item[c)] Use a single-step Genomic BLUP (GBLUP) model to predict genomic breeding values. Please specify the type of model used and also list all the model components of the GBLUP model used. 
+\item[c)] Use a single-step Genomic BLUP (GBLUP) model to predict genomic breeding values. Please specify the type of model used and also list all the model components of the GBLUP model used. The ration ($\lambda$) between the residual variance ($\sigma_e^2$) and the genetic variance ($\sigma_g^2$)  can assumed to be $1$. 
 
 \textit{Verwenden Sie ein "Ein-Schritt" genomisches BLUP (GBLUP) Modell zur Schätzung der genomischen Zuchtwerte. Bitte geben Sie den Modelltyp und alle Modellkomponenten an, welche im GBLUP-Modell vorkommen.}
 \end{enumerate}
@@ -886,4 +886,102 @@ In a single-step marker effect model a mixed linear effect model is used to pred
 ### Solution 
   
 ### Master Solution 
-The GBLUP model is a mixed linear effect model where genomic breeding values are treated as random effects. 
+The GBLUP model is a mixed linear effect model where genomic breeding values are treated as random effects. The mixed linear effect is
+
+$$y = Xb + Zg + e$$
+where $y$ is the vector of observations, $b$ the vector of fixed effects, $g$ the vector of genomic breeding values, $e$ the vector of random residuals, $X$ and $Z$ are the design-matrices. 
+
+```{r, echo=FALSE, results='asis'}
+vec_y <- tbl_data_p04$Observation
+n_nr_obs <- length(vec_y)
+mat_X <- matrix(data = c(1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 
+                         0, 0, 1, 1, 0, 1, 1, 1, 1, 1), ncol = 2)
+mat_Z <- diag(1, n_nr_obs)
+lambda <- 1
+
+# unknowns
+vec_b <- c("b_M", "b_F")
+vec_g <- rmdhelp::vecGetVecElem(psBaseElement = "g", pnVecLen = n_nr_obs, psResult = "latex")
+
+# show quantities
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_y, ps_name = "y", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bmatrix(pmat = mat_X, ps_name = "X", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bmatrix(pmat = mat_Z, ps_name = "Z", ps_env = "$$"), collapse = "\n"), "\n")
+
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_b, ps_name = "b", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_g, ps_name = "g", ps_env = "$$"), collapse = "\n"), "\n")
+```
+
+The mixed model equations
+
+$$ 
+\left[ 
+  \begin{array}{cc}
+  X^TX  &  X^TZ \\
+  Z^TX  &  Z^TZ + \lambda * H^{-1}
+  \end{array}
+\right]
+\left[ 
+  \begin{array}{c}
+  \hat{b} \\
+  \hat{g}
+  \end{array}
+\right]
+=
+\left[ 
+  \begin{array}{c}
+  X^Ty \\
+  Z^Ty
+  \end{array}
+\right]
+$$
+
+
+The genomic relationship matrix $G$ is computed using the following function
+
+```{r, echo=TRUE, results='markup'}
+computeMatGrm <- function(pmatData) {
+  matData <- pmatData
+  # check the coding, if matData is -1, 0, 1 coded, then add 1 to get to 0, 1, 2 coding
+  if (min(matData) < 0) matData <- matData + 1
+  # Allele frequencies, column vector of P and sum of frequency products
+  freq <- apply(matData, 2, mean) / 2
+  P <- 2 * (freq - 0.5)
+  sumpq <- sum(freq*(1-freq))
+  # Changing the coding from (0,1,2) to (-1,0,1) and subtract matrix P
+  Z <- matData - 1 - matrix(P, nrow = nrow(matData), 
+                             ncol = ncol(matData), 
+                             byrow = TRUE)
+  # Z%*%Zt is replaced by tcrossprod(Z)
+  return(tcrossprod(Z)/(2*sumpq))
+}
+# take matrix with genotypes
+mat_W <- matrix(data = c(tbl_data_p04$SNP1, tbl_data_p04$SNP2), ncol = 2)
+# compute the genomic relationship matrix
+mat_G <- computeMatGrm(pmatData = mat_W)
+# use the numerator relationship matrix A to blend G into H
+ped <- pedigreemm::pedigree(sire = tbl_data_p04$Sire, dam = tbl_data_p04$Dam, label = as.character(tbl_data_p04$Animal))
+mat_A <- as.matrix(pedigreemm::getA(ped = ped))
+n_blend_fact <- 0.1
+mat_H <- (1-n_blend_fact) * mat_G + n_blend_fact * mat_A
+#mat_H <- mat_G + n_blend_fact * diag(1, nrow = n_nr_obs)
+solve(mat_H)
+eigen(mat_H)
+```
+
+Get the solution of the mixed model equations
+
+```{r}
+lambda <- 1
+mat_XtX <- crossprod(mat_X);mat_XtX
+mat_XtZ <- crossprod(mat_X, mat_Z);mat_XtZ
+mat_ZtX <- crossprod(mat_Z, mat_X);mat_ZtX
+mat_ZtZlambdaHinv <- crossprod(mat_Z) + lambda * solve(mat_H);mat_ZtZlambdaHinv
+mat_coef <- rbind(cbind(mat_XtX, mat_XtZ), cbind(mat_ZtX, mat_ZtZlambdaHinv))
+eigen(mat_coef)
+mat_rhs <- rbind(crossprod(mat_X, vec_y), crossprod(mat_Z, vec_y))
+mat_sol <- solve(mat_coef, mat_rhs)
+mat_sol
+```
+
+
