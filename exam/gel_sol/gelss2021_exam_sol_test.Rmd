@@ -439,6 +439,120 @@ knitr::kable(tbl_result_pbv_p02a)
 ### Solution
 
 ### Master Solution
+The BLUP animal model corresponds to the following mixed linear effect model
+
+$$y = Xb + Zu + e$$
+
+where $y$ is the vector of observations, $b$ is the vector of fixed effects, $u$ is the vector of random breeding values, $e$ is the vector of random residuals. The matrices $X$ and $Z$ are known incidence matrices which link the fixed effects and the random breeding values to the observations, respectively.
+
+Inserting the data into the known components of the model leads to
+
+```{r, echo=FALSE, results='asis'}
+vec_y <- tbl_data_p02$Observation
+n_nr_obs <- length(vec_y)
+# design matrix X
+tbl_data_p02$Sex <- as.factor(tbl_data_p02$Sex)
+lm_fix <- lm(Observation ~ 0 + Sex, data = tbl_data_p02)
+mat_X <- model.matrix(lm_fix)
+attr(mat_X, which = "assign") <- NULL
+attr(mat_X, which = "contrasts") <- NULL
+# design matrix Z, founders in pedigree
+vec_animals <- tbl_data_p02$Animal
+vec_sire <- tbl_data_p02$Sire
+vec_dam <- tbl_data_p02$Dam
+vec_founder_sire <- setdiff(vec_sire, vec_animals)
+vec_founder_dam <- setdiff(vec_dam, vec_animals)
+vec_founder <- union(vec_founder_sire, vec_founder_dam)
+vec_founder <- vec_founder[order(vec_founder)]
+n_nr_founder <- length(vec_founder)
+mat_Z <- cbind(matrix(data = 0, nrow = n_nr_obs, ncol = n_nr_founder),
+               diag(1, nrow = n_nr_obs))
+
+# unknowns
+vec_b <- c("b_M", "b_F")
+n_nr_ped_animal <- n_nr_founder + n_nr_obs
+vec_u <- rmdhelp::vecGetVecElem(psBaseElement = "u", pnVecLen = n_nr_ped_animal, psResult = "latex")
+vec_e <- rmdhelp::vecGetVecElem(psBaseElement = "e", pnVecLen = n_nr_obs, psResult = "latex")
+
+# output
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_y, ps_name = "y", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bmatrix(pmat = mat_X, ps_name = "X", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bmatrix(pmat = mat_Z, ps_name = "Z", ps_env = "$$"), collapse = "\n"), "\n")
+
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_b, ps_name = "b", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_u, ps_name = "u", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_e, ps_name = "e", ps_env = "$$"), collapse = "\n"), "\n")
+```
+
+The expected values and the variance-covariance matrices for the random effects are
+
+$$
+E \left[\begin{array}{c}e \\ u \\ y \end{array} \right] = \left[\begin{array}{c}0 \\ 0 \\ Xb \end{array} \right]
+$$
+
+$$
+var \left[\begin{array}{c}e \\ u \\ y \end{array} \right] 
+= 
+\left[\begin{array}{ccc} R & 0 & R\\ 0 & U & UZ^T\\ R & ZU & ZUZ^T + R\end{array} \right]
+$$
+with $R = I*\sigma_e^2$, $U = A * \sigma_u^2$ and $A$ corresponding to the numerator relationship matrix.
+
+The mixed model equations are given by
+
+$$
+\left[ 
+  \begin{array}{cc}
+  X^TX  &  X^TZ  \\
+  Z^TX  &  Z^TZ + A^{-1} * \lambda
+  \end{array}
+\right]
+\left[ 
+  \begin{array}{c}
+  \hat{b} \\
+  \hat{u}
+  \end{array}
+\right]
+=
+\left[ 
+  \begin{array}{c}
+  X^Ty  \\
+  Z^Ty
+  \end{array}
+\right]
+$$
+
+The solutions to the mixed model equations are computed as follows
+
+```{r, echo=TRUE, results='markup'}
+lambda <- (1 - n_h2_imf) / n_h2_imf
+# numerator relationship matrix
+ped <- pedigreemm::pedigree(sire = c(rep(NA, n_nr_founder), tbl_data_p02$Sire), 
+                            dam  = c(rep(NA, n_nr_founder), tbl_data_p02$Dam),
+                            label = as.character(1:n_nr_ped_animal))
+mat_Ainv <- as.matrix(pedigreemm::getAInv(ped = ped))
+mat_XtX <- crossprod(mat_X)
+mat_XtZ <- crossprod(mat_X, mat_Z)
+mat_ZtX <- crossprod(mat_Z, mat_X)
+mat_ZtZAinvlambda <- crossprod(mat_Z) + mat_Ainv * lambda
+mat_coef <- rbind(cbind(mat_XtX, mat_XtZ), cbind(mat_ZtX, mat_ZtZAinvlambda))
+mat_rhs <- rbind(crossprod(mat_X, vec_y), crossprod(mat_Z, vec_y))
+mat_sol <- solve(mat_coef, mat_rhs)
+```
+
+The solution for the fixed effects are 
+
+```{r, echo=FALSE, results='asis'}
+# fixed effect solutons
+n_nr_fix_effect <- ncol(mat_X)
+vec_b_sol <- mat_sol[1:n_nr_fix_effect,]
+# random effect
+vec_u_sol <- mat_sol[(n_nr_fix_effect+1):nrow(mat_sol),]
+# output
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(vec_b_sol, digits = 4), ps_name = "\\hat{b}", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(vec_u_sol, digits = 4), ps_name = "\\hat{u}", ps_env = "$$"), collapse = "\n"), "\n")
+```
+
+
 
 \clearpage
 \pagebreak
@@ -455,6 +569,8 @@ knitr::kable(tbl_result_pbv_p02a)
 ### Solution 
 
 ### Master Solution 
+
+Reliabilities ($B$) correspond to the squarred correlation ($r_{u, \hat{u}}^2$) between true and predicted breeding value. 
 
 \clearpage
 \pagebreak

@@ -659,9 +659,9 @@ plot(fit_snp, xvar = "lambda", label = TRUE)
 
 \pagebreak
 
-Der Strafterm kann aufgrund der linken gestrichelten Linie bestimmt werden.
+The penalty-term can be determined based on the right dotted line.
 
-\textit{The penalty-term can be determined based on the right dotted line.}
+\textit{Der Strafterm kann aufgrund der rechten gestrichelten Linie bestimmt werden.}
 
 \vspace{1cm}
 
@@ -853,6 +853,11 @@ tbl_res_ts_gbv <- tibble::tibble(Animal = tbl_data_p04$Animal,
 knitr::kable(tbl_res_ts_gbv)
 ```
 
+Ranking of the animals
+
+```{r}
+order(mat_pred_gbv[,1])
+```
 
 
 \clearpage
@@ -869,7 +874,108 @@ knitr::kable(tbl_res_ts_gbv)
 ### Solution
 
 ### Master Solution
-In a single-step marker effect model a mixed linear effect model is used to predict marker effects. Marker effects are treated as random effects. Genomic breeding values are predicted by summing over the appropriate marker effects.
+In a single-step marker effect model a mixed linear effect model is used to predict marker effects. Marker effects are treated as random effects. Genomic breeding values are predicted by summing over the appropriate marker effects. The linear mixed effect model to predict the marker effects is as follows
+
+$$y = Xb + Wq + e$$
+where $y$ is the vector of observations, $b$ the vector of fixed effects, $q$ the vector of random marker effects, $e$ the vector of random residuals, $X$ and $W$ are the design-matrices. The matrix $W$ encodes the genotypes where $-1$ corresponds to $G_2G_2$, $0$ to $G_1G_2$ and $1$ to $G_1G_1$, assuming $G_1$ is the positive allele.
+
+Inserting the values of the dataset into the model components results in
+
+```{r, echo=FALSE, results='asis'}
+vec_y <- tbl_data_p04$Observation
+n_nr_obs <- length(vec_y)
+n_nr_snp <- 2
+mat_X <- matrix(data = c(1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 
+                         0, 0, 1, 1, 0, 1, 1, 1, 1, 1), ncol = 2)
+mat_W <- matrix(data = c(tbl_data_p04$SNP1, tbl_data_p04$SNP2), ncol = n_nr_snp)
+
+# vector of unknowns
+vec_b <- c("b_M", "b_F")
+vec_q <- rmdhelp::vecGetVecElem(psBaseElement = "q", pnVecLen = n_nr_snp, psResult = "latex")
+vec_e <- rmdhelp::vecGetVecElem(psBaseElement = "e", pnVecLen = n_nr_obs, psResult = "latex")
+
+# output
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_y, ps_name = "y", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bmatrix(pmat = mat_X, ps_name = "X", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bmatrix(pmat = mat_W, ps_name = "W", ps_env = "$$"), collapse = "\n"), "\n")
+
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_b, ps_name = "b", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_q, ps_name = "q", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_e, ps_name = "e", ps_env = "$$"), collapse = "\n"), "\n")
+```
+
+The mixed model equations
+
+$$ 
+\left[ 
+  \begin{array}{cc}
+  X^TX  &  X^TW \\
+  W^TX  &  W^TW + \lambda * I
+  \end{array}
+\right]
+\left[ 
+  \begin{array}{c}
+  \hat{b} \\
+  \hat{q}
+  \end{array}
+\right]
+=
+\left[ 
+  \begin{array}{c}
+  X^Ty \\
+  W^Ty
+  \end{array}
+\right]
+$$
+
+Get the solution of the mixed model equations
+
+```{r}
+lambda <- 1
+mat_XtX <- crossprod(mat_X)
+mat_XtW <- crossprod(mat_X, mat_W)
+mat_WtX <- crossprod(mat_W, mat_X)
+mat_WtWlambdaI <- crossprod(mat_W) + lambda * diag(1, nrow = n_nr_snp)
+mat_coef <- rbind(cbind(mat_XtX, mat_XtW), cbind(mat_WtX, mat_WtWlambdaI))
+mat_rhs <- rbind(crossprod(mat_X, vec_y), crossprod(mat_W, vec_y))
+mat_sol <- solve(mat_coef, mat_rhs)
+vec_sol_fix <- mat_sol[1:2,]
+```
+
+From the marker effects 
+
+```{r}
+n_nr_sol <- nrow(mat_sol)
+mrk_eff <- mat_sol[(n_nr_sol - n_nr_snp + 1):n_nr_sol,]
+mrk_eff
+```
+
+the genomic breeding values are computed by the product $\hat{g} = W\hat{q}$
+
+```{r}
+mat_gen_bv <- crossprod(t(mat_W), mrk_eff)
+vec_sol_gbv <- round(mat_gen_bv[,1], digits = 4)
+```
+
+The solution for the fixed effects ($\hat{b}$)  and for the predicted breeding values ($\hat{g}$) are
+
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(vec_sol_fix, digits = 4), ps_name = "\\hat{b}", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_sol_gbv, ps_name = "\\hat{g}", ps_env = "$$"), collapse = "\n"), "\n")
+```
+
+The ranking of the animals according to the predicted breeding value
+
+```{r, echo=TRUE, results='markup'}
+order(vec_sol_gbv)
+```
+
+Setting the predicted breeding value of the first animal to $0$ leads to
+
+```{r}
+vec_sol_gbv - vec_sol_gbv[1]
+```
+
 
 
 \clearpage
@@ -889,7 +995,7 @@ In a single-step marker effect model a mixed linear effect model is used to pred
 The GBLUP model is a mixed linear effect model where genomic breeding values are treated as random effects. The mixed linear effect is
 
 $$y = Xb + Zg + e$$
-where $y$ is the vector of observations, $b$ the vector of fixed effects, $g$ the vector of genomic breeding values, $e$ the vector of random residuals, $X$ and $Z$ are the design-matrices. 
+where $y$ is the vector of observations, $b$ the vector of fixed effects, $g$ the vector of random genomic breeding values, $e$ the vector of random residuals, $X$ and $Z$ are the design-matrices. 
 
 ```{r, echo=FALSE, results='asis'}
 vec_y <- tbl_data_p04$Observation
@@ -902,6 +1008,7 @@ lambda <- 1
 # unknowns
 vec_b <- c("b_M", "b_F")
 vec_g <- rmdhelp::vecGetVecElem(psBaseElement = "g", pnVecLen = n_nr_obs, psResult = "latex")
+vec_e <- rmdhelp::vecGetVecElem(psBaseElement = "e", pnVecLen = n_nr_obs, psResult = "latex")
 
 # show quantities
 cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_y, ps_name = "y", ps_env = "$$"), collapse = "\n"), "\n")
@@ -910,6 +1017,7 @@ cat(paste0(rmdhelp::bmatrix(pmat = mat_Z, ps_name = "Z", ps_env = "$$"), collaps
 
 cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_b, ps_name = "b", ps_env = "$$"), collapse = "\n"), "\n")
 cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_g, ps_name = "g", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = vec_e, ps_name = "e", ps_env = "$$"), collapse = "\n"), "\n")
 ```
 
 The mixed model equations
@@ -962,26 +1070,39 @@ mat_G <- computeMatGrm(pmatData = mat_W)
 # use the numerator relationship matrix A to blend G into H
 ped <- pedigreemm::pedigree(sire = tbl_data_p04$Sire, dam = tbl_data_p04$Dam, label = as.character(tbl_data_p04$Animal))
 mat_A <- as.matrix(pedigreemm::getA(ped = ped))
-n_blend_fact <- 0.1
+n_blend_fact <- 0.05
 mat_H <- (1-n_blend_fact) * mat_G + n_blend_fact * mat_A
-#mat_H <- mat_G + n_blend_fact * diag(1, nrow = n_nr_obs)
-solve(mat_H)
-eigen(mat_H)
 ```
 
 Get the solution of the mixed model equations
 
 ```{r}
 lambda <- 1
-mat_XtX <- crossprod(mat_X);mat_XtX
-mat_XtZ <- crossprod(mat_X, mat_Z);mat_XtZ
-mat_ZtX <- crossprod(mat_Z, mat_X);mat_ZtX
-mat_ZtZlambdaHinv <- crossprod(mat_Z) + lambda * solve(mat_H);mat_ZtZlambdaHinv
+mat_XtX <- crossprod(mat_X)
+mat_XtZ <- crossprod(mat_X, mat_Z)
+mat_ZtX <- crossprod(mat_Z, mat_X)
+mat_ZtZlambdaHinv <- crossprod(mat_Z) + lambda * solve(mat_H)
 mat_coef <- rbind(cbind(mat_XtX, mat_XtZ), cbind(mat_ZtX, mat_ZtZlambdaHinv))
-eigen(mat_coef)
 mat_rhs <- rbind(crossprod(mat_X, vec_y), crossprod(mat_Z, vec_y))
 mat_sol <- solve(mat_coef, mat_rhs)
-mat_sol
+n_nr_sol <- nrow(mat_sol)
+vec_sol_fix <- mat_sol[1:2,]
+vec_sol_gbv <- mat_sol[(n_nr_sol - n_nr_obs + 1):n_nr_sol, ]
 ```
 
+The solution for the fixed effects ($\hat{b}$)  and for the predicted breeding values ($\hat{g}$) are
 
+```{r, echo=FALSE, results='asis'}
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(vec_sol_fix, digits = 4), ps_name = "\\hat{b}", ps_env = "$$"), collapse = "\n"), "\n")
+cat(paste0(rmdhelp::bcolumn_vector(pvec = round(vec_sol_gbv, digits = 4), ps_name = "\\hat{g}", ps_env = "$$"), collapse = "\n"), "\n")
+```
+
+```{r, echo=TRUE, results='markup'}
+order(vec_sol_gbv)
+```
+
+Setting the predicted breeding value of the first animal to $0$ leads to
+
+```{r}
+vec_sol_gbv - vec_sol_gbv[1]
+```
