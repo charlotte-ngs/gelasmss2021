@@ -683,6 +683,8 @@ plot(cvfitsnp)
 vec_sign_snp_idx
 ```
 
+* From the diagram, the marker 53, 28, 70, 84 and 18 had the highest absolute effect.
+
 * The fit
 
 ```{r}
